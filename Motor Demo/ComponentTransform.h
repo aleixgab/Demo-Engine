@@ -4,7 +4,7 @@
 #include "Component.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 class GameObject;
 
@@ -17,18 +17,16 @@ public:
 
 	~Transform() {}
 
-	// Transform
-	//----------------------------------------------------------------
 	void SetTransform(glm::mat4 trans);
 	void SetIdentity();
-	//----------------------------------------------------------------
+	void SetPos(glm::vec3 position);
+	void SetRotation(glm::quat rotation);
+	void SetScale(glm::vec3 scale);
 
-
-	// Matrix
-	//----------------------------------------------------------------
-	glm::mat4	GetMatrixOGL() const;
-	glm::mat4	GetMatrix() const;
-	//----------------------------------------------------------------
+	glm::vec3 GetPos() const;
+	glm::quat GetRotation() const;
+	glm::vec3 GetScale() const;
+	glm::mat4 GetTransform() const;
 
 	void Inspector();
 

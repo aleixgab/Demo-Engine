@@ -3,6 +3,7 @@
 
 #include "Controller.h"
 #include "Shader.h"
+#include <list>
 
 class ControllerRender : public Controller
 {
@@ -16,14 +17,8 @@ public:
 	bool CleanUp();
 
 private:
-	unsigned int VBO = 0u;
-	unsigned int cubeVAO = 0u;
-	unsigned int lightVAO = 0u;
-
 	Shader lightingShader;
 	Shader lampShader;
-
-	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
 };
 
 #endif
