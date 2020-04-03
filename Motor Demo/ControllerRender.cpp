@@ -39,15 +39,15 @@ bool ControllerRender::Update(float dt)
 
 	for (std::vector<GameObject*>::iterator iterator = toDraw.begin(); iterator != toDraw.end(); ++iterator)
 	{
-		if ((*iterator) == toDraw.back())
-		{
-			// also draw the lamp object
-			lampShader.UseProgram();
-			lampShader.SetMat4("projection", projection);
-			lampShader.SetMat4("view", view);
-			lampShader.SetMat4("model", (*iterator)->GetComponentTransform()->GetTransform());
-		}
-		else
+		//if ((*iterator) == toDraw.back())
+		//{
+		//	// also draw the lamp object
+		//	lampShader.UseProgram();
+		//	lampShader.SetMat4("projection", projection);
+		//	lampShader.SetMat4("view", view);
+		//	lampShader.SetMat4("model", (*iterator)->GetComponentTransform()->GetTransform());
+		//}
+		//else
 		{
 			lightingShader.UseProgram();
 			lightingShader.SetMat4("projection", projection);
@@ -66,7 +66,10 @@ bool ControllerRender::Update(float dt)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-
+	Mng->gui->Draw();
+	int display_w, display_h;
+	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	// -------------------------------------------------------------------------------
 	glfwSwapBuffers(Mng->window->window);

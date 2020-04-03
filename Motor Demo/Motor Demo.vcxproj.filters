@@ -78,16 +78,13 @@
     <ClCompile Include="3rdPart\includes\imgui\imgui_draw.cpp">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp">
-      <Filter>Sources\3rd Party\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="3rdPart\includes\imgui\imgui_impl_opengl3.cpp">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="3rdPart\includes\imgui\imgui_widgets.cpp">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="3rdPart\includes\imgui\imgui_dock.cpp">
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -144,9 +141,6 @@
     <ClInclude Include="3rdPart\includes\imgui\imgui.h">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_glfw.h">
-      <Filter>Sources\3rd Party\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="3rdPart\includes\imgui\imgui_impl_opengl3.h">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClInclude>
@@ -162,7 +156,7 @@
     <ClInclude Include="3rdPart\includes\imgui\imstb_truetype.h">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="3rdPart\includes\imgui\imgui_dock.h">
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_glfw.h">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,7 +15,8 @@ public:
 
 	void ObjHierarchy();
 
-
+	void Draw();
+	
 	bool CleanUp();
 
 public:
