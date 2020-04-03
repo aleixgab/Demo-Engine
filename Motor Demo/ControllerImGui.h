@@ -13,7 +13,8 @@ public:
 	bool Start();
 	bool Update(float dt);
 
-	void ObjHierarchy();
+	void Hierarchy();
+	void ObjInspector();
 
 	void Draw();
 	

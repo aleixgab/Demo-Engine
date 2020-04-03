@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 
+class GameObject;
 class ControllerScene : public Controller
 {
 public:
@@ -16,6 +17,7 @@ public:
 
 public:
 	Camera* camera = nullptr;
+	GameObject* currGO = nullptr;
 };
 
 #endif

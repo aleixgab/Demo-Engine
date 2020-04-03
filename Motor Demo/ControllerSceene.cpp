@@ -19,11 +19,11 @@ bool ControllerScene::Start()
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	
 	//GameObjects
-	Mng->gameObject->CreateGameObject(glm::vec3(1.0f, 2.0f, -1.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.5f, 1.0f, 0.25f), "Simple Object");
-	Mng->gameObject->CreateGameObject(glm::vec3(1.0f, 0.0f, 0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.5f, 1.0f, 1.0f), "Simple Object2");
-	Mng->gameObject->CreateGameObject(glm::vec3(0.0f, 1.0f, 0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.5f, 1.0f), "Simple Object3");
-	Mng->gameObject->CreateGameObject(glm::vec3(-1.0f, 0.0f, 0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.5f), "Simple Object4");
-	Mng->gameObject->CreateGameObject(glm::vec3(1.2f, 1.0f, 2.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.2f), "Light");
+	Mng->gameObject->CreateGameObject(glm::vec3(0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f), "Simple Object");
+	//Mng->gameObject->CreateGameObject(glm::vec3(1.0f, 0.0f, 0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.5f, 1.0f, 1.0f), "Simple Object2");
+	//Mng->gameObject->CreateGameObject(glm::vec3(0.0f, 1.0f, 0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 0.5f, 1.0f), "Simple Object3");
+	//Mng->gameObject->CreateGameObject(glm::vec3(-1.0f, 0.0f, 0.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.5f), "Simple Object4");
+	//Mng->gameObject->CreateGameObject(glm::vec3(1.2f, 1.0f, 2.0f), glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(0.2f), "Light");
 
 
 

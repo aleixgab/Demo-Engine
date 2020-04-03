@@ -15,9 +15,26 @@ bool ControllerGameObject::Start()
 
 bool ControllerGameObject::Update(float dt)
 {
-	for (std::vector<GameObject*>::iterator iterator = gameObjectVec.begin(); iterator != gameObjectVec.end(); ++iterator)
+	std::list<GameObject*>::iterator iter = gameObjectVec.begin();
+	while (iter != gameObjectVec.end())
 	{
-		
+		if ((*iter)->toDelete)
+		{
+			gameObjectVec.erase(iter++);  // alternatively, i = items.erase(i);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+	for (std::list<GameObject*>::iterator iterator = gameObjectVec.begin(); iterator != gameObjectVec.end(); ++iterator)
+	{
+		if ((*iterator)->toDelete)
+		{
+
+
+		}
 	}
 	return true;
 }
@@ -35,17 +52,7 @@ GameObject* ControllerGameObject::CreateGameObject(glm::vec3 position, glm::quat
 	return obj;
 }
 
-void ControllerGameObject::RemoveGameObject(GameObject* obj)
-{
-	std::vector<GameObject*>::iterator iter = std::find(gameObjectVec.begin(), gameObjectVec.end(), obj);
-	if (iter != gameObjectVec.end())
-	{
-		
-		//gameObjectVec.erase(obj);
-	}
-}
-
-void ControllerGameObject::GetGameObjects(std::vector<GameObject*>& gos) const
+void ControllerGameObject::GetGameObjects(std::list<GameObject*>& gos) const
 {
 	gos = gameObjectVec;
 }

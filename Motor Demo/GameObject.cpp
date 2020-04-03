@@ -46,3 +46,12 @@ Transform* GameObject::GetComponentTransform() const
 {
 	return transform;
 }
+
+void GameObject::RemoveComponents()
+{
+	for (std::vector<Component*>::iterator iterator = components.begin(); iterator != components.end(); ++iterator)
+	{
+		delete (*iterator);
+	}
+	components.clear();
+}

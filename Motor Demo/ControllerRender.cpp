@@ -30,24 +30,16 @@ bool ControllerRender::Update(float dt)
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	std::vector<GameObject*> toDraw;
+	std::list<GameObject*> toDraw;
 	Mng->gameObject->GetGameObjects(toDraw);
 
 	// view/projection transformations
 	glm::mat4 projection = glm::perspective(Mng->scene->camera->Zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = Mng->scene->camera->GetViewMatrix();
 
-	for (std::vector<GameObject*>::iterator iterator = toDraw.begin(); iterator != toDraw.end(); ++iterator)
+	for (std::list<GameObject*>::iterator iterator = toDraw.begin(); iterator != toDraw.end(); ++iterator)
 	{
-		//if ((*iterator) == toDraw.back())
-		//{
-		//	// also draw the lamp object
-		//	lampShader.UseProgram();
-		//	lampShader.SetMat4("projection", projection);
-		//	lampShader.SetMat4("view", view);
-		//	lampShader.SetMat4("model", (*iterator)->GetComponentTransform()->GetTransform());
-		//}
-		//else
+		if ((*iterator)->isActive)
 		{
 			lightingShader.UseProgram();
 			lightingShader.SetMat4("projection", projection);
@@ -59,11 +51,12 @@ bool ControllerRender::Update(float dt)
 			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
 			lightingShader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
 			lightingShader.SetVec3("viewPos", Mng->scene->camera->Position);
-		}
 
-		// render the cube
-		glBindVertexArray((*iterator)->VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+			// render the cube
+			glBindVertexArray((*iterator)->VAO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 	}
 
 	Mng->gui->Draw();

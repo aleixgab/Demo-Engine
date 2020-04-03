@@ -3,7 +3,7 @@
 
 #include "Controller.h"
 #include "GameObject.h"
-#include <vector>
+#include <list>
 
 class ControllerGameObject : public Controller
 {
@@ -17,11 +17,10 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateGameObject(glm::vec3 position, glm::quat rotation, glm::vec3 scale, const char* name = nullptr);
-	void RemoveGameObject(GameObject* obj);
-	void GetGameObjects(std::vector<GameObject*>& gos) const;
+	void GetGameObjects(std::list<GameObject*>& gos) const;
 
 public:
-	std::vector<GameObject*> gameObjectVec;
+	std::list<GameObject*> gameObjectVec;
 };
 
 #endif

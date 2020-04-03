@@ -18,6 +18,7 @@ public:
 
 	Transform* GetComponentTransform() const;
 
+	void RemoveComponents();
 	inline void Delete() { toDelete = true; }
 
 public:
@@ -28,6 +29,8 @@ public:
 	std::string name;
 
 	bool toDelete = false;
+
+	bool isActive = true;
 
 	unsigned int VBO = 0u;
 	unsigned int VAO = 0u;
