@@ -29,6 +29,9 @@
     <Filter Include="Sources\GameObjects\Components">
       <UniqueIdentifier>{c0e25661-a383-472e-bfd3-bae21cd611a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\3rd Party\ImGui">
+      <UniqueIdentifier>{90464734-2fbb-49b8-9bb8-e02c47c2b4b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdPart\includes\glad\glad.c">
@@ -62,6 +65,30 @@
     </ClCompile>
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerImGui.cpp">
+      <Filter>Sources\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_demo.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_draw.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_widgets.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_dock.cpp">
+      <Filter>Sources\3rd Party\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +134,36 @@
     </ClInclude>
     <ClInclude Include="ComponentTransform.h">
       <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerImGui.h">
+      <Filter>Sources\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imconfig.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_glfw.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_opengl3.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_internal.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imstb_rectpack.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imstb_textedit.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imstb_truetype.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_dock.h">
+      <Filter>Sources\3rd Party\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

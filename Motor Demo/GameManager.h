@@ -7,6 +7,7 @@
 #include "ControllerRender.h"
 #include "ControllerScene.h"
 #include "ControllerGameObject.h"
+#include "ControllerImGui.h"
 
 class GameManager
 {
@@ -24,6 +25,7 @@ public:
 	ControllerRender* render;
 	ControllerScene* scene;
 	ControllerGameObject* gameObject;
+	ControllerImGui* gui;
 
 private:
 	std::list<Controller*> controllersList;

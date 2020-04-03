@@ -139,9 +139,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3rdPart\includes\glad\glad.c" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui.cpp" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui_demo.cpp" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui_dock.cpp" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="3rdPart\includes\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="ControllerGameObject.cpp" />
+    <ClCompile Include="ControllerImGui.cpp" />
     <ClCompile Include="ControllerRender.cpp" />
     <ClCompile Include="ControllerSceene.cpp" />
     <ClCompile Include="ControllerWindow.cpp" />
@@ -155,11 +163,21 @@
     <ClInclude Include="3rdPart\includes\glad\glad.h" />
     <ClInclude Include="3rdPart\includes\glfw\glfw3.h" />
     <ClInclude Include="3rdPart\includes\glfw\glfw3native.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imconfig.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imgui.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imgui_dock.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imgui_internal.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="3rdPart\includes\imgui\imstb_truetype.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="ControllerGameObject.h" />
+    <ClInclude Include="ControllerImGui.h" />
     <ClInclude Include="ControllerRender.h" />
     <ClInclude Include="ControllerScene.h" />
     <ClInclude Include="ControllerWindow.h" />

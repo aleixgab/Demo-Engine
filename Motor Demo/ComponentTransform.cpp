@@ -60,7 +60,7 @@ glm::mat4 Transform::GetTransform() const
 {
 	glm::mat4 mat = glm::mat4(1.0);
 	mat = translate(mat, position);
-	//glm::rotate(mat, 0.0f, glm::vec3(1.0f));
+	mat = glm::rotate(mat, glm::angle(rotation), glm::axis(rotation));
 	mat = glm::scale(mat, scale);
 	return mat;
 }
