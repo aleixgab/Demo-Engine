@@ -39,9 +39,12 @@ public:
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 	void ProcessMouseScroll(float yoffset);
 
+	void MouseCallback(float xpos, float ypos, bool firstTime);
+
 private:
 	// Calculates the front vector from the Camera's (updated) Euler Angles
 	void UpdateCameraVectors();
+
 
 public:
 	// Camera Attributes
@@ -51,11 +54,14 @@ public:
 	glm::vec3 Right = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 WorldUp = glm::vec3(0.0f, 0.0f, 0.0f);
 	// Euler Angles
-	float Yaw = 0.0f;
-	float Pitch = 0.0f;
+	float yaw = 0.0f;
+	float pitch = 0.0f;
 	// Camera options
-	float MovementSpeed = 0.0f;
-	float MouseSensitivity = 0.0f;
-	float Zoom = 0.0f;
+	float movementSpeed = 0.0f;
+	float mouseSensitivity = 0.0f;
+	float zoom = 0.0f;
+
+	float lastX = 0.0f;
+	float lastY = 0.0f;
 };
 #endif

@@ -18,6 +18,9 @@ public:
 public:
 	Camera* camera = nullptr;
 	GameObject* currGO = nullptr;
+
+private:
+	bool firstClick = true;
 };
 
 #endif

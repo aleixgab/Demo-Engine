@@ -51,6 +51,17 @@ bool ControllerScene::Update(float dt)
 	if (glfwWindowShouldClose(Mng->window->window))//Close windows and finish
 		ret = false;
 
+	if (glfwGetKey(Mng->window->window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	{
+		double xpos, ypos;
+		glfwGetCursorPos(Mng->window->window, &xpos, &ypos);
+		camera->MouseCallback(xpos, ypos, firstClick);
+		if (firstClick)
+			firstClick = false;
+	}
+	if (glfwGetKey(Mng->window->window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+			firstClick = true;
+
 	return ret;
 }
 

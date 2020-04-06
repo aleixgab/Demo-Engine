@@ -34,7 +34,7 @@ bool ControllerRender::Update(float dt)
 	Mng->gameObject->GetGameObjects(toDraw);
 
 	// view/projection transformations
-	glm::mat4 projection = glm::perspective(Mng->scene->camera->Zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(Mng->scene->camera->zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = Mng->scene->camera->GetViewMatrix();
 
 	for (std::list<GameObject*>::iterator iterator = toDraw.begin(); iterator != toDraw.end(); ++iterator)
