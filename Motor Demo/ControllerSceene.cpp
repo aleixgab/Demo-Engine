@@ -48,9 +48,6 @@ bool ControllerScene::Update(float dt)
 	if (glfwGetKey(Mng->window->window, GLFW_KEY_Q) == GLFW_PRESS)
 		camera->ProcessKeyboard(DOWN, dt);
 
-	if (glfwWindowShouldClose(Mng->window->window))//Close windows and finish
-		ret = false;
-
 	if (glfwGetKey(Mng->window->window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
 		double xpos, ypos;
@@ -61,6 +58,9 @@ bool ControllerScene::Update(float dt)
 	}
 	if (glfwGetKey(Mng->window->window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
 			firstClick = true;
+
+	if (glfwWindowShouldClose(Mng->window->window))//Close windows and finish
+		ret = false;
 
 	return ret;
 }

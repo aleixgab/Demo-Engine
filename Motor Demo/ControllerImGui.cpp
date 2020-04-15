@@ -104,21 +104,21 @@ void ControllerImGui::ObjInspector()
 		ImGui::Separator();
 
 		//TODO: NEW COMPONENTS
-		//if (ImGui::BeginMenu("Add new component"))
-		//{
+		if (ImGui::BeginMenu("Add new component"))
+		{
 		//	if (ImGui::MenuItem("Texture", "", nullptr, !currObject->HasComponent(ComponentType_TEXTURE)))
 		//	{
 		//		TextureInfo info;
 		//		info.texture = nullptr;
 		//		currObject->AddComponent(ComponentType_TEXTURE, &info);
 		//	}
-		//	if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasComponent(ComponentType_EMITTER)))
-		//	{
-		//		currObject->AddComponent(ComponentType_EMITTER, nullptr);
-		//	}
-		//	ImGui::MenuItem("Cancel");
-		//	ImGui::EndMenu();
-		//}
+			if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
+			{
+				currObject->AddComponentEmitter();
+			}
+			ImGui::MenuItem("Cancel");
+			ImGui::EndMenu();
+		}
 
 		ImGui::Separator();
 		if (ImGui::Button("Delete GameObject", ImVec2(150, 25)))

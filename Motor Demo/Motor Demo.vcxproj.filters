@@ -32,6 +32,12 @@
     <Filter Include="Sources\3rd Party\ImGui">
       <UniqueIdentifier>{90464734-2fbb-49b8-9bb8-e02c47c2b4b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Library">
+      <UniqueIdentifier>{1f81c5ae-b1e7-4547-9623-05a2f305f5a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Shaders\Particle">
+      <UniqueIdentifier>{87e46d3f-328c-47be-ac44-fc0d8e716bd6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdPart\includes\glad\glad.c">
@@ -86,6 +92,27 @@
     </ClCompile>
     <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp">
       <Filter>Sources\3rd Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEmitter.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerParticles.cpp">
+      <Filter>Sources\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\PlaneImporter.cpp">
+      <Filter>Sources\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\Emitter.cpp">
+      <Filter>Sources\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\Particle.cpp">
+      <Filter>Sources\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\ParticleManager.cpp">
+      <Filter>Sources\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\Timer.cpp">
+      <Filter>Sources\Library</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +186,27 @@
     <ClInclude Include="3rdPart\includes\imgui\imgui_impl_glfw.h">
       <Filter>Sources\3rd Party\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentEmitter.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerParticles.h">
+      <Filter>Sources\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\PlaneImporter.h">
+      <Filter>Sources\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\Emitter.h">
+      <Filter>Sources\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\Particle.h">
+      <Filter>Sources\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\ParticleManager.h">
+      <Filter>Sources\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\Timer.h">
+      <Filter>Sources\Library</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FShader_BasicLight.txt">
@@ -178,6 +226,12 @@
     </Text>
     <Text Include="VertexShader.txt">
       <Filter>Sources\Shaders</Filter>
+    </Text>
+    <Text Include="VShader_ParticlePlane.txt">
+      <Filter>Sources\Shaders\Particle</Filter>
+    </Text>
+    <Text Include="FShader_ParticlePlane.txt">
+      <Filter>Sources\Shaders\Particle</Filter>
     </Text>
   </ItemGroup>
 </Project>

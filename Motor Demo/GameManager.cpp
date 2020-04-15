@@ -7,12 +7,15 @@ GameManager::GameManager()
 	scene = new ControllerScene(this);
 	gameObject = new ControllerGameObject(this);
 	gui = new ControllerImGui(this);
+	particle = new ControllerParticles(this);
 	render = new ControllerRender(this);
 
 	controllersList.push_back(window);
 	controllersList.push_back(scene);
 	controllersList.push_back(gameObject);
 	controllersList.push_back(gui);
+
+	controllersList.push_back(particle);
 	controllersList.push_back(render);
 }
 

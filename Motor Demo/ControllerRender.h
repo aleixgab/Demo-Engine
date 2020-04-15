@@ -5,6 +5,8 @@
 #include "Shader.h"
 #include <list>
 
+class PlaneImporter;
+
 class ControllerRender : public Controller
 {
 public:
@@ -19,6 +21,8 @@ public:
 private:
 	Shader lightingShader;
 	Shader lampShader;
+
+	PlaneImporter* plane;
 };
 
 #endif

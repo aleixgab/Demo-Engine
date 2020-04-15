@@ -92,6 +92,8 @@ void Camera::MouseCallback(float xpos, float ypos, bool firstTime)
 	front.y = sin(glm::radians(pitch));
 	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	Front = glm::normalize(front);
+	Right = glm::normalize(glm::cross(Front, WorldUp));
+	Up = glm::normalize(glm::cross(Right, Front));
 }
 
 void Camera::UpdateCameraVectors()

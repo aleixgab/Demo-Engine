@@ -54,7 +54,7 @@ bool ControllerRender::Update(float dt)
 
 
 			// render the cube
-			glBindVertexArray((*iterator)->VAO);
+			//glBindVertexArray(plane->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 	}

@@ -8,12 +8,13 @@ enum ComponentType
 	ComponentType_NONE,
 
 	ComponentType_TRANSFORM,
+	ComponentType_EMITTER,
 };
 
 class Component
 {
 public:
-	Component(GameObject* gameObject, ComponentType type) : owner(gameObject), type(ComponentType_NONE) {}
+	Component(GameObject* gameObject, ComponentType type) : owner(gameObject) {}
 
 	virtual ~Component() {}
 

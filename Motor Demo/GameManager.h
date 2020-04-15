@@ -8,7 +8,7 @@
 #include "ControllerScene.h"
 #include "ControllerGameObject.h"
 #include "ControllerImGui.h"
-
+#include "ControllerParticles.h"
 class GameManager
 {
 public:
@@ -26,6 +26,7 @@ public:
 	ControllerScene* scene;
 	ControllerGameObject* gameObject;
 	ControllerImGui* gui;
+	ControllerParticles* particle;
 
 private:
 	std::list<Controller*> controllersList;

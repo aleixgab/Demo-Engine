@@ -7,6 +7,8 @@
 #include "Component.h"
 #include "ComponentTransform.h"
 
+class ComponentEmitter;
+
 enum ComponentType;
 
 class GameObject
@@ -17,6 +19,11 @@ public:
 	~GameObject();
 
 	Transform* GetComponentTransform() const;
+	ComponentEmitter* GetComponentEmitter();
+
+	ComponentEmitter* AddComponentEmitter();
+
+	bool HasEmitter();
 
 	void RemoveComponents();
 	inline void Delete() { toDelete = true; }
@@ -31,8 +38,5 @@ public:
 	bool toDelete = false;
 
 	bool isActive = true;
-
-	unsigned int VBO = 0u;
-	unsigned int VAO = 0u;
 };
 #endif // !__GameObject_H__
