@@ -227,10 +227,10 @@
     <Text Include="VertexShader.txt">
       <Filter>Sources\Shaders</Filter>
     </Text>
-    <Text Include="VShader_ParticlePlane.txt">
+    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt">
       <Filter>Sources\Shaders\Particle</Filter>
     </Text>
-    <Text Include="FShader_ParticlePlane.txt">
+    <Text Include="ParticleLibrary\Shaders\Particle_VShader.txt">
       <Filter>Sources\Shaders\Particle</Filter>
     </Text>
   </ItemGroup>

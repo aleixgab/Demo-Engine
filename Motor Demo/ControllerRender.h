@@ -21,8 +21,7 @@ public:
 private:
 	Shader lightingShader;
 	Shader lampShader;
-
-	PlaneImporter* plane;
+	Shader particleShader;
 };
 
 #endif

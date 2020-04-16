@@ -202,11 +202,11 @@
     <Text Include="FragmentShader.txt" />
     <Text Include="FShader_BasicLight.txt" />
     <Text Include="FShader_Lamp.txt" />
-    <Text Include="FShader_ParticlePlane.txt" />
+    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt" />
+    <Text Include="ParticleLibrary\Shaders\Particle_VShader.txt" />
     <Text Include="VertexShader.txt" />
     <Text Include="VShader_BasicLight.txt" />
     <Text Include="VShader_Lamp.txt" />
-    <Text Include="VShader_ParticlePlane.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

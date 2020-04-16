@@ -11,6 +11,7 @@
 #include "Emitter.h"
 
 class PlaneImporter;
+class Shader;
 
 class ParticleManager
 {

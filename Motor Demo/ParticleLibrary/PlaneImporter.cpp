@@ -26,6 +26,28 @@ PlaneImporter::PlaneImporter()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	//
+
+	GLfloat particle_quad[] = {
+		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f
+	};
+	glGenVertexArrays(1, &partVAO);
+	glGenBuffers(1, &partVBO);
+	glBindVertexArray(partVAO);
+	// Fill mesh buffer
+	glBindBuffer(GL_ARRAY_BUFFER, partVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
+	// Set mesh attributes
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+	glBindVertexArray(0);
+
 }
 
 PlaneImporter::~PlaneImporter()

@@ -1,5 +1,6 @@
 #include "Particle.h"
 #include "ParticleManager.h"
+#include "PlaneImporter.h"
 
 #include <glad/glad.h>
 
@@ -41,7 +42,7 @@ bool Particle::Update(float dt)
 		//Scale
 		transform.scale.x += sizeOverTime * dt;
 		transform.scale.y += sizeOverTime * dt;
-		transform.scale.z += sizeOverTime * dt;
+		//transform.scale.z += sizeOverTime * dt;
 
 		//Rotation
 		angularVelocity += angularAcceleration * dt;
@@ -74,13 +75,19 @@ bool Particle::Update(float dt)
 	return ret;
 }
 
-void Particle::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix)
+void Particle::Draw(uint uuid, glm::mat4 viewProjMatrix)
 {
 	if (isActive)
 	{
+		glUniform3fv(glGetUniformLocation(uuid, "position"), 1, &transform.position.y);
+		glUniform1fv(glGetUniformLocation(uuid, "sixe"), 1, &transform.scale.x);
+		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &color.r);
 
+		//this->texture.Bind();
+		glBindVertexArray(owner->parent->plane->partVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
 	}
-
 }
 
 void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
