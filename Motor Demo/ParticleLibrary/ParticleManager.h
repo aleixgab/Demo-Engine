@@ -25,7 +25,8 @@ public:
 	Returns false if user doesn't set camera pointers correctly
 	*/
 	bool Update(float dt);
-	void Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix);
+	//Draw function with shaderUuid, and camera view and projection
+	void Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
 	//You get the next slot in the array for the new particle
 	bool GetNextParticleSlot(int& id);
 

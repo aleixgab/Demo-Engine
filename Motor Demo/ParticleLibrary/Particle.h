@@ -38,8 +38,8 @@ public:
 	//Set all the particle values and start the particle
 	void CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner);
 	bool Update(float dt);
-	//Draw function
-	void Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix);
+	//Draw function with shaderUuid, and camera view and projection
+	void Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
 	//We safe the distance between the camera and the particle to order by distance after this
 	void SaveCameraDistance(glm::vec3 cameraPosition);
 private:

@@ -1,6 +1,7 @@
 #include "ParticleManager.h"
 #include <algorithm>
 #include "PlaneImporter.h"
+#include <iostream>
 
 ParticleManager::ParticleManager()
 {
@@ -63,7 +64,7 @@ bool ParticleManager::Update(float dt)
 }
 
 //Call this function from the renderer to draw all the particles 
-void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix)
+void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	//Sort the particles from end to beginning depend on the camera distance
 	std::sort(activePartVec.begin(), activePartVec.end(), [](const Particle* particle1, const Particle* particle2)
@@ -74,7 +75,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix)
 	for (int i = 0; i < activePartVec.size(); ++i)
 	{
 		//Draw each active particle
-		activePartVec[i]->Draw(shaderProgramUuid, viewProjMatrix);
+		activePartVec[i]->Draw(shaderProgramUuid, viewMatrix, projMatrix);
 	}
 }
 
@@ -131,6 +132,7 @@ void ParticleManager::StartEmmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StartEmitter();
+	std::cout << "START EMITTER" << std::endl;
 }
 
 void ParticleManager::PauseAllEmitters()

@@ -1,12 +1,13 @@
 #include "ComponentTransform.h"
 #include "glm/gtx/matrix_decompose.hpp"
 #include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include "imgui/imgui.h"
 
 Transform::Transform(GameObject* gameObject, glm::vec3 position, glm::quat rotation, glm::vec3 scale) : Component(gameObject, ComponentType_TRANSFORM)
 {
 	this->position = position;
-	this->rotation = rotation;
+	this->quatRot = rotation;
 	this->scale = scale;
 }
 
@@ -18,7 +19,7 @@ void Transform::SetTransform(glm::mat4 trans)
 {
 	glm::vec3 skew;
 	glm::vec4 perspective;
-	glm::decompose(trans, scale, rotation, position, skew, perspective);
+	glm::decompose(trans, scale, quatRot, position, skew, perspective);
 }
 
 void Transform::SetIdentity()
@@ -35,7 +36,7 @@ void Transform::SetPos(glm::vec3 position)
 
 void Transform::SetRotation(glm::quat rotation)
 {
-	this->rotation = rotation;
+	this->quatRot = rotation;
 }
 
 void Transform::SetScale(glm::vec3 scale)
@@ -50,7 +51,7 @@ glm::vec3 Transform::GetPos() const
 
 glm::quat Transform::GetRotation() const
 {
-	return rotation;
+	return quatRot;
 }
 
 glm::vec3 Transform::GetScale() const
@@ -62,7 +63,7 @@ glm::mat4 Transform::GetTransform() const
 {
 	glm::mat4 mat = glm::mat4(1.0);
 	mat = translate(mat, position);
-	mat = glm::rotate(mat, glm::angle(rotation), glm::axis(rotation));
+	mat = glm::rotate(mat, glm::angle(quatRot), glm::axis(quatRot));
 	mat = glm::scale(mat, scale);
 	return mat;
 }
@@ -73,7 +74,7 @@ void Transform::Inspector()
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
-		glm::vec3 angles = glm::eulerAngles(rotation);
+		glm::vec3 angles = glm::eulerAngles(quatRot);
 
 		angles[0] = glm::degrees(angles.x);
 		angles[1] = glm::degrees(angles.y);
@@ -87,18 +88,11 @@ void Transform::Inspector()
 
 		if (ImGui::DragFloat3("Rotation", &angles[0], 1, 0.0f, 0.0f, "%.2f"))
 		{
-
-			SetRotation(glm::eulerAngleXYZ(angles.x, angles.y, angles.z));
-
-			glm::quat QuatAroundX = glm::angleAxis(angles.x, glm::vec3(1.0, 0.0, 0.0));
-			glm::quat QuatAroundY = glm::angleAxis(angles.y, glm::vec3(0.0, 1.0, 0.0));
-			glm::quat QuatAroundZ = glm::angleAxis(angles.z, glm::vec3(0.0, 0.0, 1.0));
-			SetRotation(glm::normalize(QuatAroundX * QuatAroundY * QuatAroundZ));
+			SetRotation(glm::toQuat(glm::eulerAngleXYZ(glm::radians(angles.x), glm::radians(angles.y), glm::radians(angles.z))));
 		}
 
 		if (ImGui::Button("Reset", ImVec2(100, 20)))
 			SetIdentity();
-
 	}
 }
 

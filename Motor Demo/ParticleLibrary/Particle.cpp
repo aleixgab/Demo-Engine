@@ -19,7 +19,7 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
-	color = values.color;
+	color = glm::vec4(1.0f);
 
 	isActive = true;
 
@@ -42,7 +42,7 @@ bool Particle::Update(float dt)
 		//Scale
 		transform.scale.x += sizeOverTime * dt;
 		transform.scale.y += sizeOverTime * dt;
-		//transform.scale.z += sizeOverTime * dt;
+		transform.scale.z += sizeOverTime * dt;
 
 		//Rotation
 		angularVelocity += angularAcceleration * dt;
@@ -75,12 +75,15 @@ bool Particle::Update(float dt)
 	return ret;
 }
 
-void Particle::Draw(uint uuid, glm::mat4 viewProjMatrix)
+void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	if (isActive)
 	{
-		glUniform3fv(glGetUniformLocation(uuid, "position"), 1, &transform.position.y);
-		glUniform1fv(glGetUniformLocation(uuid, "sixe"), 1, &transform.scale.x);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		glUseProgram(uuid);
+		glUniformMatrix4fv(glGetUniformLocation(uuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
 		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &color.r);
 
 		//this->texture.Bind();
@@ -88,6 +91,7 @@ void Particle::Draw(uint uuid, glm::mat4 viewProjMatrix)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 	}
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
@@ -127,7 +131,7 @@ bool Particle::LookAtCamera()
 
 glm::mat4 PartTransform::GetMatrix() const
 {
-	glm::mat4 mat = glm::mat4(1.0);
+	glm::mat4 mat = glm::mat4(1.0f);
 	mat = translate(mat, position);
 	mat = glm::rotate(mat, glm::angle(rotation), glm::axis(rotation));
 	mat = glm::scale(mat, scale);

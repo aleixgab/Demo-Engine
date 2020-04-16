@@ -48,22 +48,22 @@ bool ControllerRender::Update(float dt)
 			lightingShader.UseProgram();
 			lightingShader.SetMat4("projection", projection);
 			lightingShader.SetMat4("view", view);
-
 			lightingShader.SetMat4("model", (*iterator)->GetComponentTransform()->GetTransform());
+
 			// be sure to activate shader when setting uniforms/drawing objects
 			lightingShader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-			lightingShader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
+			lightingShader.SetVec3("lightPos", 0.0f, 0.0f, 0.0f);
 			lightingShader.SetVec3("viewPos", Mng->scene->camera->Position);
 
 
 			// render the cube
-			glBindVertexArray(Mng->particle->particleManager->plane->VAO);
+			glBindVertexArray(Mng->particle->particleManager->plane->partVAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 	}
 
-	Mng->particle->particleManager->Draw(particleShader.uid, view);
+	Mng->particle->particleManager->Draw(particleShader.uid, view, projection);
 	Mng->gui->Draw();
 	int display_w, display_h;
 	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);

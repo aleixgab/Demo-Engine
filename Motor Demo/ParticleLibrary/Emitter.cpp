@@ -72,6 +72,7 @@ void Emitter::StopEmitter()
 
 	parent->numActivePart -= particles.size();
 	runningTime = false;
+	secParticleCreation = 0.0f;
 
 	particles.clear();
 	emitterTimer.Stop();

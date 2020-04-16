@@ -3,50 +3,57 @@
 
 PlaneImporter::PlaneImporter()
 {
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-	};
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	//float vertices[] = {
+	//-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	// 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	// 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	//-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	//-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	//};
+	//glGenVertexArrays(1, &VAO);
+	//glGenBuffers(1, &VBO);
 
-	glBindVertexArray(VAO);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// normal attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//glBindVertexArray(VAO);
+
+	//// position attribute
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//// normal attribute
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
 	//
 
 	GLfloat particle_quad[] = {
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-
-		0.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f
+		//POSITION				TEXT COORD
+		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f,		1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,
+					  
+		-0.5f,  0.5f, 0.0f,		0.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f,		1.0f, 1.0f,
+		 0.5f, -0.5f, 0.0f,		1.0f, 0.0f
 	};
 	glGenVertexArrays(1, &partVAO);
 	glGenBuffers(1, &partVBO);
-	glBindVertexArray(partVAO);
+
 	// Fill mesh buffer
 	glBindBuffer(GL_ARRAY_BUFFER, partVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
+
+	glBindVertexArray(partVAO);
+
 	// Set mesh attributes
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-	glBindVertexArray(0);
+	// textCoords
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 }
 
