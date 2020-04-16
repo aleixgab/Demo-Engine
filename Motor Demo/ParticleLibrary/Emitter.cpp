@@ -11,7 +11,7 @@ Emitter::~Emitter()
 
 void Emitter::Update(float dt)
 {
-	if (particlesEmition > 0)
+	if (particlesEmition > 0 && runningTime)
 	{
 		float time = emitterTimer.GetTimeSec();
 		if (time > secParticleCreation)
@@ -26,13 +26,8 @@ void Emitter::Update(float dt)
 	}
 }
 
-bool Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
+void Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
 {
-	return false;
-	//If we don't have particles to create we return false;
-	if (numParticles == 0)
-		return false;
-
 	for (int i = 0; i < numParticles; ++i)
 	{
 		int particleId = 0;
@@ -40,7 +35,7 @@ bool Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
 		{
 			globalPosition += GetRandomPos();
 			//Create the particle in the correctly slot in the pool
-			parent->particleArray[particleId].CreateParticle(globalPosition, startValues);
+			parent->particleArray[particleId].CreateParticle(globalPosition, startValues, this);
 			//Save the particle in emitter list to know wich particles have this emitter
 			particles.push_back(&parent->particleArray[particleId]);
 			//Add one count in the active particles from ParticleManager
@@ -49,8 +44,6 @@ bool Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
 		else
 			break;
 	}
-
-	return true;
 }
 
 void Emitter::SetShapeEmitter(ShapeEmitter shape)
@@ -65,6 +58,7 @@ void Emitter::SetGlobalPos(glm::vec3 globalPos)
 
 void Emitter::StartEmitter()
 {
+	runningTime = true;
 	emitterTimer.Play();
 }
 
@@ -77,9 +71,15 @@ void Emitter::StopEmitter()
 	}
 
 	parent->numActivePart -= particles.size();
+	runningTime = false;
 
 	particles.clear();
 	emitterTimer.Stop();
+}
+
+void Emitter::PauseEmitter()
+{
+	runningTime = false;
 }
 
 glm::vec3 Emitter::GetRandomPos()

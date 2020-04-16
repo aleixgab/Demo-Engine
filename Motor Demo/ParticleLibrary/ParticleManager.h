@@ -10,15 +10,21 @@
 #include "Particle.h"
 #include "Emitter.h"
 
-class PlaneImporter
+class PlaneImporter;
+
 class ParticleManager
 {
 public:
+	ParticleManager();
+	~ParticleManager();
+
 	//Set camera pointers. If returns false it's mean some pointer is null
 	bool SetCameraValues(glm::vec3 * pointerCameraUp, glm::vec3* pointerCameraForward, glm::vec3* cameraPos);
-	//Send delta time that will affect the particles
+	/*Send delta time that will affect the particles
+	Returns false if user doesn't set camera pointers correctly
+	*/
 	bool Update(float dt);
-	void Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix, PlaneInfoOGL plane);
+	void Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix);
 	//You get the next slot in the array for the new particle
 	bool GetNextParticleSlot(int& id);
 
@@ -27,10 +33,13 @@ public:
 	//Start specific emitter
 	void StartEmmitter(Emitter *emitter);
 
+	void PauseAllEmitters();
+	void PauseEmmitter(Emitter* emitter);
+
 	//Stop Playing all the emitters
 	void StopAllEmitters();
 	//Stop specific emitter
-	void StopEmmitter(Emitter* emitter);
+	void StopEmitter(Emitter* emitter);
 
 	//Create new emitter
 	Emitter* CreateEmitter();

@@ -29,7 +29,7 @@ ComponentEmitter* GameObject::GetComponentEmitter()
 	ComponentEmitter* ret = nullptr;
 	for (std::vector<Component*>::iterator iterator = components.begin(); iterator != components.end(); ++iterator)
 	{
-		if((*iterator)->type == ComponentType_EMITTER);
+		if((*iterator)->type == ComponentType_EMITTER)
 			ret = (ComponentEmitter*)(*iterator);
 	}
 	return ret;
@@ -37,9 +37,9 @@ ComponentEmitter* GameObject::GetComponentEmitter()
 
 ////////////////////////////////////////////LIBRARY -- new Emitter
 
-ComponentEmitter* GameObject::AddComponentEmitter()
+ComponentEmitter* GameObject::AddComponentEmitter(ParticleManager* manager)
 {
-	ComponentEmitter* newEmitter = new ComponentEmitter(this);
+	ComponentEmitter* newEmitter = new ComponentEmitter(this, manager);
 	components.push_back(newEmitter);
 
 	newEmitter->type = ComponentType_EMITTER;

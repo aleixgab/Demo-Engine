@@ -8,6 +8,7 @@
 #include "ComponentTransform.h"
 
 class ComponentEmitter;
+class ParticleManager;
 
 enum ComponentType;
 
@@ -21,7 +22,7 @@ public:
 	Transform* GetComponentTransform() const;
 	ComponentEmitter* GetComponentEmitter();
 
-	ComponentEmitter* AddComponentEmitter();
+	ComponentEmitter* AddComponentEmitter(ParticleManager* manager);
 
 	bool HasEmitter();
 

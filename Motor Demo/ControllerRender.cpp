@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include "GameManager.h"
 
+#include "ControllerParticles.h"
+#include "ParticleLibrary/ParticleManager.h"
 #include "ControllerWindow.h"
 
 ControllerRender::ControllerRender(GameManager* mng) : Controller(mng)
@@ -59,6 +61,7 @@ bool ControllerRender::Update(float dt)
 		}
 	}
 
+	//Mng->particle->particleManager->Draw()
 	Mng->gui->Draw();
 	int display_w, display_h;
 	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);

@@ -16,6 +16,8 @@ public:
 	void Hierarchy();
 	void ObjInspector();
 
+	void PlayStop();
+
 	void Draw();
 	
 	bool CleanUp();

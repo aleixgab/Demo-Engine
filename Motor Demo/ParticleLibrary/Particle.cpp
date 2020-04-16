@@ -6,7 +6,7 @@
 //#pragma comment (lib, "glu32.lib")    
 //#pragma comment (lib, "opengl32.lib") 
 
-bool Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values)
+void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner)
 {
 	//Save all the initial values 
 	lifeTime = CreateRandomNum(values.life);
@@ -22,14 +22,16 @@ bool Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values)
 
 	isActive = true;
 
-	return false;
+	this->owner = owner;
 }
 
 bool Particle::Update(float dt)
 {
 	bool ret = true;
 	
-	lifeTime -= dt;
+	if (!owner->runningTime)
+		dt = 0.0f;
+
 	if (lifeTime > 0.0f)
 	{
 		//Tranlate
@@ -58,21 +60,21 @@ bool Particle::Update(float dt)
 
 		//glDrawArrays(GL_TRIANGLES, 0, gpuParticles.size() * 6);
 
-		LookAtCamera();
+		ret = LookAtCamera();
+		lifeTime -= dt;
 	}
 	else
 	{
 		//Deactivate the particle
-		ret = false;
 		isActive = false;
 		owner->particles.remove(this);
 		owner->parent->numActivePart--;
 	}
-
+	
 	return ret;
 }
 
-void Particle::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix, PlaneInfoOGL plane)
+void Particle::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix)
 {
 	if (isActive)
 	{
@@ -100,14 +102,20 @@ float Particle::CreateRandomNum(glm::vec2 edges)//.x = minPoint & .y = maxPoint
 }
 
 //Shader
-void Particle::LookAtCamera()
+bool Particle::LookAtCamera()
 {
-	glm::vec3 zAxis = -(*owner->parent->cameraForward);
-	glm::vec3 yAxis = *owner->parent->cameraUp;
-	glm::vec3 xAxis = glm::normalize(glm::cross(yAxis,zAxis));
+	bool ret = false;
+	if (owner->parent->cameraForward && owner->parent->cameraUp)
+	{
+		glm::vec3 zAxis = -(*owner->parent->cameraForward);
+		glm::vec3 yAxis = *owner->parent->cameraUp;
+		glm::vec3 xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
 
-	glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
+		glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
+		ret = true;
+	}
+	return ret;
 }
 
 glm::mat4 PartTransform::GetMatrix() const

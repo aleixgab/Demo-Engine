@@ -36,17 +36,18 @@ class Particle
 public:
 
 	//Set all the particle values and start the particle
-	bool CreateParticle(glm::vec3 pos, ParticleStartValues values);
+	void CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner);
 	bool Update(float dt);
 	//Draw function
-	void Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix, PlaneInfoOGL plane);
+	void Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix);
 	//We safe the distance between the camera and the particle to order by distance after this
 	void SaveCameraDistance(glm::vec3 cameraPosition);
 private:
 	/*We rotate the plane to force it to be always in parallel of camera view
 	  This function needs the vector UP(y axis) and FRONT(z axis) of the camera that we save it previously
+	  Return false if the user doesn't save the camera pointers
 	*/
-	void LookAtCamera();
+	bool LookAtCamera();
 	//Create random float betweet 2 edges
 	float CreateRandomNum(glm::vec2 edges);
 

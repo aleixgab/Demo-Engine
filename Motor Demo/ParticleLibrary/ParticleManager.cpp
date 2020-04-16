@@ -2,17 +2,14 @@
 #include <algorithm>
 #include "PlaneImporter.h"
 
-bool ParticleManager::Start()
+ParticleManager::ParticleManager()
 {
 	plane = new PlaneImporter();
-
-	return true;
 }
 
-bool ParticleManager::CleanUp()
+ParticleManager::~ParticleManager()
 {
 	delete plane;
-	return true;
 }
 
 bool ParticleManager::SetCameraValues(glm::vec3* cameraUp, glm::vec3* cameraForward, glm::vec3* cameraPos)
@@ -48,8 +45,11 @@ bool ParticleManager::Update(float dt)
 		if (particleArray[i].isActive)
 		{
 			//We do the update only to the active particles. Then we add the particles in the vector to draw it after this
-			particleArray[i].Update(dt);
-			particleArray[i].SaveCameraDistance(*cameraPos);
+			ret = particleArray[i].Update(dt);
+			if (cameraPos)
+				particleArray[i].SaveCameraDistance(*cameraPos);
+			else
+				ret = false;
 			activePartVec[j++] = &particleArray[i];
 		}
 		else
@@ -63,7 +63,7 @@ bool ParticleManager::Update(float dt)
 }
 
 //Call this function from the renderer to draw all the particles 
-void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix, PlaneInfoOGL plane)
+void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix)
 {
 	//Sort the particles from end to beginning depend on the camera distance
 	std::sort(activePartVec.begin(), activePartVec.end(), [](const Particle* particle1, const Particle* particle2)
@@ -74,7 +74,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewProjMatrix, Pla
 	for (int i = 0; i < activePartVec.size(); ++i)
 	{
 		//Draw each active particle
-		activePartVec[i]->Draw(shaderProgramUuid, viewProjMatrix, plane);
+		activePartVec[i]->Draw(shaderProgramUuid, viewProjMatrix);
 	}
 }
 
@@ -133,6 +133,20 @@ void ParticleManager::StartEmmitter(Emitter* emitter)
 		emitter->StartEmitter();
 }
 
+void ParticleManager::PauseAllEmitters()
+{
+	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
+	{
+		(*it)->PauseEmitter();
+	}
+}
+
+void ParticleManager::PauseEmmitter(Emitter* emitter)
+{
+	if (emitter)
+		emitter->PauseEmitter();
+}
+
 void ParticleManager::StopAllEmitters()
 {
 	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
@@ -141,7 +155,7 @@ void ParticleManager::StopAllEmitters()
 	}
 }
 
-void ParticleManager::StopEmmitter(Emitter* emitter)
+void ParticleManager::StopEmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StopEmitter();

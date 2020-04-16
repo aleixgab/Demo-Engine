@@ -3,6 +3,8 @@
 #include "GameManager.h" 
 #include "GameObject.h"
 
+#include "ParticleLibrary/ParticleManager.h"
+
 #include "imgui/imgui.h"
 #include "3rdPart/includes/imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -38,7 +40,7 @@ bool ControllerImGui::Update(float dt)
 	ImGui::NewFrame();
 	Hierarchy();
 	ObjInspector();
-
+	PlayStop();
 	return true;
 }
 
@@ -75,8 +77,6 @@ void ControllerImGui::Hierarchy()
 		}
 		ImGui::End();
 	}
-
-	//ImGui::ShowDemoWindow(&alwaysOpen);
 }
 
 void ControllerImGui::ObjInspector()
@@ -114,7 +114,7 @@ void ControllerImGui::ObjInspector()
 		//	}
 			if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
 			{
-				currObject->AddComponentEmitter();
+				currObject->AddComponentEmitter(Mng->particle->particleManager);
 			}
 			ImGui::MenuItem("Cancel");
 			ImGui::EndMenu();
@@ -133,6 +133,36 @@ void ControllerImGui::ObjInspector()
 	}
 	ImGui::End();
 
+}
+
+void ControllerImGui::PlayStop()
+{
+	bool alwaysOpen = true;
+	if (Mng->scene->currGO)
+	{
+		ComponentEmitter* component = Mng->scene->currGO->GetComponentEmitter();
+		if (component)
+		{
+			if (ImGui::Begin("PlayStop", &alwaysOpen, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize))
+			{
+				if (ImGui::Button("Play", { 50,25 }))
+				{
+					Mng->particle->particleManager->StartEmmitter(component->emitter);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Pause", { 50,25 }))
+				{
+					Mng->particle->particleManager->PauseEmmitter(component->emitter);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Stop", { 50,25 }))
+				{
+					Mng->particle->particleManager->StopEmitter(component->emitter);
+				}
+				ImGui::End();
+			}
+		}
+	}
 }
 
 void ControllerImGui::Draw()

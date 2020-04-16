@@ -56,7 +56,7 @@ public:
 	/*Create Particle with the start values
 	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
 	And the global position in the world*/
-	bool CreateParticles(int numParticles, glm::vec3 globalPosition);
+	void CreateParticles(int numParticles, glm::vec3 globalPosition);
 
 	//Set emision type to know witch direction will take the particles and witch shape
 	void SetShapeEmitter(ShapeEmitter shape);
@@ -67,6 +67,8 @@ public:
 	void StartEmitter();
 	//Stop to emit particles
 	void StopEmitter();
+	//Stop to emit particles
+	void PauseEmitter();
 private:
 	//Get the position according to the differents shapes we have, and set the particle direction 
 	glm::vec3 GetRandomPos();
@@ -87,7 +89,9 @@ public:
 	float coneShapeRad = 0.0f;
 
 	//The particles we want to create per second.
-	float particlesEmition = 0.0f;
+	int particlesEmition = 0;
+	//Set true if time is running for this emitter, false to pause it
+	bool runningTime = false;
 private:
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;
