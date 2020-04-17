@@ -38,9 +38,3 @@ float Timer::GetTimeMilisec() const
 	Clock::time_point currentTime = Clock::now();
 	return std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - timeStart).count() - timePaused;
 }
-
-float Timer::GetTimeSec() const
-{
-	Clock::time_point currentTime = Clock::now();
-	return std::chrono::duration_cast<std::chrono::seconds>(currentTime - timeStart).count() - (timePaused / 1000);
-}

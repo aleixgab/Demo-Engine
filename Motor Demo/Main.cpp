@@ -16,7 +16,10 @@ int main(int argc, char** argv)
 	while (canContinue)
 	{
 		canContinue = Mng->Update();
+		if (!canContinue)
+			std::cout << "STOP UPDATE" << std::endl;
 	}
+
 
 	Mng->CleanUp();
 	return 0;

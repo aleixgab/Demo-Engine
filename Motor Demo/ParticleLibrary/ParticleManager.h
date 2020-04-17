@@ -10,6 +10,10 @@
 #include "Particle.h"
 #include "Emitter.h"
 
+#include <random>
+
+typedef unsigned int uint;
+
 class PlaneImporter;
 class Shader;
 
@@ -43,6 +47,11 @@ public:
 	//Stop specific emitter
 	void StopEmitter(Emitter* emitter);
 
+	//Get random num between 0 and max uint32 value
+	uint GetRandomNum();
+	//Ger random num with a min and max parameter
+	float GetRandomNum(float min, float max);
+
 	//Create new emitter
 	Emitter* CreateEmitter();
 	//Remove the wanted emitter
@@ -66,6 +75,8 @@ private:
 	std::vector<Particle*> activePartVec;
 	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	
 	int lastUsedParticle = 0;
+
+	std::mt19937 rng;
 };
 
 #endif

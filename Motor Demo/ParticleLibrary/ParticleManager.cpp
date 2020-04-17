@@ -3,9 +3,12 @@
 #include "PlaneImporter.h"
 #include <iostream>
 
+
 ParticleManager::ParticleManager()
 {
 	plane = new PlaneImporter();
+
+	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 }
 
 ParticleManager::~ParticleManager()
@@ -161,4 +164,14 @@ void ParticleManager::StopEmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StopEmitter();
+}
+
+uint ParticleManager::GetRandomNum()
+{
+	return rng();
+}
+
+float ParticleManager::GetRandomNum(float min, float max)
+{
+	return (max - min) * (float)rng() / (float)rng.max() + min;
 }

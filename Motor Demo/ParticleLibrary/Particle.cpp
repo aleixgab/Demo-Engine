@@ -4,12 +4,12 @@
 
 #include <glad/glad.h>
 #include <glm/gtx/compatibility.hpp>
-
-//#pragma comment (lib, "glu32.lib")    
-//#pragma comment (lib, "opengl32.lib") 
+#include <random>
 
 void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner)
 {
+	this->owner = owner;
+
 	//Save all the initial values 
 	initialLife = currLife = CreateRandomNum(values.life);
 	speed = CreateRandomNum(values.speed);
@@ -26,9 +26,9 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter
 	isMulticolor = values.isMulticolor;
 	index = 0u;
 
-	isActive = true;
+	transform.position = pos;
 
-	this->owner = owner;
+	isActive = true;
 }
 
 bool Particle::Update(float dt)
@@ -139,8 +139,9 @@ float Particle::CreateRandomNum(glm::vec2 edges)//.x = minPoint & .y = maxPoint
 {
 	float num = edges.x;
 	if (edges.x < edges.y)
-		num = edges.x + (((float)rand()) / (float)RAND_MAX) * (edges.y - edges.x);
-
+	{
+		num = owner->parent->GetRandomNum(edges.x, edges.y);
+	}
 	return num;
 }
 

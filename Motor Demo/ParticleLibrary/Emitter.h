@@ -27,8 +27,15 @@ struct ParticleColor
 };
 
 enum ShapeEmitter {
+	//Spawn particles from the box and takes object Up direction
 	BoxShape = 0,
+	//Spawn particles from all the sphere size
 	SphereShape,
+	//Spawn particles from the border of the sphere
+	SphereShapeBorder,
+	//Spawn particles form the center
+	SphereShapeCenter,
+	//Spawn particles from the tip and goes to the circle base
 	ConeShape
 };
 
@@ -78,7 +85,8 @@ public:
 
 	//Set emision type to know witch direction will take the particles and witch shape
 	void SetShapeEmitter(ShapeEmitter shape);
-
+	ShapeEmitter GetShapeEmitter() const;
+	//Set the position of the emitter in the world coordinates
 	void SetGlobalPos(glm::vec3 globalPos);
 
 	//Start to emit particles
@@ -88,7 +96,13 @@ public:
 	//Stop to emit particles
 	void PauseEmitter();
 private:
-	//Get the position according to the differents shapes we have, and set the particle direction 
+	/*Get the position according to the differents shapes we have, and set the particle direction 
+	BoxShape -> the particles will spawn in vec3 boxShapeSize
+	SphereShape -> the particles will spawn in a sphere with this radius float sphereShapeRad
+	ConeShape -> the particles will spawn in the center of the emitter and will go to the circle with this height (float coneShapeHeight) in this radius (float coneShapeRad)
+
+	IMPORTANT TO SET THE GLOBAL POS BEFORE CREATE THE PARTCLES
+	*/
 	glm::vec3 GetRandomPos();
 public:
 	//Public varible to have the particle start values acces out of this class
@@ -99,15 +113,15 @@ public:
 	//The particle manager pointer to acces in the own functions
 	ParticleManager* parent;
 	//The dimensions of the box shape that will spawn the particles (width and height)
-	glm::vec3 boxShapeSize;
+	glm::vec3 boxShapeSize = glm::vec3(1.0f);
 	//The radiant of the sphere shape that will spawn the particles
-	float sphereShapeRad = 0.0f;
+	float sphereShapeRad = 1.0f;
 	//The height is the distance between the tip of the cone to the base, and the rad is witch radiant will have this base
-	float coneShapeHeight = 0.0f;
-	float coneShapeRad = 0.0f;
+	float coneShapeHeight = 1.0f;
+	float coneShapeRad = 1.0f;
 
 	//The particles we want to create per second.
-	int particlesEmition = 0;
+	int particlesEmition = 1.0f;
 	//Set true if time is running for this emitter, false to pause it
 	bool runningTime = false;
 private:

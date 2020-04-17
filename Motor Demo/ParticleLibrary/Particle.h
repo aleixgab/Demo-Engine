@@ -6,6 +6,8 @@
 #include <vector>
 
 #define PI 3.14159265359
+#define MAX_UINT32 4294967295
+
 typedef unsigned int uint;
 
 class ParticleStartValues;
@@ -79,7 +81,7 @@ private:
 
 	std::vector<ParticleColor> color;
 	bool isMulticolor = false;
-	unsigned int index = 0u;
+	uint index = 0u;
 
 	glm::vec4 finalColor = glm::vec4(1.0f);
 	PartTransform transform;
