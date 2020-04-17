@@ -17,6 +17,7 @@ public:
 
 	void CheckMinMax(glm::vec2& value);
 
+	bool EditColor(ParticleColor& colorTime, unsigned int pos = 0u);
 
 public:
 	//Check box Randomize values
@@ -34,6 +35,8 @@ public:
 
 	Emitter* emitter;
 
+	int nextPos = 100;
+	glm::vec4 nextColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 };
 
 #endif

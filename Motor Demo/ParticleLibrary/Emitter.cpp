@@ -2,7 +2,12 @@
 #include "ParticleManager.h"
 #include "Timer.h"
 
-Emitter::Emitter(ParticleManager* parent): parent(parent) {}
+Emitter::Emitter(ParticleManager* parent): parent(parent) 
+{
+	ParticleColor startColor;
+	startColor.name = "Start Color";
+	startValues.colorList.push_back(startColor);
+}
 
 Emitter::~Emitter()
 {

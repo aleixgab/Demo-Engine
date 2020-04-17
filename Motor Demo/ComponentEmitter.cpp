@@ -54,6 +54,51 @@ void ComponentEmitter::Inspector()
 			ImGui::DragFloat("Duration", &duration, 0.5f, 0.5f, 20.0f, "%.2f");*/
 		}
 	}
+
+
+	if (ImGui::CollapsingHeader("Particle Color"))
+	{
+		ImGui::Text("Particle Color");
+		ImGui::SameLine();
+		std::list<ParticleColor>::iterator iter = emitter->startValues.colorList.begin();
+		uint posList = 0u;
+		while (iter != emitter->startValues.colorList.end())
+		{
+			//TODO: they must be able to change position
+			if ((iter) == emitter->startValues.colorList.begin())
+			{//Cant delete 1st color
+
+				if (!EditColor(*iter))
+					break;
+				iter++;
+			}
+			else
+			{
+				if (!EditColor(*iter, posList))
+					emitter->startValues.colorList.erase(iter++);
+				else
+					iter++;
+			}
+			++posList;
+		}
+		ImGui::Separator();
+		ImGui::Checkbox("Color time", &emitter->startValues.isMulticolor);
+		if (emitter->startValues.isMulticolor)
+		{
+
+			ImGui::DragInt("Position", &nextPos, 1.0f, 1, 100);
+			ImGui::ColorPicker4("", &nextColor.x, ImGuiColorEditFlags_AlphaBar);
+			if (ImGui::Button("Add Color", ImVec2(125, 25)))
+			{
+				ParticleColor colorTime;
+				colorTime.color = nextColor;
+				colorTime.position = (float)nextPos / 100;
+				colorTime.name = std::to_string((int)nextPos) + "%";
+				emitter->startValues.colorList.push_back(colorTime);
+				emitter->startValues.colorList.sort();
+			}
+		}
+	}
 }
 
 void ComponentEmitter::ShowFloatValue(glm::vec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max)
@@ -84,4 +129,37 @@ void ComponentEmitter::CheckMinMax(glm::vec2& value)
 {
 	if (value.x > value.y)
 		value.y = value.x;
+}
+
+bool ComponentEmitter::EditColor(ParticleColor& colorTime, unsigned int pos)
+{
+	bool ret = true;
+	ImVec4 color;
+	color.x = colorTime.color.x;
+	color.y = colorTime.color.y;
+	color.z = colorTime.color.z;
+	color.w = colorTime.color.w;
+	
+	if (ImGui::ColorButton(colorTime.name.data(), color, ImGuiColorEditFlags_None, ImVec2(100, 20)))
+		colorTime.changingColor = !colorTime.changingColor;
+
+	if (!colorTime.changingColor)
+	{
+		ImGui::SameLine();
+		ImGui::TextUnformatted(colorTime.name.data());
+		if (pos > 0)
+		{
+			std::string colorStr = "Remove Color ";
+			colorStr.append(std::to_string(pos));
+			ImGui::SameLine();
+			if (ImGui::Button(colorStr.data(), ImVec2(125, 25)))
+				ret = false;
+		}
+		else if (!emitter->startValues.isMulticolor)
+			ret = false;
+	}
+	else
+		ImGui::ColorEdit4(colorTime.name.data(), &colorTime.color.x, ImGuiColorEditFlags_AlphaBar);
+
+	return ret;
 }

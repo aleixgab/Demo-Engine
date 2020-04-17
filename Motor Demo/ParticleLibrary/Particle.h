@@ -3,19 +3,14 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <vector>
 
 #define PI 3.14159265359
 typedef unsigned int uint;
 
 class ParticleStartValues;
 class Emitter;
-
-struct PlaneInfoOGL
-{
-	uint vao = 0u;
-	uint ibo = 0u;
-	uint indicesCount = 0u;
-};
+struct ParticleColor;
 
 //Transform of the particle where there are Translation - Rotation - Scale
 struct PartTransform
@@ -60,7 +55,7 @@ public:
 	float cameraDist = 0.0f;
 private:
 	//Time in seconds that the particle will be alive
-	float lifeTime = 0.0f;
+	float currLife, initialLife = 0.0f;
 
 	//Velocity of the particle
 	float speed = 0.0f;
@@ -82,8 +77,11 @@ private:
 	//Increase(or decrease if it's negative) of the size of the particle
 	float sizeOverTime = 0.0f;
 
-	glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	std::vector<ParticleColor> color;
+	bool isMulticolor = false;
+	unsigned int index = 0u;
 
+	glm::vec4 finalColor = glm::vec4(1.0f);
 	PartTransform transform;
 };
 

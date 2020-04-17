@@ -2,12 +2,29 @@
 #define __Emitter_H__
 
 #include <list>
+#include <string>
 
 #include "Timer.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 class Particle;
 class ParticleManager;
+
+struct ParticleColor
+{
+	glm::vec4 color = glm::vec4(1.0f);
+	//position in percentage to paint correctly the colors during the time
+	float position = 0.0f;
+	//Name just to differentiate diferents colors
+	std::string name = " ";
+	//open window for change particle color
+	bool changingColor = false;
+	//Order the colors depending on the position
+	bool operator<(const ParticleColor& color) const
+	{
+		return position < color.position;
+	}
+};
 
 enum ShapeEmitter {
 	BoxShape = 0,
@@ -38,9 +55,10 @@ struct ParticleStartValues
 	//The angular velocity of the plane 
 	glm::vec2 angularVelocity = glm::vec2(0.0f, 0.0f);
 
-	//Color of the particle with RGBA
-	glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-
+	//Vector of all colors will be in the particle with RGBA. The colors will change during de time
+	std::list<ParticleColor> colorList;
+	//Knowing if we have more than one color during the time
+	bool isMulticolor = false;
 	//The initial direction that will take the particle
 	glm::vec3 particleDirection = glm::vec3(0.0f, 1.0f, 0.0f);
 };

@@ -3,6 +3,7 @@
 #include "PlaneImporter.h"
 
 #include <glad/glad.h>
+#include <glm/gtx/compatibility.hpp>
 
 //#pragma comment (lib, "glu32.lib")    
 //#pragma comment (lib, "opengl32.lib") 
@@ -10,7 +11,7 @@
 void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner)
 {
 	//Save all the initial values 
-	lifeTime = CreateRandomNum(values.life);
+	initialLife = currLife = CreateRandomNum(values.life);
 	speed = CreateRandomNum(values.speed);
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
@@ -19,7 +20,11 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
-	color = glm::vec4(1.0f);
+	for (std::list<ParticleColor>::iterator iter = values.colorList.begin(); iter != values.colorList.end(); ++iter)
+		color.push_back(*iter);
+
+	isMulticolor = values.isMulticolor;
+	index = 0u;
 
 	isActive = true;
 
@@ -33,7 +38,7 @@ bool Particle::Update(float dt)
 	if (!owner->runningTime)
 		dt = 0.0f;
 
-	if (lifeTime > 0.0f)
+	if (currLife > 0.0f)
 	{
 		//Tranlate
 		speed + acceleration * dt;
@@ -49,6 +54,32 @@ bool Particle::Update(float dt)
 		angle += angularVelocity * dt;
 		transform.rotation *= glm::quat(0.0f,0.0f,1.0f,angle);
 
+
+		if (color.size() == 1 || !isMulticolor)
+			finalColor = color.front().color;
+
+		else if (index + 1 < color.size())
+		{
+			float lifeNormalized = 1.0f - currLife / initialLife;
+			if (color[index + 1].position > lifeNormalized)
+			{
+				float timeNormalized = (lifeNormalized - color[index].position) / (color[index + 1].position - color[index].position);
+				if (color[index + 1].position == 0)
+					timeNormalized = 0;
+				//LOG("%i", index);
+				finalColor = glm::lerp(color[index].color, color[index + 1].color, timeNormalized);
+				//LERP Color
+			}
+			else
+				index++;
+		}
+		else
+			finalColor = color[index].color;
+
+
+
+
+
 		//gpuParticles[index].v1 = v1;
 		//gpuParticles[index].v2 = v1;
 		//gpuParticles[index].v3 = v1;
@@ -62,7 +93,7 @@ bool Particle::Update(float dt)
 		//glDrawArrays(GL_TRIANGLES, 0, gpuParticles.size() * 6);
 
 		ret = LookAtCamera();
-		lifeTime -= dt;
+		currLife -= dt;
 	}
 	else
 	{
@@ -70,6 +101,7 @@ bool Particle::Update(float dt)
 		isActive = false;
 		owner->particles.remove(this);
 		owner->parent->numActivePart--;
+		color.clear();
 	}
 	
 	return ret;
@@ -84,7 +116,7 @@ void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
-		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &color.r);
+		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
 
 		//this->texture.Bind();
 		glBindVertexArray(owner->parent->plane->partVAO);
@@ -123,7 +155,7 @@ bool Particle::LookAtCamera()
 		glm::vec3 xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
 
-		glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
+		transform.rotation = glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
 		ret = true;
 	}
 	return ret;
