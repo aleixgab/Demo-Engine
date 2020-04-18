@@ -22,6 +22,8 @@ void ComponentEmitter::Inspector()
 	ShapeValuesInsp();
 
 	ColorValuesInsp();
+
+	TextureValuesInsp();
 }
 
 #pragma region StartValues
@@ -229,4 +231,100 @@ bool ComponentEmitter::EditColor(ParticleColor& colorTime, uint pos)
 
 	return ret;
 }
+#pragma endregion
+
+#pragma region TextureValues
+void ComponentEmitter::TextureValuesInsp()
+{
+	if (ImGui::CollapsingHeader("Particle Texture", ImGuiTreeNodeFlags_FramePadding))
+	{
+		if (emitter->textureID > 0u)
+		{
+			std::string name = "Texture ";
+			name += emitter->textureID;
+
+			ImGui::Text("Loaded texture '%s'", name.data());
+
+			ImGui::Image((void*)emitter->textureID, ImVec2(256.0f, 256.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+
+/*			if (ImGui::BeginMenu("Change Texture"))
+			{
+				std::vector<Resource*> resource;
+				App->resources->GetResources(resource, ResourceType::texture);
+
+				for (std::vector<Resource*>::iterator iterator = resource.begin(); iterator != resource.end(); ++iterator)
+				{
+					if (ImGui::MenuItem((*iterator)->name.data()))
+					{
+						App->resources->Remove(texture);
+						texture = nullptr;
+
+						texture = ((ResourceTexture*)(*iterator));
+						texture->usage++;
+					}
+				}
+				ImGui::End();
+			}*/
+			if (ImGui::Button("Remove Texture", ImVec2(125, 25)))
+			{
+				emitter->textureID = 0u;
+			}
+
+		}
+		else
+		{
+			bool a = true;
+			ImGui::ShowDemoWindow(&a);
+			//ImGui::Text("No texture loaded");
+			//if (ImGui::BeginMenu("Add new Texture"))
+			//{
+			//	std::vector<Resource*> resource;
+			//	App->resources->GetResources(resource, ResourceType::texture);
+
+			//	for (std::vector<Resource*>::iterator iterator = resource.begin(); iterator != resource.end(); ++iterator)
+			//	{
+			//		if (ImGui::MenuItem((*iterator)->name.data()))
+			//		{
+			//			texture = ((ResourceTexture*)(*iterator));
+			//			texture->usage++;
+			//		}
+			//	}
+			//	ImGui::End();
+			//}
+		}
+
+		//TODO ANIMATION
+		//ImGui::Separator();
+		//if (ImGui::Checkbox("Animated sprite", &isParticleAnimated))
+		//{
+		//	if (!isParticleAnimated)
+		//	{
+		//		SetNewAnimation(1, 1);
+		//		dieOnAnimation = false;
+		//	}
+		//	else
+		//		SetNewAnimation(textureRows, textureColumns);
+		//}
+		//if (isParticleAnimated)
+		//{
+		//	ImGui::DragFloat("Animation Speed", &animationSpeed, 0.001f, 0.0f, 5.0f, "%.3f");
+		//	ImGui::DragInt("Rows", &textureRows, 1, 1, 10);
+		//	ImGui::DragInt("Columns", &textureColumns, 1, 1, 10);
+
+		//	ImGui::Checkbox("Kill particle with animation", &dieOnAnimation);
+		//	if (dieOnAnimation)
+		//	{
+		//		checkLife = false;
+		//		startValues.life.x = animationSpeed * particleAnimation.columns * particleAnimation.rows;
+		//	}
+
+		//	if (ImGui::Button("Calc Animation", ImVec2(150.0f, 25.0f)))
+		//	{
+		//		SetNewAnimation(textureRows, textureColumns);
+		//	}
+		//}
+		//ImGui::Separator();
+	}
+}
+
 #pragma endregion

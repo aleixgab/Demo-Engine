@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include <list>
 
-class PlaneImporter;
+class TextureImporter;
 
 class ControllerRender : public Controller
 {
@@ -18,10 +18,12 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
+	std::list<TextureImporter*> textures;
 private:
 	Shader lightingShader;
 	Shader lampShader;
 	Shader particleShader;
+
 };
 
 #endif

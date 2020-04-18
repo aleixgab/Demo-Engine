@@ -12,8 +12,6 @@ public:
 public:
 	unsigned int VBO = 0u;
 	unsigned int VAO = 0u;
-	unsigned int partVBO = 0u;
-	unsigned int partVAO = 0u;
 };
 
 #endif

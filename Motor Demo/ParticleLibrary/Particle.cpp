@@ -16,7 +16,7 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
 	direction = values.particleDirection;
-	angle = CreateRandomNum(values.rotation) * (PI / 180.0f);
+	angle =/* glm::radians(*/CreateRandomNum(values.rotation)/*)*/;
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
@@ -50,9 +50,12 @@ bool Particle::Update(float dt)
 		transform.scale.z += sizeOverTime * dt;
 
 		//Rotation
+		ret = LookAtCamera();
 		angularVelocity += angularAcceleration * dt;
 		angle += angularVelocity * dt;
-		transform.rotation *= glm::quat(0.0f,0.0f,1.0f,angle);
+
+		transform.rotation *= glm::angleAxis(angle, glm::vec3(0.0f, 0.0f, 1.0f));
+		//transform.rotation = glm::quat(0.0f,0.0f,1.0f,angle);
 
 
 		if (color.size() == 1 || !isMulticolor)
@@ -92,7 +95,6 @@ bool Particle::Update(float dt)
 
 		//glDrawArrays(GL_TRIANGLES, 0, gpuParticles.size() * 6);
 
-		ret = LookAtCamera();
 		currLife -= dt;
 	}
 	else
@@ -118,8 +120,8 @@ void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
 		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
 
-		//this->texture.Bind();
-		glBindVertexArray(owner->parent->plane->partVAO);
+		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindVertexArray(owner->parent->plane->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 	}

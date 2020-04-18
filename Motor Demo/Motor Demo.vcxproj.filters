@@ -35,16 +35,16 @@
     <Filter Include="Sources\Library">
       <UniqueIdentifier>{1f81c5ae-b1e7-4547-9623-05a2f305f5a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Shaders\Particle">
-      <UniqueIdentifier>{87e46d3f-328c-47be-ac44-fc0d8e716bd6}</UniqueIdentifier>
+    <Filter Include="Sources\Library\Shaders">
+      <UniqueIdentifier>{e7a87b7a-2cf6-4f51-93b9-8adadeba9bca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Library\Importers">
+      <UniqueIdentifier>{785a3e1e-480a-4e14-bbea-146fcae34b3f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdPart\includes\glad\glad.c">
       <Filter>Sources\3rd Party\Glad</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Sources\3rd Party</Filter>
     </ClCompile>
     <ClCompile Include="ControllerWindow.cpp">
       <Filter>Sources\Controller</Filter>
@@ -99,9 +99,6 @@
     <ClCompile Include="ControllerParticles.cpp">
       <Filter>Sources\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleLibrary\PlaneImporter.cpp">
-      <Filter>Sources\Library</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleLibrary\Emitter.cpp">
       <Filter>Sources\Library</Filter>
     </ClCompile>
@@ -114,6 +111,15 @@
     <ClCompile Include="ParticleLibrary\Timer.cpp">
       <Filter>Sources\Library</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleLibrary\PlaneImporter.cpp">
+      <Filter>Sources\Library\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\STB\stb_image.cpp">
+      <Filter>Sources\3rd Party</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureImporter.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rdPart\includes\glad\glad.h">
@@ -124,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="3rdPart\includes\glfw\glfw3native.h">
       <Filter>Sources\3rd Party\Glwf</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Sources\3rd Party</Filter>
     </ClInclude>
     <ClInclude Include="ControllerWindow.h">
       <Filter>Sources\Controller</Filter>
@@ -192,9 +195,6 @@
     <ClInclude Include="ControllerParticles.h">
       <Filter>Sources\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleLibrary\PlaneImporter.h">
-      <Filter>Sources\Library</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleLibrary\Emitter.h">
       <Filter>Sources\Library</Filter>
     </ClInclude>
@@ -206,6 +206,15 @@
     </ClInclude>
     <ClInclude Include="ParticleLibrary\Timer.h">
       <Filter>Sources\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\PlaneImporter.h">
+      <Filter>Sources\Library\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\STB\stb_image.h">
+      <Filter>Sources\3rd Party</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureImporter.h">
+      <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,11 +236,11 @@
     <Text Include="VertexShader.txt">
       <Filter>Sources\Shaders</Filter>
     </Text>
-    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt">
-      <Filter>Sources\Shaders\Particle</Filter>
-    </Text>
     <Text Include="ParticleLibrary\Shaders\Particle_VShader.txt">
-      <Filter>Sources\Shaders\Particle</Filter>
+      <Filter>Sources\Library\Shaders</Filter>
+    </Text>
+    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt">
+      <Filter>Sources\Library\Shaders</Filter>
     </Text>
   </ItemGroup>
 </Project>

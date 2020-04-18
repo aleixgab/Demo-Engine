@@ -145,6 +145,7 @@
     <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="3rdPart\includes\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="3rdPart\includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="3rdPart\includes\STB\stb_image.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ComponentEmitter.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
@@ -163,7 +164,7 @@
     <ClCompile Include="ParticleLibrary\PlaneImporter.cpp" />
     <ClCompile Include="ParticleLibrary\Timer.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="TextureImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rdPart\includes\glad\glad.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="3rdPart\includes\imgui\imstb_rectpack.h" />
     <ClInclude Include="3rdPart\includes\imgui\imstb_textedit.h" />
     <ClInclude Include="3rdPart\includes\imgui\imstb_truetype.h" />
+    <ClInclude Include="3rdPart\includes\STB\stb_image.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentEmitter.h" />
@@ -196,7 +198,7 @@
     <ClInclude Include="ParticleLibrary\PlaneImporter.h" />
     <ClInclude Include="ParticleLibrary\Timer.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TextureImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="FragmentShader.txt" />

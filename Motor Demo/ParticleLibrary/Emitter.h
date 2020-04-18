@@ -124,6 +124,8 @@ public:
 	int particlesEmition = 1.0f;
 	//Set true if time is running for this emitter, false to pause it
 	bool runningTime = false;
+	//Texture id that draw function need it
+	unsigned int textureID = 0u;
 private:
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;

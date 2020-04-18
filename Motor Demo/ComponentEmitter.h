@@ -14,6 +14,7 @@ public:
 	void Inspector();
 
 	void ColorValuesInsp();
+	void TextureValuesInsp();
 	void StartValuesInsp();
 	void ShapeValuesInsp();
 
