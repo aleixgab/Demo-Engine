@@ -82,6 +82,7 @@ private:
 
 	std::vector<ParticleColor> color;
 	bool isMulticolor = false;
+	float colorPercentage = 1.0f;
 	uint index = 0u;
 
 	glm::vec4 finalColor = glm::vec4(1.0f);

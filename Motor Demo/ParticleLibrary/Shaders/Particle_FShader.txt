@@ -5,8 +5,13 @@ in vec4 particleColor;
 out vec4 FragColor;
 
 uniform sampler2D sprite;
+uniform float colorPercent;
 
 void main()
 {
-    FragColor = texture(sprite, texCoords) * particleColor;
+	vec4 tex = texture(sprite, texCoords);
+	if(colorPercent < 1.0 && tex.a < 0.1)
+		discard;
+
+    FragColor = mix(tex, particleColor, colorPercent);
 }  

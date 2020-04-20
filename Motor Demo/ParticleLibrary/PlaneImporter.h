@@ -12,6 +12,7 @@ public:
 public:
 	unsigned int VBO = 0u;
 	unsigned int VAO = 0u;
+	unsigned int EBO = 0u;
 };
 
 #endif

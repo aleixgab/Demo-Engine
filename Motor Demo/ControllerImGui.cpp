@@ -82,7 +82,7 @@ void ControllerImGui::Hierarchy()
 void ControllerImGui::ObjInspector()
 {
 	bool alwaysOpen = true;
-	ImGui::Begin("Inspector", &alwaysOpen, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+	ImGui::Begin("Inspector", &alwaysOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 
 
 	GameObject* currObject = Mng->scene->currGO;
@@ -103,15 +103,8 @@ void ControllerImGui::ObjInspector()
 
 		ImGui::Separator();
 
-		//TODO: NEW COMPONENTS
 		if (ImGui::BeginMenu("Add new component"))
 		{
-		//	if (ImGui::MenuItem("Texture", "", nullptr, !currObject->HasComponent(ComponentType_TEXTURE)))
-		//	{
-		//		TextureInfo info;
-		//		info.texture = nullptr;
-		//		currObject->AddComponent(ComponentType_TEXTURE, &info);
-		//	}
 			if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
 			{
 				currObject->AddComponentEmitter(Mng->particle->particleManager, Mng->particle);

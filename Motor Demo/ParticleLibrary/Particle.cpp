@@ -24,6 +24,7 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Particl
 		color.push_back(*iter);
 
 	isMulticolor = values.isMulticolor;
+	colorPercentage = values.colorPercent;
 	index = 0u;
 
 	transform.position = pos;
@@ -158,24 +159,33 @@ void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
 	if (isActive)
 	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		bool blend = glIsEnabled(GL_BLEND);
+		glEnable(GL_BLEND);
+		glDepthMask(GL_FALSE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
 		glUseProgram(uuid);
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
 		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
+		glUniform1f(glGetUniformLocation(uuid, "colorPercent"), colorPercentage);
 
 		glUniform2fv(glGetUniformLocation(uuid, "currMinCoord"), 1, &currMinUVCoord.x);
 		glUniform1f(glGetUniformLocation(uuid, "rowUVNorm"), textureRowsNorm);
 		glUniform1f(glGetUniformLocation(uuid, "columUVNorm"), textureColumnsNorm);
 		glUniform1i(glGetUniformLocation(uuid, "isAnimated"), isParticleAnimated);
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, owner->textureID);
 		glBindVertexArray(owner->parent->plane->VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+
+		glDepthMask(GL_TRUE);
+ 		glEnable(blend);
 	}
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Particle::SaveCameraDistance(glm::vec3 cameraPosition)

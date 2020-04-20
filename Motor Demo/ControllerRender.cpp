@@ -74,7 +74,7 @@ bool ControllerRender::Update(float dt)
 
 			// render the cube
 			glBindVertexArray(Mng->particle->particleManager->plane->VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		}
 	}
 
