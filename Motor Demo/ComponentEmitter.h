@@ -35,6 +35,7 @@ public:
 	bool checkRotation = false;
 	bool checkAngularAcceleration = false;
 	bool checkAngularVelocity = false;
+	bool checkAnimationSpeed = false;
 
 	// Loop the particle (if true the particle emitter will never stop)
 	bool loop = true;

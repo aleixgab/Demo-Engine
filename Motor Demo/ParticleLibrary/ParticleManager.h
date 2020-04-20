@@ -49,8 +49,10 @@ public:
 
 	//Get random num between 0 and max uint32 value
 	uint GetRandomNum();
-	//Ger random num with a min and max parameter
+	//Ger random float num with a min and max parameter
 	float GetRandomNum(float min, float max);
+	//Ger random integrer num with a min and max parameter
+	int GetRandomNum(int min, int max);
 
 	//Create new emitter
 	Emitter* CreateEmitter();

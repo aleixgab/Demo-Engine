@@ -249,7 +249,7 @@ void ComponentEmitter::TextureValuesInsp()
 
 			ImGui::Image((void*)emitter->textureID, ImVec2(256.0f, 256.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
-			if (ImGui::BeginMenu("Textures"))
+			if (ImGui::BeginMenu("Change Texture"))
 			{
 				float sz = ImGui::GetTextLineHeight();
 				for (std::list<TextureImporter*>::iterator iter = controller->Mng->render->textures.begin(); iter != controller->Mng->render->textures.end(); ++iter)
@@ -263,15 +263,43 @@ void ComponentEmitter::TextureValuesInsp()
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::Checkbox("Animated sprite", &emitter->particleAnimation.isParticleAnimated))
+			{
+				if (!emitter->particleAnimation.isParticleAnimated)
+				{
+					emitter->particleAnimation.textureRows = 1;
+					emitter->particleAnimation.textureColumns = 1;
+					emitter->dieOnFinishAnim = false;
+				}
+			}
+			if (emitter->particleAnimation.isParticleAnimated)
+			{
+				if (ImGui::Checkbox("##AnimationSpeed", &checkAnimationSpeed))
+					emitter->startValues.acceleration.y = emitter->startValues.acceleration.x;
+				ShowFloatValue(emitter->particleAnimation.animationSpeed, checkAnimationSpeed, "Animation Speed", 0.001, 0.0f, 5.0f);
+
+				if (ImGui::DragInt("Rows", &emitter->particleAnimation.textureRows, 1, 1, 10))
+					emitter->particleAnimation.textureRowsNorm = 1.0f / emitter->particleAnimation.textureRows;
+				if (ImGui::DragInt("Columns", &emitter->particleAnimation.textureColumns, 1, 1, 10))
+					emitter->particleAnimation.textureColumnsNorm = 1.0f / emitter->particleAnimation.textureColumns;
+
+				ImGui::Checkbox("Kill particle with animation", &emitter->dieOnFinishAnim);
+				ImGui::Checkbox("Random Starting Frame", &emitter->particleAnimation.isAnimRand);
+				if (emitter->dieOnFinishAnim)
+				{
+					checkLife = false;
+					emitter->startValues.life.x = emitter->particleAnimation.animationSpeed.x * (emitter->particleAnimation.textureColumns * emitter->particleAnimation.textureRows - 1);
+				}
+			}
+			
 			if (ImGui::Button("Remove Texture", ImVec2(125, 25)))
 			{
 				emitter->textureID = 0u;
 			}
-
 		}
 		else
 		{
-			if (ImGui::BeginMenu("Textures"))
+			if (ImGui::BeginMenu("Add New Texture"))
 			{
 				float sz = ImGui::GetTextLineHeight();
 				for (std::list<TextureImporter*>::iterator iter = controller->Mng->render->textures.begin() ; iter != controller->Mng->render->textures.end(); ++iter)
@@ -284,55 +312,8 @@ void ComponentEmitter::TextureValuesInsp()
 				}
 				ImGui::EndMenu();
 			}
-			//ImGui::Text("No texture loaded");
-			//if (ImGui::BeginMenu("Add new Texture"))
-			//{
-			//	std::vector<Resource*> resource;
-			//	App->resources->GetResources(resource, ResourceType::texture);
-
-			//	for (std::vector<Resource*>::iterator iterator = resource.begin(); iterator != resource.end(); ++iterator)
-			//	{
-			//		if (ImGui::MenuItem((*iterator)->name.data()))
-			//		{
-			//			texture = ((ResourceTexture*)(*iterator));
-			//			texture->usage++;
-			//		}
-			//	}
-			//	ImGui::End();
-			//}
 		}
-
-		//TODO ANIMATION
-		//ImGui::Separator();
-		//if (ImGui::Checkbox("Animated sprite", &isParticleAnimated))
-		//{
-		//	if (!isParticleAnimated)
-		//	{
-		//		SetNewAnimation(1, 1);
-		//		dieOnAnimation = false;
-		//	}
-		//	else
-		//		SetNewAnimation(textureRows, textureColumns);
-		//}
-		//if (isParticleAnimated)
-		//{
-		//	ImGui::DragFloat("Animation Speed", &animationSpeed, 0.001f, 0.0f, 5.0f, "%.3f");
-		//	ImGui::DragInt("Rows", &textureRows, 1, 1, 10);
-		//	ImGui::DragInt("Columns", &textureColumns, 1, 1, 10);
-
-		//	ImGui::Checkbox("Kill particle with animation", &dieOnAnimation);
-		//	if (dieOnAnimation)
-		//	{
-		//		checkLife = false;
-		//		startValues.life.x = animationSpeed * particleAnimation.columns * particleAnimation.rows;
-		//	}
-
-		//	if (ImGui::Button("Calc Animation", ImVec2(150.0f, 25.0f)))
-		//	{
-		//		SetNewAnimation(textureRows, textureColumns);
-		//	}
-		//}
-		//ImGui::Separator();
+		ImGui::Separator();
 	}
 }
 

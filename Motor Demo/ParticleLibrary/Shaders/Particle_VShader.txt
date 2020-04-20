@@ -3,19 +3,35 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aCoords; 
 
 
-out vec2 TexCoords;
-out vec4 ParticleColor;
+out vec2 texCoords;
+out vec4 particleColor;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+//Animated Particle
+uniform float rowUVNorm;
+uniform float columUVNorm;
+uniform vec2 currMinCoord;
+uniform int isAnimated;
+
 uniform vec4 color;
 
 void main()
 {
-    TexCoords = aCoords;
-    ParticleColor = color;
+    particleColor = color;
+
+	if(isAnimated == 0)
+		texCoords = aCoords;
+	else
+	{
+		texCoords = currMinCoord;
+		if(aCoords.x == 1)
+			texCoords.x += columUVNorm;
+		if(aCoords.y == 1)
+			texCoords.y += rowUVNorm;
+	}
 
 	vec3 pos = vec3(model * vec4(aPos, 1.0));
     gl_Position = projection * view * vec4(pos, 1.0);

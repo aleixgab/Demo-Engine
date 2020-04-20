@@ -6,7 +6,7 @@
 #include <glm/gtx/compatibility.hpp>
 #include <random>
 
-void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner)
+void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
 {
 	this->owner = owner;
 
@@ -27,6 +27,24 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter
 	index = 0u;
 
 	transform.position = pos;
+
+	countAnimTime = 0.0f;
+
+	isParticleAnimated = animation.isParticleAnimated;
+	textureRows = animation.textureRows;
+	textureColumns = animation.textureColumns;
+	textureRowsNorm = animation.textureRowsNorm;
+	textureColumnsNorm = animation.textureColumnsNorm;
+	animTime = CreateRandomNum(animation.animationSpeed);
+
+	if (animation.isAnimRand)
+		currentFrame = owner->parent->GetRandomNum(0, textureColumns * textureRows);
+	else
+		currentFrame = 0u;
+
+	contFrame = 0u;
+	currMinUVCoord.x = (currentFrame % textureColumns) * textureColumnsNorm;
+	currMinUVCoord.y = ((textureRows - 1) - (currentFrame / textureColumns)) * textureRowsNorm;
 
 	isActive = true;
 }
@@ -57,7 +75,7 @@ bool Particle::Update(float dt)
 		transform.rotation *= glm::angleAxis(angle, glm::vec3(0.0f, 0.0f, 1.0f));
 		//transform.rotation = glm::quat(0.0f,0.0f,1.0f,angle);
 
-
+		//COLOR
 		if (color.size() == 1 || !isMulticolor)
 			finalColor = color.front().color;
 
@@ -79,6 +97,33 @@ bool Particle::Update(float dt)
 		else
 			finalColor = color[index].color;
 
+		//ANIMATION
+		if (isParticleAnimated && (textureRows > 1 || textureColumns > 1))
+		{
+			countAnimTime += dt;
+			if (countAnimTime > animTime)
+			{
+				if ((textureColumns * textureRows) > contFrame + 1)
+				{
+					if ((textureColumns * textureRows) > currentFrame + 1)
+					{
+						currentFrame++;
+						contFrame++;
+					}
+					else
+						currentFrame = 0;
+
+					currMinUVCoord.x = (currentFrame % textureColumns) * textureColumnsNorm;
+					currMinUVCoord.y = ((textureRows - 1) - (currentFrame / textureColumns)) * textureRowsNorm;
+					countAnimTime = 0.0f;
+				}
+				else if (!owner->dieOnFinishAnim)
+					contFrame = 0u;
+
+				else
+					currLife = 0.0f;
+			}
+		}
 
 
 
@@ -119,6 +164,11 @@ void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
 		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
+
+		glUniform2fv(glGetUniformLocation(uuid, "currMinCoord"), 1, &currMinUVCoord.x);
+		glUniform1f(glGetUniformLocation(uuid, "rowUVNorm"), textureRowsNorm);
+		glUniform1f(glGetUniformLocation(uuid, "columUVNorm"), textureColumnsNorm);
+		glUniform1i(glGetUniformLocation(uuid, "isAnimated"), isParticleAnimated);
 
 		glBindTexture(GL_TEXTURE_2D, owner->textureID);
 		glBindVertexArray(owner->parent->plane->VAO);

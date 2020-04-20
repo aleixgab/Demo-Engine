@@ -13,6 +13,7 @@ typedef unsigned int uint;
 class ParticleStartValues;
 class Emitter;
 struct ParticleColor;
+struct ParticleAnimation;
 
 //Transform of the particle where there are Translation - Rotation - Scale
 struct PartTransform
@@ -33,7 +34,7 @@ class Particle
 public:
 
 	//Set all the particle values and start the particle
-	void CreateParticle(glm::vec3 pos, ParticleStartValues values, Emitter* owner);
+	void CreateParticle(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	bool Update(float dt);
 	//Draw function with shaderUuid, and camera view and projection
 	void Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
@@ -85,6 +86,28 @@ private:
 
 	glm::vec4 finalColor = glm::vec4(1.0f);
 	PartTransform transform;
+
+	//Say if the texture is animated or not
+	bool isParticleAnimated = false;
+	//Number of rows and columns of the texture
+	int textureRows = 1;
+	int textureColumns = 1;
+	//Number of rows and columns of the texture between 0 and 1
+	float textureRowsNorm = 1.0f;
+	float textureColumnsNorm = 1.0f;
+
+	//Counter of the time to know when we should change the animation
+	float countAnimTime = 0.0f;
+	//Time value to say how seconds we will stay in each sprite
+	float animTime = 0.0f;
+
+	//It Says wich cell are to know the row and column
+	uint currentFrame = 0u;
+	/*Counter of the cells to know when it's finish
+	Diferent than currentFrmae because there are random cells and it might not goes in order
+	*/
+	uint contFrame = 0u;
+	glm::vec2 currMinUVCoord = glm::vec2(0.0f);
 };
 
 #endif

@@ -25,9 +25,13 @@ bool ControllerRender::Start()
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
 	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");
 	TextureImporter* newTexture3 = new TextureImporter("Assets/awesomeface.png");
+	TextureImporter* newTexture4 = new TextureImporter("Assets/Smoke30Frames_0.png");
+	TextureImporter* newTexture5 = new TextureImporter("Assets/Smoke30Frames_0.jpg");
 	textures.push_back(newTexture);
 	textures.push_back(newTexture2);
 	textures.push_back(newTexture3);
+	textures.push_back(newTexture4);
+	textures.push_back(newTexture5);
 
 	// configure global opengl state
 	// -----------------------------

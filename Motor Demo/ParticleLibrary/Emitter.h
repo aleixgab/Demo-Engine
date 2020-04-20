@@ -26,6 +26,17 @@ struct ParticleColor
 	}
 };
 
+struct ParticleAnimation
+{
+	bool isParticleAnimated = false;
+	int  textureRows = 1;
+	int  textureColumns = 1;
+	float textureRowsNorm = 1.0f;
+	float textureColumnsNorm = 1.0f;
+	glm::vec2 animationSpeed = glm::vec2(0.1f, 0.1f);
+	bool isAnimRand = false;
+};
+
 enum ShapeEmitter {
 	//Spawn particles from the box and takes object Up direction
 	BoxShape = 0,
@@ -126,6 +137,10 @@ public:
 	bool runningTime = false;
 	//Texture id that draw function need it
 	unsigned int textureID = 0u;
+
+	ParticleAnimation particleAnimation;
+	bool dieOnFinishAnim = false;
+
 private:
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;

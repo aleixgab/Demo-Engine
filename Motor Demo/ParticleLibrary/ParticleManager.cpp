@@ -175,3 +175,8 @@ float ParticleManager::GetRandomNum(float min, float max)
 {
 	return (max - min) * (float)rng() / (float)rng.max() + min;
 }
+
+int ParticleManager::GetRandomNum(int min, int max)
+{
+	return (max - min) * rng() / rng.max() + min;
+}

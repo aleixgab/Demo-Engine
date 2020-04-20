@@ -40,7 +40,7 @@ void Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
 		{
 			globalPosition += GetRandomPos();
 			//Create the particle in the correctly slot in the pool
-			parent->particleArray[particleId].CreateParticle(globalPosition, startValues, this);
+			parent->particleArray[particleId].CreateParticle(globalPosition, startValues, particleAnimation, this);
 			//Save the particle in emitter list to know wich particles have this emitter
 			particles.push_back(&parent->particleArray[particleId]);
 			//Add one count in the active particles from ParticleManager
