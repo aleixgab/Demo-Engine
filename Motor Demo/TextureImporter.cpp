@@ -34,7 +34,10 @@ bool TextureImporter::ImportTexture(const char* path)
 		ret = false;
 	}
 	stbi_image_free(data);
-	texture.path = path;
+
+	std::string name = path;
+	texture.name = name.substr(name.find_last_of("\\") + 1);
+	
 	return ret;
 }
 

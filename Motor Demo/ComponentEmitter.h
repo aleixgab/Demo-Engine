@@ -4,19 +4,20 @@
 #include "Component.h"
 #include "ParticleLibrary/Emitter.h"
 
+class ControllerParticles;
 class ComponentEmitter : public Component
 {
 public:
-	ComponentEmitter(GameObject* gameObject, ParticleManager* manager);
+	ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller);
 
 	~ComponentEmitter();
 
 	void Inspector();
 
 	void ColorValuesInsp();
-	void TextureValuesInsp();
 	void StartValuesInsp();
 	void ShapeValuesInsp();
+	void TextureValuesInsp();
 
 	void ShowFloatValue(glm::vec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
 
@@ -42,6 +43,9 @@ public:
 
 	int nextPos = 100;
 	glm::vec4 nextColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+private:
+	ControllerParticles* controller = nullptr;
 };
 
 #endif

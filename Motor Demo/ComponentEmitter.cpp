@@ -1,13 +1,18 @@
 #include "ComponentEmitter.h"
 #include <imgui\imgui.h>
+#include "GameManager.h"
+#include "Controller.h"
+#include "ControllerRender.h"
+#include "TextureImporter.h"
 
 #include "GameObject.h"
 #include "ParticleLibrary/ParticleManager.h"
 #include <string>
 
-ComponentEmitter::ComponentEmitter(GameObject* gameObject, ParticleManager* manager) : Component(gameObject, ComponentType_EMITTER)
+ComponentEmitter::ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller) : Component(gameObject, ComponentType_EMITTER)
 {
 	emitter = manager->CreateEmitter();
+	this->controller = controller;
 }
 
 ComponentEmitter::~ComponentEmitter()
@@ -240,31 +245,24 @@ void ComponentEmitter::TextureValuesInsp()
 	{
 		if (emitter->textureID > 0u)
 		{
-			std::string name = "Texture ";
-			name += emitter->textureID;
-
-			ImGui::Text("Loaded texture '%s'", name.data());
+			ImGui::Text("Texture num '%i'", emitter->textureID);
 
 			ImGui::Image((void*)emitter->textureID, ImVec2(256.0f, 256.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
-/*			if (ImGui::BeginMenu("Change Texture"))
+			if (ImGui::BeginMenu("Textures"))
 			{
-				std::vector<Resource*> resource;
-				App->resources->GetResources(resource, ResourceType::texture);
-
-				for (std::vector<Resource*>::iterator iterator = resource.begin(); iterator != resource.end(); ++iterator)
+				float sz = ImGui::GetTextLineHeight();
+				for (std::list<TextureImporter*>::iterator iter = controller->Mng->render->textures.begin(); iter != controller->Mng->render->textures.end(); ++iter)
 				{
-					if (ImGui::MenuItem((*iterator)->name.data()))
-					{
-						App->resources->Remove(texture);
-						texture = nullptr;
-
-						texture = ((ResourceTexture*)(*iterator));
-						texture->usage++;
-					}
+					ImVec2 p = ImGui::GetCursorScreenPos();
+					ImGui::Dummy(ImVec2(sz, sz));
+					ImGui::SameLine();
+					if (ImGui::MenuItem((*iter)->texture.name.c_str()))
+						emitter->textureID = (*iter)->texture.id;
 				}
-				ImGui::End();
-			}*/
+				ImGui::EndMenu();
+			}
+
 			if (ImGui::Button("Remove Texture", ImVec2(125, 25)))
 			{
 				emitter->textureID = 0u;
@@ -273,8 +271,19 @@ void ComponentEmitter::TextureValuesInsp()
 		}
 		else
 		{
-			bool a = true;
-			ImGui::ShowDemoWindow(&a);
+			if (ImGui::BeginMenu("Textures"))
+			{
+				float sz = ImGui::GetTextLineHeight();
+				for (std::list<TextureImporter*>::iterator iter = controller->Mng->render->textures.begin() ; iter != controller->Mng->render->textures.end(); ++iter)
+				{
+					ImVec2 p = ImGui::GetCursorScreenPos();
+					ImGui::Dummy(ImVec2(sz, sz));
+					ImGui::SameLine();
+					if (ImGui::MenuItem((*iter)->texture.name.c_str()))
+						emitter->textureID = (*iter)->texture.id;
+				}
+				ImGui::EndMenu();
+			}
 			//ImGui::Text("No texture loaded");
 			//if (ImGui::BeginMenu("Add new Texture"))
 			//{

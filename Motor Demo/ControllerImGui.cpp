@@ -114,7 +114,7 @@ void ControllerImGui::ObjInspector()
 		//	}
 			if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
 			{
-				currObject->AddComponentEmitter(Mng->particle->particleManager);
+				currObject->AddComponentEmitter(Mng->particle->particleManager, Mng->particle);
 			}
 			ImGui::MenuItem("Cancel");
 			ImGui::EndMenu();

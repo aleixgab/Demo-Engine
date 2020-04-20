@@ -1,7 +1,7 @@
-#include "ControllerRender.h"
 #include <glad/glad.h>
 #include "GameManager.h"
 
+#include "ControllerRender.h"
 #include "ControllerParticles.h"
 #include "ParticleLibrary/ParticleManager.h"
 #include "ParticleLibrary/PlaneImporter.h"
@@ -23,10 +23,17 @@ bool ControllerRender::Start()
 	particleShader.SetShader("ParticleLibrary/Shaders/Particle_VShader.txt", "ParticleLibrary/Shaders/Particle_FShader.txt");
 
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
+	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");
+	TextureImporter* newTexture3 = new TextureImporter("Assets/awesomeface.png");
 	textures.push_back(newTexture);
+	textures.push_back(newTexture2);
+	textures.push_back(newTexture3);
+
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+
+
 
 	return true;
 }
@@ -82,5 +89,10 @@ bool ControllerRender::Update(float dt)
 
 bool ControllerRender::CleanUp()
 {
+	for (std::list<TextureImporter*>::iterator iterator = textures.begin(); iterator != textures.end(); ++iterator)
+	{
+		delete (*iterator);
+	}
+	textures.clear();
 	return true;
 }

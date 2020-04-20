@@ -35,18 +35,14 @@ ComponentEmitter* GameObject::GetComponentEmitter()
 	return ret;
 }
 
-////////////////////////////////////////////LIBRARY -- new Emitter
-
-ComponentEmitter* GameObject::AddComponentEmitter(ParticleManager* manager)
+ComponentEmitter* GameObject::AddComponentEmitter(ParticleManager* manager, ControllerParticles* controller)
 {
-	ComponentEmitter* newEmitter = new ComponentEmitter(this, manager);
+	ComponentEmitter* newEmitter = new ComponentEmitter(this, manager, controller);
 	components.push_back(newEmitter);
 
 	newEmitter->type = ComponentType_EMITTER;
 	return newEmitter;
 }
-
-////////////////////////////////////////////LIBRARY -- new Emitter
 
 bool GameObject::HasEmitter()
 {

@@ -5,7 +5,7 @@
 
 struct TextureInfo
 {
-	std::string path;
+	std::string name;
 	unsigned int id = 0u;
 };
 

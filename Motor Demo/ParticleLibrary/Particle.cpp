@@ -120,7 +120,7 @@ void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
 		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
 
-		glBindTexture(GL_TEXTURE_2D, 1);
+		glBindTexture(GL_TEXTURE_2D, owner->textureID);
 		glBindVertexArray(owner->parent->plane->VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);

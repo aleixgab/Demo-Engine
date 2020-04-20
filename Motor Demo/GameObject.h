@@ -9,6 +9,7 @@
 
 class ComponentEmitter;
 class ParticleManager;
+class ControllerParticles;
 
 enum ComponentType;
 
@@ -22,7 +23,7 @@ public:
 	Transform* GetComponentTransform() const;
 	ComponentEmitter* GetComponentEmitter();
 
-	ComponentEmitter* AddComponentEmitter(ParticleManager* manager);
+	ComponentEmitter* AddComponentEmitter(ParticleManager* manager, ControllerParticles* controller);
 
 	bool HasEmitter();
 
