@@ -2,6 +2,8 @@
 #include <algorithm>
 #include "PlaneImporter.h"
 #include <iostream>
+#include <vector>
+#include <glad/glad.h>
 
 
 ParticleManager::ParticleManager()
@@ -71,14 +73,47 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 {
 	//Sort the particles from end to beginning depend on the camera distance
 	std::sort(activePartVec.begin(), activePartVec.end(), [](const Particle* particle1, const Particle* particle2)
-	{
-		return particle1->cameraDist > particle2->cameraDist;
-	});
+		{
+			return particle1->cameraDist > particle2->cameraDist;
+		});
 
-	for (int i = 0; i < activePartVec.size(); ++i)
+	if (activePartVec.size() > 0)
 	{
-		//Draw each active particle
-		activePartVec[i]->Draw(shaderProgramUuid, viewMatrix, projMatrix);
+		for (int i = 0; i < activePartVec.size(); ++i)
+		{
+			//Draw each active particle
+			//activePartVec[i]->Draw(shaderProgramUuid, viewMatrix, projMatrix);
+			particleTransforms[i] = activePartVec[i]->GetTransform();
+			particleColor[i] = activePartVec[i]->GetColor();
+			particleTexture[i] = activePartVec[i]->GetTexture();
+		}
+
+
+		bool blend = glIsEnabled(GL_BLEND);
+		glEnable(GL_BLEND);
+		glDepthMask(GL_FALSE);
+
+		glUseProgram(shaderProgramUuid);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "model"), activePartVec.size(), GL_FALSE, &particleTransforms[0][0][0]);
+
+		glUniform4fv(glGetUniformLocation(shaderProgramUuid, "color"), activePartVec.size(), &particleColor[0].r);
+		glUniform4fv(glGetUniformLocation(shaderProgramUuid, "modidiedCoords"), activePartVec.size(), &particleTexture[0].x);
+
+		glUniform1f(glGetUniformLocation(shaderProgramUuid, "colorPercent"), activePartVec[0]->owner->colorPercent);
+		glUniform1i(glGetUniformLocation(shaderProgramUuid, "isAnimated"), activePartVec[0]->isParticleAnimated);
+	
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, activePartVec[0]->owner->textureID);
+		
+		glBindVertexArray(plane->VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElementsInstanced(GL_TRIANGLES, 6 * activePartVec.size(), GL_UNSIGNED_INT, 0, activePartVec.size());
+		glBindVertexArray(0);
+
+		glDepthMask(GL_TRUE);
+		glEnable(blend);
 	}
 }
 

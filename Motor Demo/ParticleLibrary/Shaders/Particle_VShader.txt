@@ -6,33 +6,31 @@ layout (location = 1) in vec2 aCoords;
 out vec2 texCoords;
 out vec4 particleColor;
 
-uniform mat4 model;
+uniform mat4 model[160];
 uniform mat4 view;
 uniform mat4 projection;
 
 //Animated Particle
-uniform float rowUVNorm;
-uniform float columUVNorm;
-uniform vec2 currMinCoord;
+uniform vec4 modidiedCoords[160]; // .xy (min coordinate position) .z (Column normalized) .w (Row normalized)
 uniform int isAnimated;
 
-uniform vec4 color;
+uniform vec4 color[160];
 
 void main()
 {
-    particleColor = color;
+    particleColor = color[gl_InstanceID];
 
 	if(isAnimated == 0)
 		texCoords = aCoords;
 	else
 	{
-		texCoords = currMinCoord;
+		texCoords = modidiedCoords[gl_InstanceID].xy;
 		if(aCoords.x == 1)
-			texCoords.x += columUVNorm;
+			texCoords.x += modidiedCoords[gl_InstanceID].z;
 		if(aCoords.y == 1)
-			texCoords.y += rowUVNorm;
+			texCoords.y += modidiedCoords[gl_InstanceID].w;
 	}
 
-	vec3 pos = vec3(model * vec4(aPos, 1.0));
+	vec3 pos = vec3(model[gl_InstanceID] * vec4(aPos, 1.0));
     gl_Position = projection * view * vec4(pos, 1.0);
 }

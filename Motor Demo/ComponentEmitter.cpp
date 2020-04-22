@@ -185,7 +185,7 @@ void ComponentEmitter::ColorValuesInsp()
 			++posList;
 		}
 		ImGui::Separator();
-		ImGui::SliderFloat("Color Percentage", &emitter->startValues.colorPercent, 0.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Color Percentage", &emitter->colorPercent, 0.0f, 1.0f, "%.2f");
 		ImGui::Checkbox("Color time", &emitter->startValues.isMulticolor);
 		if (emitter->startValues.isMulticolor)
 		{

@@ -77,12 +77,6 @@ struct ParticleStartValues
 	std::list<ParticleColor> colorList;
 	//Knowing if we have more than one color during the time
 	bool isMulticolor = false;
-	/*Percentage of the color in the particle between 0 and 1
-	0.0f it will draw the texture color
-	1.0f it will draw the colors that you chose
-	between it will mix both colors depending on the percentage.
-	*/
-	float colorPercent = 0.5f;
 	//The initial direction that will take the particle
 	glm::vec3 particleDirection = glm::vec3(0.0f, 1.0f, 0.0f);
 };
@@ -147,6 +141,12 @@ public:
 	ParticleAnimation particleAnimation;
 	bool dieOnFinishAnim = false;
 
+	/*Percentage of the color in the particle between 0 and 1
+	0.0f it will draw the texture color
+	1.0f it will draw the colors that you chose
+	between it will mix both colors depending on the percentage.
+	*/
+	float colorPercent = 0.5f;
 private:
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;
