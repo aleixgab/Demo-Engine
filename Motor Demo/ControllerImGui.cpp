@@ -41,7 +41,32 @@ bool ControllerImGui::Update(float dt)
 	Hierarchy();
 	ObjInspector();
 	PlayStop();
+	
+	TimeGraph();
 	return true;
+}
+
+void ControllerImGui::TimeGraph()
+{
+	if (glfwGetKey(Mng->window->window, GLFW_KEY_F2) == GLFW_PRESS)
+		hasFps = !hasFps;
+	if (hasFps)
+	{
+		if (ImGui::Begin("Times", NULL))
+		{
+			// Framerate
+			char title[20];
+			std::vector<float> framerateTrack = Mng->GetFps();
+			sprintf_s(title, IM_ARRAYSIZE(title), "Framerate %.1f", framerateTrack.back());
+			ImGui::PlotHistogram("##framerate", &framerateTrack.front(), framerateTrack.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+
+			// Ms
+			std::vector<float> msTrack = Mng->GetMsec();
+			sprintf_s(title, IM_ARRAYSIZE(title), "Milliseconds %.1f", msTrack.back());
+			ImGui::PlotHistogram("##milliseconds", &msTrack.front(), msTrack.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+		}
+		ImGui::End();
+	}
 }
 
 void ControllerImGui::Hierarchy()

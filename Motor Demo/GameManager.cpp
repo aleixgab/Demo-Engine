@@ -1,7 +1,7 @@
 #include "GameManager.h"
 #include <GLFW/glfw3.h>
 
-GameManager::GameManager()
+GameManager::GameManager() : dtVector(50), fpsVector(50)
 {
 	window = new ControllerWindow(this);
 	scene = new ControllerScene(this);
@@ -48,9 +48,9 @@ bool GameManager::Update()
 	// per-frame time logic
 	// --------------------
 
-	float currentFrame = glfwGetTime();
-	dt = currentFrame - lastFrame;
-	lastFrame = currentFrame;
+	float BeginTime = glfwGetTime();
+//	dt = BeginTime - lastFrame;
+//	lastFrame = BeginTime;
 
 	std::list<Controller*>::const_iterator iterator = controllersList.begin();
 	bool canContinue = true;
@@ -59,6 +59,21 @@ bool GameManager::Update()
 		canContinue = (*iterator)->Update(dt);
 		++iterator;
 	}
+	//Get dt and save it in a Vector
+	float lastUpdatedFrame = (glfwGetTime() - BeginTime) * 1000;
+	for (uint i = dtVector.size() - 1; i > 0; --i)
+		dtVector[i] = dtVector[i - 1];
+	dtVector[0] = lastUpdatedFrame;
+
+	//Get fps and save it in a Vector
+	float fps = 1000.0f / lastUpdatedFrame;
+	for (uint i = fpsVector.size() - 1; i > 0; --i)
+		fpsVector[i] = fpsVector[i - 1];
+	fpsVector[0] = fps;
+
+
+	dt = 1.0f / fps;
+
 	return canContinue;
 }
 
@@ -72,4 +87,14 @@ bool GameManager::CleanUp()
 		++iterator;
 	}
 	return canContinue;
+}
+
+std::vector<float> GameManager::GetFps() const
+{
+	return fpsVector;
+}
+
+std::vector<float> GameManager::GetMsec() const
+{
+	return dtVector;
 }

@@ -20,6 +20,10 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	std::vector<float> GetFps() const;
+	std::vector<float> GetMsec() const;
+
+
 public:
 	ControllerWindow* window;
 	ControllerRender* render;
@@ -32,6 +36,9 @@ private:
 	std::list<Controller*> controllersList;
 	float dt = 0.0f;
 	float lastFrame = 0.0f;
+
+	std::vector<float> dtVector;
+	std::vector<float> fpsVector;
 };
 
 #endif
