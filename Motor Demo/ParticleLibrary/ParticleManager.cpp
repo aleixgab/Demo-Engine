@@ -88,6 +88,13 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 			particleTexture[i] = activePartVec[i]->GetTexture();
 		}
 
+		//unsigned int buffer;
+		//glGenBuffers(1, &buffer);
+		//glBindBuffer(GL_ARRAY_BUFFER, buffer);
+		//glBufferData(GL_ARRAY_BUFFER, activePartVec.size() * sizeof(glm::mat4), &particleTransforms[0], GL_STATIC_DRAW);
+
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		bool blend = glIsEnabled(GL_BLEND);
 		glEnable(GL_BLEND);
@@ -108,8 +115,8 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 		glBindTexture(GL_TEXTURE_2D, activePartVec[0]->owner->textureID);
 		
 		glBindVertexArray(plane->VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glDrawElementsInstanced(GL_TRIANGLES, 6 * activePartVec.size(), GL_UNSIGNED_INT, 0, activePartVec.size());
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, activePartVec.size());
 		glBindVertexArray(0);
 
 		glDepthMask(GL_TRUE);
