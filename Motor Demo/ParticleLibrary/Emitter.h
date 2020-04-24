@@ -28,7 +28,6 @@ struct ParticleColor
 
 struct ParticleAnimation
 {
-	bool isParticleAnimated = false;
 	int  textureRows = 1;
 	int  textureColumns = 1;
 	float textureRowsNorm = 1.0f;
@@ -140,6 +139,7 @@ public:
 
 	ParticleAnimation particleAnimation;
 	bool dieOnFinishAnim = false;
+	bool isParticleAnimated = false;
 
 	/*Percentage of the color in the particle between 0 and 1
 	0.0f it will draw the texture color

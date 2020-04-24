@@ -30,7 +30,6 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Particl
 
 	countAnimTime = 0.0f;
 
-	isParticleAnimated = animation.isParticleAnimated;
 	textureRows = animation.textureRows;
 	textureColumns = animation.textureColumns;
 	textureRowsNorm = animation.textureRowsNorm;
@@ -98,7 +97,7 @@ bool Particle::Update(float dt)
 			finalColor = color[index].color;
 
 		//ANIMATION
-		if (isParticleAnimated && (textureRows > 1 || textureColumns > 1))
+		if (owner->isParticleAnimated && (textureRows > 1 || textureColumns > 1))
 		{
 			countAnimTime += dt;
 			if (countAnimTime > animTime)

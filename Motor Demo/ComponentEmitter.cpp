@@ -264,16 +264,16 @@ void ComponentEmitter::TextureValuesInsp()
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::Checkbox("Animated sprite", &emitter->particleAnimation.isParticleAnimated))
+			if (ImGui::Checkbox("Animated sprite", &emitter->isParticleAnimated))
 			{
-				if (!emitter->particleAnimation.isParticleAnimated)
+				if (!emitter->isParticleAnimated)
 				{
 					emitter->particleAnimation.textureRows = 1;
 					emitter->particleAnimation.textureColumns = 1;
 					emitter->dieOnFinishAnim = false;
 				}
 			}
-			if (emitter->particleAnimation.isParticleAnimated)
+			if (emitter->isParticleAnimated)
 			{
 				if (ImGui::Checkbox("##AnimationSpeed", &checkAnimationSpeed))
 					emitter->startValues.acceleration.y = emitter->startValues.acceleration.x;

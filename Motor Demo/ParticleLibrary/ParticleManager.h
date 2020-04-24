@@ -39,6 +39,8 @@ public:
 	bool Update(float dt);
 	//Draw function with shaderUuid, and camera view and projection
 	void Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
+	void GetParticleValues();
+	void ParticleSort();
 	//You get the next slot in the array for the new particle
 	bool GetNextParticleSlot(int& id);
 
@@ -72,7 +74,10 @@ public:
 	std::list<Emitter*> emittersList; 
 	//Particle pool where are all the particles (active and inactive)
 	Particle particleArray[MAX_PARTICLES];
-	glm::mat4 particleTransforms[MAX_PARTICLES];
+	glm::vec4 particleTransformsX[MAX_PARTICLES];
+	glm::vec4 particleTransformsY[MAX_PARTICLES];
+	glm::vec4 particleTransformsZ[MAX_PARTICLES];
+	glm::vec4 particleTransformsW[MAX_PARTICLES];
 	glm::vec4 particleColor[MAX_PARTICLES];
 	glm::vec4 particleTexture[MAX_PARTICLES];
 	//Counter from all the active particles. This will let us ignore the other particles.

@@ -1,36 +1,43 @@
 #version 330 core
 layout (location = 0) in vec3 aPos; 
 layout (location = 1) in vec2 aCoords; 
+layout (location = 2) in vec4 aCoordsRect; 
+layout (location = 3) in vec4 aColor; 
+layout (location = 4) in vec4 aModelx; 
+layout (location = 5) in vec4 aModely; 
+layout (location = 6) in vec4 aModelz; 
+layout (location = 7) in vec4 aModelw; 
 
 
 out vec2 texCoords;
 out vec4 particleColor;
 
-uniform mat4 model[160];
 uniform mat4 view;
 uniform mat4 projection;
 
 //Animated Particle
-uniform vec4 modidiedCoords[160]; // .xy (min coordinate position) .z (Column normalized) .w (Row normalized)
 uniform int isAnimated;
-
-uniform vec4 color[160];
 
 void main()
 {
-    particleColor = color[gl_InstanceID];
+    particleColor = aColor;
+	mat4 aModel = mat4(aModelx.x,aModelx.y,aModelx.z,aModelx.w,
+						aModely.x,aModely.y,aModely.z,aModely.w,
+						aModelz.x,aModelz.y,aModelz.z,aModelz.w,
+						aModelw.x,aModelw.y,aModelw.z,aModelw.w);
+
 
 	if(isAnimated == 0)
 		texCoords = aCoords;
 	else
 	{
-		texCoords = modidiedCoords[gl_InstanceID].xy;
+		texCoords = aCoordsRect.xy;
 		if(aCoords.x == 1)
-			texCoords.x += modidiedCoords[gl_InstanceID].z;
+			texCoords.x += aCoordsRect.z;
 		if(aCoords.y == 1)
-			texCoords.y += modidiedCoords[gl_InstanceID].w;
+			texCoords.y += aCoordsRect.w;
 	}
 
-	vec3 pos = vec3(model[gl_InstanceID] * vec4(aPos, 1.0));
+	vec3 pos = vec3(aModel * vec4(aPos, 1.0));
     gl_Position = projection * view * vec4(pos, 1.0);
 }

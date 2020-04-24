@@ -62,8 +62,6 @@ public:
 	//Float to know the distance between camera and this particle
 	float cameraDist = 0.0f;
 
-	//Say if the texture is animated or not
-	bool isParticleAnimated = false;
 private:
 	//Time in seconds that the particle will be alive
 	float currLife, initialLife = 0.0f;
