@@ -22,9 +22,9 @@ void main()
 {
     particleColor = aColor;
 	mat4 aModel = mat4(aModelx.x,aModelx.y,aModelx.z,aModelx.w,
-						aModely.x,aModely.y,aModely.z,aModely.w,
-						aModelz.x,aModelz.y,aModelz.z,aModelz.w,
-						aModelw.x,aModelw.y,aModelw.z,aModelw.w);
+					   aModely.x,aModely.y,aModely.z,aModely.w,
+					   aModelz.x,aModelz.y,aModelz.z,aModelz.w,
+					   aModelw.x,aModelw.y,aModelw.z,aModelw.w);
 
 
 	if(isAnimated == 0)
@@ -38,6 +38,5 @@ void main()
 			texCoords.y += aCoordsRect.w;
 	}
 
-	vec3 pos = vec3(aModel * vec4(aPos, 1.0));
-    gl_Position = projection * view * vec4(pos, 1.0);
+    gl_Position = projection * view * aModel * vec4(aPos, 1.0);
 }

@@ -24,7 +24,7 @@ struct PartTransform
 	//Plane rotation = Quaternion identity
 	glm::quat rotation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
 	//global scale
-	glm::vec3 scale = glm::vec3(1.0f,1.0f,1.0f);
+	float scale = 1.0f;
 
 	//Function to join position, rotation and scale in one matrix 4x4
 	glm::mat4 GetMatrix() const;

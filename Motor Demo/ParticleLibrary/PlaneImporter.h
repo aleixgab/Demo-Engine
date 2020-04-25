@@ -12,6 +12,7 @@ public:
 
 public:
 	unsigned int VBO = 0u;
+	unsigned int VBO_StaticCoord = 0u;
 	unsigned int VBO_TransformX = 0u;
 	unsigned int VBO_TransformY = 0u;
 	unsigned int VBO_TransformZ = 0u;

@@ -26,8 +26,8 @@ void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, Particl
 	isMulticolor = values.isMulticolor;
 	index = 0u;
 
-	transform.position = pos;
-
+	transform.position = glm::vec3(0.0f,5.0f,0.0f);
+	transform.scale = CreateRandomNum(values.size);
 	countAnimTime = 0.0f;
 
 	textureRows = animation.textureRows;
@@ -62,9 +62,7 @@ bool Particle::Update(float dt)
 		transform.position += direction * (speed * dt);
 
 		//Scale
-		transform.scale.x += sizeOverTime * dt;
-		transform.scale.y += sizeOverTime * dt;
-		transform.scale.z += sizeOverTime * dt;
+		transform.scale += sizeOverTime * dt;
 
 		//Rotation
 		ret = LookAtCamera();
@@ -252,6 +250,6 @@ glm::mat4 PartTransform::GetMatrix() const
 	glm::mat4 mat = glm::mat4(1.0f);
 	mat = translate(mat, position);
 	mat = glm::rotate(mat, glm::angle(rotation), glm::axis(rotation));
-	mat = glm::scale(mat, scale);
+	mat = glm::scale(mat, glm::vec3(scale));
 	return mat;
 }
