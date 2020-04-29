@@ -6,7 +6,7 @@
 #include <glm/gtx/compatibility.hpp>
 #include <random>
 
-void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
+void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
 {
 	this->owner = owner;
 

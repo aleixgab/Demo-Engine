@@ -35,7 +35,7 @@ class Particle
 public:
 
 	//Set all the particle values and start the particle
-	void CreateParticle(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
+	void SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	bool Update(float dt);
 	//Draw function with shaderUuid, and camera view and projection
 	void Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);

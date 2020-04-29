@@ -22,6 +22,9 @@ ComponentEmitter::~ComponentEmitter()
 
 void ComponentEmitter::Inspector()
 {
+	ImGui::Separator();
+	ImGui::Text("Particle Emitter");
+	ImGui::Separator();
 	StartValuesInsp();
 	
 	ShapeValuesInsp();
