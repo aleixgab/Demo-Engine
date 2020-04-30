@@ -95,60 +95,42 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 	
 		//Bind VAO
 		glBindVertexArray(plane->VAO);
-
-		glVertexAttribDivisor(0, 0);												
-		glVertexAttribDivisor(1, 0);												
-		glVertexAttribDivisor(2, 1); //Textures modified			
-		glVertexAttribDivisor(3, 1); //Color
-		glVertexAttribDivisor(4, 1); //Matrix 1st row	
-		glVertexAttribDivisor(5, 1); //Matrix 2nd row	
-		glVertexAttribDivisor(6, 1); //Matrix 3rd row	
-		glVertexAttribDivisor(7, 1); //Matrix 4th row	
-										
-
+								
 		// Set mesh attributes
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO);
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 
 		// textCoords
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_StaticCoord);
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
 
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Texture);
+		//Textures modified	
+		glVertexAttribDivisor(2, 1);		
 		glEnableVertexAttribArray(2);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0].x);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0]);
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Color);
+		//Color
+		glVertexAttribDivisor(3, 1); 									
 		glEnableVertexAttribArray(3);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0].x);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0]);
 		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
+		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Transform);
+		//Transform
+		for (uint i = 0; i < 4; ++i)
+		{
+			glEnableVertexAttribArray(4 + i);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::mat4), &particleTransforms[0]);
+			glVertexAttribPointer(4 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
 
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformX);
-		glEnableVertexAttribArray(4);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsX[0].x);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformY);
-		glEnableVertexAttribArray(5);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsY[0].x);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformZ);
-		glEnableVertexAttribArray(6);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsZ[0].x);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformW);
-		glEnableVertexAttribArray(7);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsW[0].x);
-		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
+			glVertexAttribDivisor(4 + i, 1);
+		}
 
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, activePartVec.size());
 
@@ -171,15 +153,7 @@ void ParticleManager::GetParticleValues()
 {
 	for (int i = 0; i < activePartVec.size(); ++i)
 	{
-		//Draw each active particle
-		//activePartVec[i]->Draw(shaderProgramUuid, viewMatrix, projMatrix);
-		glm::mat4 mat = activePartVec[i]->GetTransform();
-		particleTransformsX[i] = glm::vec4(mat[0][0], mat[0][1], mat[0][2], mat[0][3]);
-		particleTransformsY[i] = glm::vec4(mat[1][0], mat[1][1], mat[1][2], mat[1][3]);
-		particleTransformsZ[i] = glm::vec4(mat[2][0], mat[2][1], mat[2][2], mat[2][3]);
-		particleTransformsW[i] = glm::vec4(mat[3][0], mat[3][1], mat[3][2], mat[3][3]);
-
-		
+		particleTransforms[i] = activePartVec[i]->GetTransform();
 		particleColor[i] = activePartVec[i]->GetColor();
 		particleTexture[i] = activePartVec[i]->GetTexture();
 	}

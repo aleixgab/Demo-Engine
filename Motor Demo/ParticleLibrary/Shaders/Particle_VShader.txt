@@ -3,10 +3,7 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aCoords; 
 layout (location = 2) in vec4 aCoordsRect; 
 layout (location = 3) in vec4 aColor; 
-layout (location = 4) in vec4 aModelx; 
-layout (location = 5) in vec4 aModely; 
-layout (location = 6) in vec4 aModelz; 
-layout (location = 7) in vec4 aModelw; 
+layout (location = 4) in mat4 aModel; 
 
 
 out vec2 texCoords;
@@ -21,11 +18,6 @@ uniform int isAnimated;
 void main()
 {
     particleColor = aColor;
-	mat4 aModel = mat4(aModelx.x,aModelx.y,aModelx.z,aModelx.w,
-					   aModely.x,aModely.y,aModely.z,aModely.w,
-					   aModelz.x,aModelz.y,aModelz.z,aModelz.w,
-					   aModelw.x,aModelw.y,aModelw.z,aModelw.w);
-
 
 	if(isAnimated == 0)
 		texCoords = aCoords;
