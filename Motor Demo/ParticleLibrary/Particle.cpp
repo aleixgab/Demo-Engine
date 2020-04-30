@@ -6,7 +6,7 @@
 #include <glm/gtx/compatibility.hpp>
 #include <random>
 
-void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
+void Particle::CreateParticle(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
 {
 	this->owner = owner;
 
@@ -16,7 +16,7 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
 	direction = values.particleDirection;
-	angle =glm::radians(CreateRandomNum(values.rotation));
+	angle =/* glm::radians(*/CreateRandomNum(values.rotation)/*)*/;
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
@@ -24,12 +24,14 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 		color.push_back(*iter);
 
 	isMulticolor = values.isMulticolor;
+	colorPercentage = values.colorPercent;
 	index = 0u;
 
 	transform.position = pos;
-	transform.scale = CreateRandomNum(values.size);
+
 	countAnimTime = 0.0f;
 
+	isParticleAnimated = animation.isParticleAnimated;
 	textureRows = animation.textureRows;
 	textureColumns = animation.textureColumns;
 	textureRowsNorm = animation.textureRowsNorm;
@@ -62,7 +64,9 @@ bool Particle::Update(float dt)
 		transform.position += direction * (speed * dt);
 
 		//Scale
-		transform.scale += sizeOverTime * dt;
+		transform.scale.x += sizeOverTime * dt;
+		transform.scale.y += sizeOverTime * dt;
+		transform.scale.z += sizeOverTime * dt;
 
 		//Rotation
 		ret = LookAtCamera();
@@ -95,7 +99,7 @@ bool Particle::Update(float dt)
 			finalColor = color[index].color;
 
 		//ANIMATION
-		if (owner->isParticleAnimated && (textureRows > 1 || textureColumns > 1))
+		if (isParticleAnimated && (textureRows > 1 || textureColumns > 1))
 		{
 			countAnimTime += dt;
 			if (countAnimTime > animTime)
@@ -153,35 +157,35 @@ bool Particle::Update(float dt)
 
 void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
-	//if (isActive)
-	//{
-	//	bool blend = glIsEnabled(GL_BLEND);
-	//	glEnable(GL_BLEND);
-	//	glDepthMask(GL_FALSE);
-	//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if (isActive)
+	{
+		bool blend = glIsEnabled(GL_BLEND);
+		glEnable(GL_BLEND);
+		glDepthMask(GL_FALSE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-	//	glUseProgram(uuid);
-	//	glUniformMatrix4fv(glGetUniformLocation(uuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
-	//	glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
-	//	glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
-	//	glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
-	//	glUniform1f(glGetUniformLocation(uuid, "colorPercent"), colorPercentage);
+		glUseProgram(uuid);
+		glUniformMatrix4fv(glGetUniformLocation(uuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
+		glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
+		glUniform1f(glGetUniformLocation(uuid, "colorPercent"), colorPercentage);
 
-	//	glUniform2fv(glGetUniformLocation(uuid, "currMinCoord"), 1, &currMinUVCoord.x);
-	//	glUniform1f(glGetUniformLocation(uuid, "rowUVNorm"), textureRowsNorm);
-	//	glUniform1f(glGetUniformLocation(uuid, "columUVNorm"), textureColumnsNorm);
-	//	glUniform1i(glGetUniformLocation(uuid, "isAnimated"), isParticleAnimated);
+		glUniform2fv(glGetUniformLocation(uuid, "currMinCoord"), 1, &currMinUVCoord.x);
+		glUniform1f(glGetUniformLocation(uuid, "rowUVNorm"), textureRowsNorm);
+		glUniform1f(glGetUniformLocation(uuid, "columUVNorm"), textureColumnsNorm);
+		glUniform1i(glGetUniformLocation(uuid, "isAnimated"), isParticleAnimated);
 
-	//	glActiveTexture(GL_TEXTURE0);
-	//	glBindTexture(GL_TEXTURE_2D, owner->textureID);
-	//	glBindVertexArray(owner->parent->plane->VAO);
-	//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	//	glBindVertexArray(0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, owner->textureID);
+		glBindVertexArray(owner->parent->plane->VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
-	//	glDepthMask(GL_TRUE);
- //		glEnable(blend);
-//	}
+		glDepthMask(GL_TRUE);
+ 		glEnable(blend);
+	}
 }
 
 void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
@@ -191,31 +195,6 @@ void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
 	float z = cameraPosition.z - transform.position.z;
 
 	cameraDist = x * x + y * y + z * z;
-}
-
-DrawInfo Particle::GetDrawInfo() const
-{
-	DrawInfo info;
-	info.color = finalColor;
-	info.transformation = transform.GetMatrix();
-	info.textureRect = glm::vec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
-
-	return info;
-}
-
-glm::vec4 Particle::GetTexture() const
-{
-	return glm::vec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
-}
-
-glm::vec4 Particle::GetColor() const
-{
-	return finalColor;
-}
-
-glm::mat4 Particle::GetTransform() const
-{
-	return transform.GetMatrix();
 }
 
 float Particle::CreateRandomNum(glm::vec2 edges)//.x = minPoint & .y = maxPoint
@@ -250,6 +229,6 @@ glm::mat4 PartTransform::GetMatrix() const
 	glm::mat4 mat = glm::mat4(1.0f);
 	mat = translate(mat, position);
 	mat = glm::rotate(mat, glm::angle(rotation), glm::axis(rotation));
-	mat = glm::scale(mat, glm::vec3(scale));
+	mat = glm::scale(mat, scale);
 	return mat;
 }

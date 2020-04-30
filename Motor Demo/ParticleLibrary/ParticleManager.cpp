@@ -2,13 +2,11 @@
 #include <algorithm>
 #include "PlaneImporter.h"
 #include <iostream>
-#include <vector>
-#include <glad/glad.h>
 
 
 ParticleManager::ParticleManager()
 {
-	plane = new PlaneImporter(MAX_PARTICLES);
+	plane = new PlaneImporter();
 
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 }
@@ -71,102 +69,19 @@ bool ParticleManager::Update(float dt)
 //Call this function from the renderer to draw all the particles 
 void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
-	ParticleSort();
-
-	if (activePartVec.size() > 0)
-	{
-		GetParticleValues();
-
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		bool blend = glIsEnabled(GL_BLEND);
-		glEnable(GL_BLEND);
-		glDepthMask(GL_FALSE);
-
-		// Constant Uniforms
-		glUseProgram(shaderProgramUuid);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
-
-		glUniform1f(glGetUniformLocation(shaderProgramUuid, "colorPercent"), activePartVec[0]->owner->colorPercent);
-		glUniform1i(glGetUniformLocation(shaderProgramUuid, "isAnimated"), activePartVec[0]->owner->isParticleAnimated);
-	
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, activePartVec[0]->owner->textureID);
-	
-		//Bind VAO
-		glBindVertexArray(plane->VAO);
-								
-		// Set mesh attributes
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-		// textCoords
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Texture);
-		//Textures modified	
-		glVertexAttribDivisor(2, 1);		
-		glEnableVertexAttribArray(2);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0]);
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Color);
-		//Color
-		glVertexAttribDivisor(3, 1); 									
-		glEnableVertexAttribArray(3);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0]);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Transform);
-		//Transform
-		for (uint i = 0; i < 4; ++i)
-		{
-			glEnableVertexAttribArray(4 + i);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::mat4), &particleTransforms[0]);
-			glVertexAttribPointer(4 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
-
-			glVertexAttribDivisor(4 + i, 1);
-		}
-
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, activePartVec.size());
-
-		glDisableVertexAttribArray(2);
-		glDisableVertexAttribArray(3);
-		glDisableVertexAttribArray(4);
-		glDisableVertexAttribArray(5);
-		glDisableVertexAttribArray(6);
-		glDisableVertexAttribArray(7);
-
-		glBindVertexArray(0);
-
-		glDepthMask(GL_TRUE);
-		glEnable(blend);
-	}
-	
-}
-
-void ParticleManager::GetParticleValues()
-{
-	for (int i = 0; i < activePartVec.size(); ++i)
-	{
-		particleTransforms[i] = activePartVec[i]->GetTransform();
-		particleColor[i] = activePartVec[i]->GetColor();
-		particleTexture[i] = activePartVec[i]->GetTexture();
-	}
-}
-
-void ParticleManager::ParticleSort()
-{
 	//Sort the particles from end to beginning depend on the camera distance
 	std::sort(activePartVec.begin(), activePartVec.end(), [](const Particle* particle1, const Particle* particle2)
-		{
-			return particle1->cameraDist > particle2->cameraDist;
-		});
+	{
+		return particle1->cameraDist > particle2->cameraDist;
+	});
+
+	for (int i = 0; i < activePartVec.size(); ++i)
+	{
+		//Draw each active particle
+		activePartVec[i]->Draw(shaderProgramUuid, viewMatrix, projMatrix);
+	}
 }
+
 //Create new emitter
 Emitter* ParticleManager::CreateEmitter()
 {

@@ -22,9 +22,6 @@ ComponentEmitter::~ComponentEmitter()
 
 void ComponentEmitter::Inspector()
 {
-	ImGui::Separator();
-	ImGui::Text("Particle Emitter");
-	ImGui::Separator();
 	StartValuesInsp();
 	
 	ShapeValuesInsp();
@@ -188,7 +185,7 @@ void ComponentEmitter::ColorValuesInsp()
 			++posList;
 		}
 		ImGui::Separator();
-		ImGui::SliderFloat("Color Percentage", &emitter->colorPercent, 0.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Color Percentage", &emitter->startValues.colorPercent, 0.0f, 1.0f, "%.2f");
 		ImGui::Checkbox("Color time", &emitter->startValues.isMulticolor);
 		if (emitter->startValues.isMulticolor)
 		{
@@ -267,16 +264,16 @@ void ComponentEmitter::TextureValuesInsp()
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::Checkbox("Animated sprite", &emitter->isParticleAnimated))
+			if (ImGui::Checkbox("Animated sprite", &emitter->particleAnimation.isParticleAnimated))
 			{
-				if (!emitter->isParticleAnimated)
+				if (!emitter->particleAnimation.isParticleAnimated)
 				{
 					emitter->particleAnimation.textureRows = 1;
 					emitter->particleAnimation.textureColumns = 1;
 					emitter->dieOnFinishAnim = false;
 				}
 			}
-			if (emitter->isParticleAnimated)
+			if (emitter->particleAnimation.isParticleAnimated)
 			{
 				if (ImGui::Checkbox("##AnimationSpeed", &checkAnimationSpeed))
 					emitter->startValues.acceleration.y = emitter->startValues.acceleration.x;

@@ -33,7 +33,6 @@ bool ControllerRender::Start()
 	textures.push_back(newTexture4);
 	textures.push_back(newTexture5);
 
-	ground = new PlaneImporter();
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
@@ -74,8 +73,8 @@ bool ControllerRender::Update(float dt)
 
 
 			// render the cube
-			glBindVertexArray(ground->VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glBindVertexArray(Mng->particle->particleManager->plane->VAO);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		}
 	}
 
@@ -99,7 +98,5 @@ bool ControllerRender::CleanUp()
 		delete (*iterator);
 	}
 	textures.clear();
-	
-	delete ground;
 	return true;
 }

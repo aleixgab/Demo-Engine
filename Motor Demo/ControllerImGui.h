@@ -13,8 +13,6 @@ public:
 	bool Start();
 	bool Update(float dt);
 
-	void TimeGraph();
-
 	void Hierarchy();
 	void ObjInspector();
 
@@ -25,7 +23,7 @@ public:
 	bool CleanUp();
 
 public:
-	bool hasFps = false;
+
 };
 
 #endif

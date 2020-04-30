@@ -14,7 +14,6 @@ class ParticleStartValues;
 class Emitter;
 struct ParticleColor;
 struct ParticleAnimation;
-struct DrawInfo;
 
 //Transform of the particle where there are Translation - Rotation - Scale
 struct PartTransform
@@ -24,7 +23,7 @@ struct PartTransform
 	//Plane rotation = Quaternion identity
 	glm::quat rotation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
 	//global scale
-	float scale = 1.0f;
+	glm::vec3 scale = glm::vec3(1.0f,1.0f,1.0f);
 
 	//Function to join position, rotation and scale in one matrix 4x4
 	glm::mat4 GetMatrix() const;
@@ -35,16 +34,12 @@ class Particle
 public:
 
 	//Set all the particle values and start the particle
-	void SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
+	void CreateParticle(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	bool Update(float dt);
 	//Draw function with shaderUuid, and camera view and projection
 	void Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
 	//We safe the distance between the camera and the particle to order by distance after this
 	void SaveCameraDistance(glm::vec3 cameraPosition);
-	DrawInfo GetDrawInfo() const;
-	glm::vec4 GetTexture() const;
-	glm::vec4 GetColor() const;
-	glm::mat4 GetTransform() const;
 private:
 	/*We rotate the plane to force it to be always in parallel of camera view
 	  This function needs the vector UP(y axis) and FRONT(z axis) of the camera that we save it previously
@@ -61,7 +56,6 @@ public:
 	Emitter* owner = nullptr;
 	//Float to know the distance between camera and this particle
 	float cameraDist = 0.0f;
-
 private:
 	//Time in seconds that the particle will be alive
 	float currLife, initialLife = 0.0f;
@@ -88,11 +82,14 @@ private:
 
 	std::vector<ParticleColor> color;
 	bool isMulticolor = false;
+	float colorPercentage = 1.0f;
 	uint index = 0u;
 
 	glm::vec4 finalColor = glm::vec4(1.0f);
 	PartTransform transform;
 
+	//Say if the texture is animated or not
+	bool isParticleAnimated = false;
 	//Number of rows and columns of the texture
 	int textureRows = 1;
 	int textureColumns = 1;

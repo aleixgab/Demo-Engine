@@ -6,7 +6,6 @@
 #include <list>
 
 class TextureImporter;
-class PlaneImporter;
 
 class ControllerRender : public Controller
 {
@@ -25,7 +24,6 @@ private:
 	Shader lampShader;
 	Shader particleShader;
 
-	PlaneImporter* ground;
 };
 
 #endif
