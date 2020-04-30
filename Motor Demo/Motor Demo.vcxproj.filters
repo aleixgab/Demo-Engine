@@ -41,6 +41,9 @@
     <Filter Include="Sources\Library\Importers">
       <UniqueIdentifier>{785a3e1e-480a-4e14-bbea-146fcae34b3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\3rd Party\Brofiler">
+      <UniqueIdentifier>{b78f3402-fc75-4fda-ad4e-9451a01c5679}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdPart\includes\glad\glad.c">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="TextureImporter.h">
       <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\Brofiler\Brofiler.h">
+      <Filter>Sources\3rd Party\Brofiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

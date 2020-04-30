@@ -167,6 +167,7 @@
     <ClCompile Include="TextureImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3rdPart\includes\Brofiler\Brofiler.h" />
     <ClInclude Include="3rdPart\includes\glad\glad.h" />
     <ClInclude Include="3rdPart\includes\glfw\glfw3.h" />
     <ClInclude Include="3rdPart\includes\glfw\glfw3native.h" />

@@ -1,7 +1,9 @@
 #include <iostream>
 #include "GameManager.h"
+#include <Brofiler/Brofiler.h>
 
 #pragma comment(lib, "3rdPart\\lib\\glfw3.lib")
+#pragma comment(lib, "3rdPart\\lib\\ProfilerCore64.lib")
 
 GameManager* Mng = nullptr;
 int main(int argc, char** argv)
@@ -15,6 +17,7 @@ int main(int argc, char** argv)
 
 	while (canContinue)
 	{
+		BROFILER_FRAME("Update");
 		canContinue = Mng->Update();
 		if (!canContinue)
 			std::cout << "STOP UPDATE" << std::endl;

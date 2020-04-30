@@ -3,6 +3,7 @@
 #include "PlaneImporter.h"
 #include <iostream>
 
+#include <Brofiler/Brofiler.h>
 
 ParticleManager::ParticleManager()
 {
@@ -69,6 +70,8 @@ bool ParticleManager::Update(float dt)
 //Call this function from the renderer to draw all the particles 
 void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
+
 	//Sort the particles from end to beginning depend on the camera distance
 	std::sort(activePartVec.begin(), activePartVec.end(), [](const Particle* particle1, const Particle* particle2)
 	{
