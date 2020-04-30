@@ -1,6 +1,7 @@
 #include "PlaneImporter.h"
 #include <glad/glad.h>
 #include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
 
 PlaneImporter::PlaneImporter()
 {
@@ -96,6 +97,10 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_TransformW);	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO_Transform);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
 }
 
 PlaneImporter::~PlaneImporter()
@@ -109,5 +114,6 @@ PlaneImporter::~PlaneImporter()
 	glDeleteBuffers(1, &VBO_TransformY);
 	glDeleteBuffers(1, &VBO_TransformZ);
 	glDeleteBuffers(1, &VBO_TransformW);
+	//glDeleteBuffers(1, &VBO_Transform);
 }
 

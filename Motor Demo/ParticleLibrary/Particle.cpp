@@ -16,7 +16,7 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
 	direction = values.particleDirection;
-	angle =/* glm::radians(*/CreateRandomNum(values.rotation)/*)*/;
+	angle =glm::radians(CreateRandomNum(values.rotation));
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
@@ -26,7 +26,7 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	isMulticolor = values.isMulticolor;
 	index = 0u;
 
-	transform.position = glm::vec3(0.0f,5.0f,0.0f);
+	transform.position = pos;
 	transform.scale = CreateRandomNum(values.size);
 	countAnimTime = 0.0f;
 

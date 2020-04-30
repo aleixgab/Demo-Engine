@@ -119,40 +119,34 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Texture);
 		glEnableVertexAttribArray(2);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * activePartVec.size(), &particleTexture[0], GL_STREAM_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0]);
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0].x);
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Color);
 		glEnableVertexAttribArray(3);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * activePartVec.size(), &particleColor[0], GL_STREAM_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0].x);
 		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformX);
 		glEnableVertexAttribArray(4);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * activePartVec.size(), &particleTransformsX[0], GL_DYNAMIC_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsX[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsX[0].x);
 		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformY);
 		glEnableVertexAttribArray(5);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * activePartVec.size(), &particleTransformsY[0], GL_DYNAMIC_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsY[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsY[0].x);
 		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformW);
+		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformZ);
 		glEnableVertexAttribArray(6);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * activePartVec.size(), &particleTransformsY[0], GL_DYNAMIC_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsZ[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsZ[0].x);
 		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformZ);
-		glEnableVertexAttribArray(4);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * activePartVec.size(), &particleTransformsX[0], GL_DYNAMIC_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsW[0]);
+		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_TransformW);
+		glEnableVertexAttribArray(7);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTransformsW[0].x);
 		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
