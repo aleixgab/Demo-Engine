@@ -5,6 +5,7 @@
 #include <vector>
 #include <glad/glad.h>
 
+#include <Brofiler/Brofiler.h>
 
 ParticleManager::ParticleManager()
 {
@@ -71,6 +72,8 @@ bool ParticleManager::Update(float dt)
 //Call this function from the renderer to draw all the particles 
 void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
 {
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
+
 	ParticleSort();
 
 	if (activePartVec.size() > 0)
@@ -105,14 +108,12 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
 
-
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Texture);
 		//Textures modified	
 		glVertexAttribDivisor(2, 1);		
 		glEnableVertexAttribArray(2);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0]);
 		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Color);
 		//Color
@@ -151,6 +152,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 
 void ParticleManager::GetParticleValues()
 {
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::AliceBlue);
 	for (int i = 0; i < activePartVec.size(); ++i)
 	{
 		particleTransforms[i] = activePartVec[i]->GetTransform();
