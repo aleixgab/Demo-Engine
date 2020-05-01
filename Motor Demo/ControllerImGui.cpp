@@ -100,57 +100,58 @@ void ControllerImGui::Hierarchy()
 				Mng->scene->currGO = *iterator;
 			}
 		}
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void ControllerImGui::ObjInspector()
 {
 	bool alwaysOpen = true;
-	ImGui::Begin("Inspector", &alwaysOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-
-
-	GameObject* currObject = Mng->scene->currGO;
-
-	if (currObject != nullptr)
+	if (ImGui::Begin("Inspector", &alwaysOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar))
 	{
-		char name[50];
-		strcpy_s(name, 50, currObject->name.c_str());
-		if (ImGui::InputText("##Name", name, 50, ImGuiInputTextFlags_EnterReturnsTrue))
-			currObject->name = name;
 
-		ImGui::Checkbox("Active", &currObject->isActive);
 
-		for (std::vector<Component*>::iterator comp = currObject->components.begin(); comp != currObject->components.end(); ++comp)
+		GameObject* currObject = Mng->scene->currGO;
+
+		if (currObject != nullptr)
 		{
-			(*comp)->Inspector();
-		}
+			char name[50];
+			strcpy_s(name, 50, currObject->name.c_str());
+			if (ImGui::InputText("##Name", name, 50, ImGuiInputTextFlags_EnterReturnsTrue))
+				currObject->name = name;
 
-		ImGui::Separator();
+			ImGui::Checkbox("Active", &currObject->isActive);
 
-		if (ImGui::BeginMenu("Add new component"))
-		{
-			if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
+			for (std::vector<Component*>::iterator comp = currObject->components.begin(); comp != currObject->components.end(); ++comp)
 			{
-				currObject->AddComponentEmitter(Mng->particle->particleManager, Mng->particle);
+				(*comp)->Inspector();
 			}
-			ImGui::MenuItem("Cancel");
-			ImGui::EndMenu();
-		}
 
-		ImGui::Separator();
-		if (ImGui::Button("Delete GameObject", ImVec2(150, 25)))
-		{
-			currObject->Delete();
-			Mng->scene->currGO = nullptr;
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("Add new component"))
+			{
+				if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
+				{
+					currObject->AddComponentEmitter(Mng->particle->particleManager, Mng->particle);
+				}
+				ImGui::MenuItem("Cancel");
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+			if (ImGui::Button("Delete GameObject", ImVec2(150, 25)))
+			{
+				currObject->Delete();
+				Mng->scene->currGO = nullptr;
+			}
 		}
-	}
-	else
-	{
-		ImGui::TextWrapped("Select a GameObject to view its components");
+		else
+		{
+			ImGui::TextWrapped("Select a GameObject to view its components");
+		}
 	}
 	ImGui::End();
-
 }
 
 void ControllerImGui::PlayStop()
@@ -177,8 +178,8 @@ void ControllerImGui::PlayStop()
 				{
 					Mng->particle->particleManager->StopEmitter(component->emitter);
 				}
-				ImGui::End();
 			}
+			ImGui::End();
 		}
 	}
 }

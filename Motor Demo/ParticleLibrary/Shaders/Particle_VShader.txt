@@ -3,7 +3,9 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aCoords; 
 layout (location = 2) in vec4 aCoordsRect; 
 layout (location = 3) in vec4 aColor; 
-layout (location = 4) in mat4 aModel; 
+layout (location = 4) in vec3 aPosition; 
+layout (location = 5) in vec3 aEulerA; 
+layout (location = 6) in float aSize; 
 
 
 out vec2 texCoords;
@@ -30,5 +32,31 @@ void main()
 			texCoords.y += aCoordsRect.w;
 	}
 
-    gl_Position = projection * view * aModel * vec4(aPos, 1.0);
+	float cosX = cos(aEulerA.x);
+	float sinX = sin(aEulerA.x);
+	float cosY = cos(aEulerA.y);
+	float sinY = sin(aEulerA.y);
+	float cosZ = cos(aEulerA.z);
+	float sinZ = sin(aEulerA.z);
+
+	float m00 = cosY * cosZ + sinX * sinY * sinZ; 
+	float m01 = cosY * sinZ - sinX * sinY * cosZ; 
+	float m02 = cosX * sinY;
+	
+	float m10 = -cosX * sinZ; 
+	float m11 = cosX * cosZ; 
+	float m12 = sinX;
+	
+	float m20 = sinX * cosY * sinZ - sinY * cosZ;
+	float m21 = -sinY * sinZ - sinX * cosY * cosZ;
+	float m22 = cosX * cosY;
+	
+
+	mat4 aModel = mat4(m00,			m01,		 m02,		  0.0f,
+					   m10,			m11,		 m12,		  0.0f,
+					   m20,			m21,		 m22,		  0.0f,
+					   aPosition.x, aPosition.y, aPosition.z, 1.0f);
+					   
+
+    gl_Position = projection * view * aModel * vec4(aPos * aSize, 1.0);
 }

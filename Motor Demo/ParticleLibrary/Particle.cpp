@@ -6,6 +6,8 @@
 #include <glm/gtx/compatibility.hpp>
 #include <random>
 
+#include <Brofiler/Brofiler.h>
+
 void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
 {
 	this->owner = owner;
@@ -16,7 +18,7 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
 	direction = values.particleDirection;
-	angle =glm::radians(CreateRandomNum(values.rotation));
+	angle = glm::radians(CreateRandomNum(values.rotation));
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
@@ -51,12 +53,14 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 bool Particle::Update(float dt)
 {
 	bool ret = true;
-	
+
 	if (!owner->runningTime)
 		dt = 0.0f;
 
 	if (currLife > 0.0f)
 	{
+
+
 		//Tranlate
 		speed + acceleration * dt;
 		transform.position += direction * (speed * dt);
@@ -69,10 +73,10 @@ bool Particle::Update(float dt)
 		angularVelocity += angularAcceleration * dt;
 		angle += angularVelocity * dt;
 
-		transform.rotation *= glm::angleAxis(angle, glm::vec3(0.0f, 0.0f, 1.0f));
-		//transform.rotation = glm::quat(0.0f,0.0f,1.0f,angle);
+		rotation *= glm::angleAxis(angle, glm::vec3(0.0f, 0.0f, 1.0f));
+		transform.eulerAngles = glm::eulerAngles(rotation);
 
-		//COLOR
+	//COLOR
 		if (color.size() == 1 || !isMulticolor)
 			finalColor = color.front().color;
 
@@ -121,22 +125,6 @@ bool Particle::Update(float dt)
 					currLife = 0.0f;
 			}
 		}
-
-
-
-
-		//gpuParticles[index].v1 = v1;
-		//gpuParticles[index].v2 = v1;
-		//gpuParticles[index].v3 = v1;
-		//gpuParticles[index].v4 = v1;
-		//gpuParticles[index].v5 = v1;
-		//gpuParticles[index].v6 = v1;
-
-		//glBufferSubData(GL_BUFFER.., 0, sizeOfGPUParticlesInBytes, &gpuParticles[0]);
-
-
-		//glDrawArrays(GL_TRIANGLES, 0, gpuParticles.size() * 6);
-
 		currLife -= dt;
 	}
 	else
@@ -147,41 +135,8 @@ bool Particle::Update(float dt)
 		owner->parent->numActivePart--;
 		color.clear();
 	}
-	
+
 	return ret;
-}
-
-void Particle::Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
-{
-	//if (isActive)
-	//{
-	//	bool blend = glIsEnabled(GL_BLEND);
-	//	glEnable(GL_BLEND);
-	//	glDepthMask(GL_FALSE);
-	//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-	//	glUseProgram(uuid);
-	//	glUniformMatrix4fv(glGetUniformLocation(uuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
-	//	glUniformMatrix4fv(glGetUniformLocation(uuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
-	//	glUniformMatrix4fv(glGetUniformLocation(uuid, "model"), 1, GL_FALSE, &transform.GetMatrix()[0][0]);
-	//	glUniform4fv(glGetUniformLocation(uuid, "color"), 1, &finalColor.r);
-	//	glUniform1f(glGetUniformLocation(uuid, "colorPercent"), colorPercentage);
-
-	//	glUniform2fv(glGetUniformLocation(uuid, "currMinCoord"), 1, &currMinUVCoord.x);
-	//	glUniform1f(glGetUniformLocation(uuid, "rowUVNorm"), textureRowsNorm);
-	//	glUniform1f(glGetUniformLocation(uuid, "columUVNorm"), textureColumnsNorm);
-	//	glUniform1i(glGetUniformLocation(uuid, "isAnimated"), isParticleAnimated);
-
-	//	glActiveTexture(GL_TEXTURE0);
-	//	glBindTexture(GL_TEXTURE_2D, owner->textureID);
-	//	glBindVertexArray(owner->parent->plane->VAO);
-	//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	//	glBindVertexArray(0);
-
-	//	glDepthMask(GL_TRUE);
- //		glEnable(blend);
-//	}
 }
 
 void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
@@ -193,17 +148,7 @@ void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
 	cameraDist = x * x + y * y + z * z;
 }
 
-DrawInfo Particle::GetDrawInfo() const
-{
-	DrawInfo info;
-	info.color = finalColor;
-	info.transformation = transform.GetMatrix();
-	info.textureRect = glm::vec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
-
-	return info;
-}
-
-glm::vec4 Particle::GetTexture() const
+glm::vec4 Particle::GetTextureCoords() const
 {
 	return glm::vec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
 }
@@ -213,9 +158,11 @@ glm::vec4 Particle::GetColor() const
 	return finalColor;
 }
 
-glm::mat4 Particle::GetTransform() const
+void Particle::GetTransform(glm::vec3& pos, glm::vec3& eulerAngles, float& scale ) const
 {
-	return transform.GetMatrix();
+	pos = transform.position;
+	eulerAngles = transform.eulerAngles;
+	scale = transform.scale;
 }
 
 float Particle::CreateRandomNum(glm::vec2 edges)//.x = minPoint & .y = maxPoint
@@ -238,18 +185,8 @@ bool Particle::LookAtCamera()
 		glm::vec3 yAxis = *owner->parent->cameraUp;
 		glm::vec3 xAxis = glm::normalize(glm::cross(yAxis, zAxis));
 
-
-		transform.rotation = glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
+		rotation = glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
 		ret = true;
 	}
 	return ret;
-}
-
-glm::mat4 PartTransform::GetMatrix() const
-{
-	glm::mat4 mat = glm::mat4(1.0f);
-	mat = translate(mat, position);
-	mat = glm::rotate(mat, glm::angle(rotation), glm::axis(rotation));
-	mat = glm::scale(mat, glm::vec3(scale));
-	return mat;
 }

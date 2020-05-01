@@ -20,14 +20,11 @@ struct DrawInfo;
 struct PartTransform
 {
 	//global position
-	glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 position = glm::vec3(0.0f);
 	//Plane rotation = Quaternion identity
-	glm::quat rotation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec3 eulerAngles = glm::vec3(0.0f);
 	//global scale
 	float scale = 1.0f;
-
-	//Function to join position, rotation and scale in one matrix 4x4
-	glm::mat4 GetMatrix() const;
 };
 
 class Particle
@@ -37,14 +34,11 @@ public:
 	//Set all the particle values and start the particle
 	void SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	bool Update(float dt);
-	//Draw function with shaderUuid, and camera view and projection
-	void Draw(uint uuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
 	//We safe the distance between the camera and the particle to order by distance after this
 	void SaveCameraDistance(glm::vec3 cameraPosition);
-	DrawInfo GetDrawInfo() const;
-	glm::vec4 GetTexture() const;
+	glm::vec4 GetTextureCoords() const;
 	glm::vec4 GetColor() const;
-	glm::mat4 GetTransform() const;
+	void GetTransform(glm::vec3& pos, glm::vec3& eulerAngles, float& scale) const;
 private:
 	/*We rotate the plane to force it to be always in parallel of camera view
 	  This function needs the vector UP(y axis) and FRONT(z axis) of the camera that we save it previously
@@ -63,6 +57,8 @@ public:
 	float cameraDist = 0.0f;
 
 private:
+	glm::quat rotation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+
 	//Time in seconds that the particle will be alive
 	float currLife, initialLife = 0.0f;
 

@@ -37,31 +37,32 @@ bool ParticleManager::SetCameraValues(glm::vec3* cameraUp, glm::vec3* cameraForw
 bool ParticleManager::Update(float dt)
 {
 	bool ret = true;
-
-	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
 	{
-		(*it)->Update(dt);
+		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
+		{
+			(*it)->Update(dt);
+		}
 	}
-
 	//Resize the vector to get only the active particles
 	activePartVec.resize(numActivePart);
-
-	int j = 0;
-	for (int i = 0; i < MAX_PARTICLES; ++i)
 	{
-		if (particleArray[i].isActive)
+		int j = 0;
+		for (int i = 0; i < MAX_PARTICLES; ++i)
 		{
-			//We do the update only to the active particles. Then we add the particles in the vector to draw it after this
-			ret = particleArray[i].Update(dt);
-			if (cameraPos)
-				particleArray[i].SaveCameraDistance(*cameraPos);
+			if (particleArray[i].isActive)
+			{
+				//We do the update only to the active particles. Then we add the particles in the vector to draw it after this
+				ret = particleArray[i].Update(dt);
+				if (cameraPos)
+					particleArray[i].SaveCameraDistance(*cameraPos);
+				else
+					ret = false;
+				activePartVec[j++] = &particleArray[i];
+			}
 			else
-				ret = false;
-			activePartVec[j++] = &particleArray[i];
-		}
-		else
-		{
-			particleArray[i].cameraDist = -1;
+			{
+				particleArray[i].cameraDist = -1;
+			}
 		}
 	}
 
@@ -122,16 +123,28 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0]);
 		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Transform);
-		//Transform
-		for (uint i = 0; i < 4; ++i)
-		{
-			glEnableVertexAttribArray(4 + i);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::mat4), &particleTransforms[0]);
-			glVertexAttribPointer(4 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
 
-			glVertexAttribDivisor(4 + i, 1);
-		}
+		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Position);
+		//Position
+		glVertexAttribDivisor(4, 1);
+		glEnableVertexAttribArray(4);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec3), &particleTransforms1[0]);
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Rotation);
+		//Rotation
+		glVertexAttribDivisor(5, 1);
+		glEnableVertexAttribArray(5);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec3), &particleTransforms2[0]);
+		glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Size);
+		//Scale
+		glVertexAttribDivisor(6, 1);
+		glEnableVertexAttribArray(6);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(float), &particleTransforms3[0]);
+		glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		
 
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, activePartVec.size());
 
@@ -140,7 +153,6 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 		glDisableVertexAttribArray(4);
 		glDisableVertexAttribArray(5);
 		glDisableVertexAttribArray(6);
-		glDisableVertexAttribArray(7);
 
 		glBindVertexArray(0);
 
@@ -152,15 +164,15 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 
 void ParticleManager::GetParticleValues()
 {
-	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::AliceBlue);
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
+	//BROFILER_CATEGORY("Transform", Profiler::Color::AliceBlue);
 	for (int i = 0; i < activePartVec.size(); ++i)
 	{
-		particleTransforms[i] = activePartVec[i]->GetTransform();
+		activePartVec[i]->GetTransform(particleTransforms1[i], particleTransforms2[i], particleTransforms3[i]);
 		particleColor[i] = activePartVec[i]->GetColor();
-		particleTexture[i] = activePartVec[i]->GetTexture();
+		particleTexture[i] = activePartVec[i]->GetTextureCoords();
 	}
 }
-
 void ParticleManager::ParticleSort()
 {
 	//Sort the particles from end to beginning depend on the camera distance
@@ -222,7 +234,7 @@ void ParticleManager::StartEmmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StartEmitter();
-	std::cout << "START EMITTER" << std::endl;
+	//std::cout << "START EMITTER" << std::endl;
 }
 
 void ParticleManager::PauseAllEmitters()
