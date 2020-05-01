@@ -21,8 +21,8 @@ struct PartTransform
 {
 	//global position
 	glm::vec3 position = glm::vec3(0.0f);
-	//Plane rotation = Quaternion identity
-	glm::vec3 eulerAngles = glm::vec3(0.0f);
+	//Plane rotation
+	float angle = 0.0f;
 	//global scale
 	float scale = 1.0f;
 };
@@ -38,13 +38,9 @@ public:
 	void SaveCameraDistance(glm::vec3 cameraPosition);
 	glm::vec4 GetTextureCoords() const;
 	glm::vec4 GetColor() const;
-	void GetTransform(glm::vec3& pos, glm::vec3& eulerAngles, float& scale) const;
+	void GetTransform(glm::vec3& pos, float& angle, float& scale) const;
 private:
-	/*We rotate the plane to force it to be always in parallel of camera view
-	  This function needs the vector UP(y axis) and FRONT(z axis) of the camera that we save it previously
-	  Return false if the user doesn't save the camera pointers
-	*/
-	bool LookAtCamera();
+
 	//Create random float betweet 2 edges
 	float CreateRandomNum(glm::vec2 edges);
 
@@ -57,8 +53,6 @@ public:
 	float cameraDist = 0.0f;
 
 private:
-	glm::quat rotation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
-
 	//Time in seconds that the particle will be alive
 	float currLife, initialLife = 0.0f;
 
@@ -72,8 +66,6 @@ private:
 	//Direction of the particle in 3D
 	glm::vec3 direction = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	//Inclination of the particle
-	float angle = 0.0f;
 	//Velocity of the rotation
 	float angularVelocity = 0.0f;
 	//Acceleration of the rotation

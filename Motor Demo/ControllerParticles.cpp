@@ -17,7 +17,7 @@ bool ControllerParticles::Start()
 {
 	if(particleManager == nullptr)
 		particleManager = new ParticleManager();
-	particleManager->SetCameraValues(&Mng->scene->camera->Up, &Mng->scene->camera->Front, &Mng->scene->camera->Position);
+	particleManager->SetCameraPos(&Mng->scene->camera->Position);
 	return true;
 }
 

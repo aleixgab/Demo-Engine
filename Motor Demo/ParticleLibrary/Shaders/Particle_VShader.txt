@@ -4,7 +4,7 @@ layout (location = 1) in vec2 aCoords;
 layout (location = 2) in vec4 aCoordsRect; 
 layout (location = 3) in vec4 aColor; 
 layout (location = 4) in vec3 aPosition; 
-layout (location = 5) in vec3 aEulerA; 
+layout (location = 5) in float aAngle; 
 layout (location = 6) in float aSize; 
 
 
@@ -32,31 +32,21 @@ void main()
 			texCoords.y += aCoordsRect.w;
 	}
 
-	float cosX = cos(aEulerA.x);
-	float sinX = sin(aEulerA.x);
-	float cosY = cos(aEulerA.y);
-	float sinY = sin(aEulerA.y);
-	float cosZ = cos(aEulerA.z);
-	float sinZ = sin(aEulerA.z);
+	//Billboard
+	vec3 zAxis = vec3(view[2].xyz); //Camera Forward
+	vec3 yAxis = vec3(view[1].xyz); //Camera Up
+	vec3 xAxis = normalize(cross(yAxis, zAxis));
 
-	float m00 = cosY * cosZ + sinX * sinY * sinZ; 
-	float m01 = cosY * sinZ - sinX * sinY * cosZ; 
-	float m02 = cosX * sinY;
-	
-	float m10 = -cosX * sinZ; 
-	float m11 = cosX * cosZ; 
-	float m12 = sinX;
-	
-	float m20 = sinX * cosY * sinZ - sinY * cosZ;
-	float m21 = -sinY * sinZ - sinX * cosY * cosZ;
-	float m22 = cosX * cosY;
-	
-
-	mat4 aModel = mat4(m00,			m01,		 m02,		  0.0f,
-					   m10,			m11,		 m12,		  0.0f,
-					   m20,			m21,		 m22,		  0.0f,
-					   aPosition.x, aPosition.y, aPosition.z, 1.0f);
-					   
+	mat4 aModel = mat4(xAxis.x, yAxis.x, zAxis.x, 0.0f,
+					   xAxis.y, yAxis.y, zAxis.y, 0.0f,
+					   xAxis.z, yAxis.z, zAxis.z, 0.0f,
+					   aPosition,				  1.0f);
+	//Plane Rotation
+	radians(aAngle);
+	aModel *= mat4(cos(aAngle), -sin(aAngle), 0.0, 0.0,
+				   sin(aAngle),	cos(aAngle),  0.0, 0.0,
+                   0.0,			0.0,		  1.0, 0.0,
+                   0.0,			0.0,		  0.0, 1.0);
 
     gl_Position = projection * view * aModel * vec4(aPos * aSize, 1.0);
 }

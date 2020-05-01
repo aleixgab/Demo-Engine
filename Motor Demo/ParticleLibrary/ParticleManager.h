@@ -31,8 +31,9 @@ public:
 	ParticleManager();
 	~ParticleManager();
 
-	//Set camera pointers. If returns false it's mean some pointer is null
-	bool SetCameraValues(glm::vec3 * pointerCameraUp, glm::vec3* pointerCameraForward, glm::vec3* cameraPos);
+	//Set camera pointers. If returns false it's mean the pointer it is null
+	bool SetCameraPos(glm::vec3* cameraPos);
+
 	/*Send delta time that will affect the particles
 	Returns false if user doesn't set camera pointers correctly
 	*/
@@ -74,16 +75,14 @@ public:
 	std::list<Emitter*> emittersList; 
 	//Particle pool where are all the particles (active and inactive)
 	Particle particleArray[MAX_PARTICLES];
-	glm::vec3 particleTransforms1[MAX_PARTICLES];
-	glm::vec3 particleTransforms2[MAX_PARTICLES];
-	float particleTransforms3[MAX_PARTICLES];
+	glm::vec3 particlePosition[MAX_PARTICLES];
+	float particleAngleRot[MAX_PARTICLES];
+	float particleSize[MAX_PARTICLES];
 	glm::vec4 particleColor[MAX_PARTICLES];
 	glm::vec4 particleTexture[MAX_PARTICLES];
 	//Counter from all the active particles. This will let us ignore the other particles.
 	int numActivePart = 0;
 
-	glm::vec3* cameraUp = nullptr;
-	glm::vec3* cameraForward = nullptr;
 	glm::vec3* cameraPos = nullptr;
 
 	PlaneImporter* plane = nullptr;

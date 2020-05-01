@@ -18,7 +18,6 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
 	direction = values.particleDirection;
-	angle = glm::radians(CreateRandomNum(values.rotation));
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
@@ -28,6 +27,7 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	isMulticolor = values.isMulticolor;
 	index = 0u;
 
+	transform.angle = glm::radians(CreateRandomNum(values.rotation));
 	transform.position = pos;
 	transform.scale = CreateRandomNum(values.size);
 	countAnimTime = 0.0f;
@@ -69,12 +69,8 @@ bool Particle::Update(float dt)
 		transform.scale += sizeOverTime * dt;
 
 		//Rotation
-		ret = LookAtCamera();
 		angularVelocity += angularAcceleration * dt;
-		angle += angularVelocity * dt;
-
-		rotation *= glm::angleAxis(angle, glm::vec3(0.0f, 0.0f, 1.0f));
-		transform.eulerAngles = glm::eulerAngles(rotation);
+		transform.angle += angularVelocity * dt;
 
 	//COLOR
 		if (color.size() == 1 || !isMulticolor)
@@ -158,10 +154,10 @@ glm::vec4 Particle::GetColor() const
 	return finalColor;
 }
 
-void Particle::GetTransform(glm::vec3& pos, glm::vec3& eulerAngles, float& scale ) const
+void Particle::GetTransform(glm::vec3& pos, float& angle, float& scale ) const
 {
 	pos = transform.position;
-	eulerAngles = transform.eulerAngles;
+	angle = transform.angle;
 	scale = transform.scale;
 }
 
@@ -173,20 +169,4 @@ float Particle::CreateRandomNum(glm::vec2 edges)//.x = minPoint & .y = maxPoint
 		num = owner->parent->GetRandomNum(edges.x, edges.y);
 	}
 	return num;
-}
-
-//Shader
-bool Particle::LookAtCamera()
-{
-	bool ret = false;
-	if (owner->parent->cameraForward && owner->parent->cameraUp)
-	{
-		glm::vec3 zAxis = -(*owner->parent->cameraForward);
-		glm::vec3 yAxis = *owner->parent->cameraUp;
-		glm::vec3 xAxis = glm::normalize(glm::cross(yAxis, zAxis));
-
-		rotation = glm::toQuat(glm::mat3(xAxis, yAxis, zAxis));
-		ret = true;
-	}
-	return ret;
 }

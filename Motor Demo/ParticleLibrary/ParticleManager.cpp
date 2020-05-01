@@ -19,13 +19,11 @@ ParticleManager::~ParticleManager()
 	delete plane;
 }
 
-bool ParticleManager::SetCameraValues(glm::vec3* cameraUp, glm::vec3* cameraForward, glm::vec3* cameraPos)
+bool ParticleManager::SetCameraPos(glm::vec3* cameraPos)
 {
 	bool ret = false;
-	if (cameraUp && cameraForward && cameraPos)
+	if (cameraPos)
 	{
-		this->cameraUp = cameraUp;
-		this->cameraForward = cameraForward;
 		this->cameraPos = cameraPos;
 
 		ret = true;
@@ -38,6 +36,7 @@ bool ParticleManager::Update(float dt)
 {
 	bool ret = true;
 	{
+		BROFILER_CATEGORY("Emitter Update", Profiler::Color::PapayaWhip);
 		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
 		{
 			(*it)->Update(dt);
@@ -46,6 +45,7 @@ bool ParticleManager::Update(float dt)
 	//Resize the vector to get only the active particles
 	activePartVec.resize(numActivePart);
 	{
+		BROFILER_CATEGORY("Particle Update", Profiler::Color::PapayaWhip);
 		int j = 0;
 		for (int i = 0; i < MAX_PARTICLES; ++i)
 		{
@@ -128,21 +128,21 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 		//Position
 		glVertexAttribDivisor(4, 1);
 		glEnableVertexAttribArray(4);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec3), &particleTransforms1[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec3), &particlePosition[0]);
 		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Rotation);
 		//Rotation
 		glVertexAttribDivisor(5, 1);
 		glEnableVertexAttribArray(5);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec3), &particleTransforms2[0]);
-		glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(float), &particleAngleRot[0]);
+		glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Size);
 		//Scale
 		glVertexAttribDivisor(6, 1);
 		glEnableVertexAttribArray(6);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(float), &particleTransforms3[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(float), &particleSize[0]);
 		glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		
 
@@ -168,7 +168,7 @@ void ParticleManager::GetParticleValues()
 	//BROFILER_CATEGORY("Transform", Profiler::Color::AliceBlue);
 	for (int i = 0; i < activePartVec.size(); ++i)
 	{
-		activePartVec[i]->GetTransform(particleTransforms1[i], particleTransforms2[i], particleTransforms3[i]);
+		activePartVec[i]->GetTransform(particlePosition[i], particleAngleRot[i], particleSize[i]);
 		particleColor[i] = activePartVec[i]->GetColor();
 		particleTexture[i] = activePartVec[i]->GetTextureCoords();
 	}
