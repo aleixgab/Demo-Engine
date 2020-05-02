@@ -40,10 +40,6 @@ public:
 	glm::vec4 GetColor() const;
 	void GetTransform(glm::vec3& pos, float& angle, float& scale) const;
 
-	bool operator<(const Particle& particle) const
-	{
-		return cameraDist > particle.cameraDist;
-	}
 private:
 
 	//Create random float betweet 2 edges

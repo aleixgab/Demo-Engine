@@ -114,11 +114,7 @@ public:
 	void StopEmitter();
 	//Stop to emit particles
 	void PauseEmitter();
-	//Order the colors depending on the position
-	bool operator<(const Emitter& emitter) const
-	{
-		return cameraDist > emitter.cameraDist;
-	}
+
 private:
 	/*Get the position according to the differents shapes we have, and set the particle direction 
 	BoxShape -> the particles will spawn in vec3 boxShapeSize

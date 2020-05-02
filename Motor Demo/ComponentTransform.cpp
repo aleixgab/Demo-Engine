@@ -1,4 +1,6 @@
 #include "ComponentTransform.h"
+#include "GameObject.h"
+#include "ComponentEmitter.h"
 #include "glm/gtx/matrix_decompose.hpp"
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -32,6 +34,10 @@ void Transform::SetIdentity()
 void Transform::SetPos(glm::vec3 position)
 {
 	this->position = position;
+
+	ComponentEmitter* emitter = owner->GetComponentEmitter();
+	if (emitter)
+		emitter->emitter->SetGlobalPos(position);
 }
 
 void Transform::SetRotation(glm::quat rotation)
@@ -80,7 +86,7 @@ void Transform::Inspector()
 		angles[1] = glm::degrees(angles.y);
 		angles[2] = glm::degrees(angles.z);
 
-		if (ImGui::DragFloat3("Position", &position[0], 0.1f, 0.0f, 0.0f, "%.2f")) 
+		if (ImGui::DragFloat3("Position", &position[0], 0.1f, 0.0f, 0.0f, "%.2f"))
 			SetPos(position);
 
 		if (ImGui::DragFloat3("Scale", &scale[0], 0.01f, 0.0f, 0.0f, "%.2f"))

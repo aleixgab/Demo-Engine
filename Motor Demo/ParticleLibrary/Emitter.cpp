@@ -14,6 +14,7 @@ Emitter::Emitter(ParticleManager* parent): parent(parent)
 
 Emitter::~Emitter()
 {
+	StopEmitter();
 	delete plane;
 }
 
@@ -73,7 +74,6 @@ void Emitter::SetGlobalPos(glm::vec3 globalPos)
 void Emitter::Draw(unsigned int shaderUuid)
 {
 
-	particles.sort();
 	GetParticleValues();
 
 	glUniform1f(glGetUniformLocation(shaderUuid, "colorPercent"), colorPercent);

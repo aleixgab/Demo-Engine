@@ -59,10 +59,9 @@ bool Particle::Update(float dt)
 
 	if (currLife > 0.0f)
 	{
-
-
+		
 		//Tranlate
-		speed + acceleration * dt;
+		speed += acceleration * dt;
 		transform.position += direction * (speed * dt);
 
 		//Scale

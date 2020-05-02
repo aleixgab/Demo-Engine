@@ -68,8 +68,12 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 
 	if (canDraw)
 	{
+	
 		//Sort back to front
-		emittersList.sort();
+		emittersList.sort([](const Emitter* emitter1, const Emitter* emitter2)
+			{
+				return emitter1->cameraDist > emitter2->cameraDist;
+			});
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		bool blend = glIsEnabled(GL_BLEND);
