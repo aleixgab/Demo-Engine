@@ -18,12 +18,12 @@ PlaneImporter::PlaneImporter()
 	};
 
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &VBO[0]);
 
 	glBindVertexArray(VAO);
 
 	// Fill mesh buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
 
 	// Set mesh attributes
@@ -50,43 +50,43 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	};
 
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &VBO_Texture);
-	glGenBuffers(1, &VBO_Color);
-	glGenBuffers(1, &VBO_Position);
-	glGenBuffers(1, &VBO_Rotation);
-	glGenBuffers(1, &VBO_Size);
+	glGenBuffers(1, &VBO[0]); //Static VBO
+	glGenBuffers(1, &VBO[1]); //TextureCoords
+	glGenBuffers(1, &VBO[2]); //Color
+	glGenBuffers(1, &VBO[3]); //Position
+	glGenBuffers(1, &VBO[4]); //Rotation
+	glGenBuffers(1, &VBO[5]); //Size
 
 	glBindVertexArray(VAO);
 
 	// Fill mesh buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);	
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Texture);	
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Color);	
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Position);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[3]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Rotation);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[4]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Size);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[5]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 }
 
 PlaneImporter::~PlaneImporter()
 {
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &VBO_Color);
-	glDeleteBuffers(1, &VBO_Texture);
-	glDeleteBuffers(1, &VBO_Position);
-	glDeleteBuffers(1, &VBO_Rotation);
-	glDeleteBuffers(1, &VBO_Size);
+	glDeleteBuffers(1, &VBO[0]);
+	glDeleteBuffers(1, &VBO[1]);
+	glDeleteBuffers(1, &VBO[2]);
+	glDeleteBuffers(1, &VBO[3]);
+	glDeleteBuffers(1, &VBO[4]);
+	glDeleteBuffers(1, &VBO[5]);
 }
 

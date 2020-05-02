@@ -1,17 +1,20 @@
 #include "Emitter.h"
 #include "ParticleManager.h"
 #include "Timer.h"
+#include <glad/glad.h>
+#include "PlaneImporter.h"
 
 Emitter::Emitter(ParticleManager* parent): parent(parent) 
 {
 	ParticleColor startColor;
 	startColor.name = "Start Color";
 	startValues.colorList.push_back(startColor);
+	plane = new PlaneImporter(MAX_PARTICLES);
 }
 
 Emitter::~Emitter()
 {
-
+	delete plane;
 }
 
 void Emitter::Update(float dt)
@@ -64,6 +67,105 @@ ShapeEmitter Emitter::GetShapeEmitter() const
 void Emitter::SetGlobalPos(glm::vec3 globalPos)
 {
 	globalObjPos = globalPos;
+}
+
+
+void Emitter::Draw(unsigned int shaderUuid)
+{
+
+	particles.sort();
+	GetParticleValues();
+
+	glUniform1f(glGetUniformLocation(shaderUuid, "colorPercent"), colorPercent);
+	glUniform1i(glGetUniformLocation(shaderUuid, "isAnimated"), isParticleAnimated);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	//Bind VAO
+	glBindVertexArray(plane->VAO);
+
+	// Set mesh attributes
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[0]);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+
+	// textCoords
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
+
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[1]);
+	//Textures modified	
+	glVertexAttribDivisor(2, 1);
+	glEnableVertexAttribArray(2);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(glm::vec4), &particleTexture[0]);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[2]);
+	//Color
+	glVertexAttribDivisor(3, 1);
+	glEnableVertexAttribArray(3);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(glm::vec4), &particleColor[0]);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
+	//Position
+	glVertexAttribDivisor(4, 1);
+	glEnableVertexAttribArray(4);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(glm::vec3), &particlePosition[0]);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
+	//Rotation
+	glVertexAttribDivisor(5, 1);
+	glEnableVertexAttribArray(5);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleRot[0]);
+	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[5]);
+	//Scale
+	glVertexAttribDivisor(6, 1);
+	glEnableVertexAttribArray(6);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleSize[0]);
+	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particles.size());
+
+	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
+	glDisableVertexAttribArray(4);
+	glDisableVertexAttribArray(5);
+	glDisableVertexAttribArray(6);
+
+	glBindVertexArray(0);
+}
+
+void Emitter::GetParticleValues()
+{
+	uint cont = 0u;
+	for (std::list<Particle*>::iterator iter = particles.begin(); iter != particles.end(); ++iter, ++cont)
+	{
+		(*iter)->GetTransform(particlePosition[cont], particleAngleRot[cont], particleSize[cont]);
+		particleColor[cont] = (*iter)->GetColor();
+		particleTexture[cont] = (*iter)->GetTextureCoords();
+	}
+}
+
+bool Emitter::SaveCameraDistance()
+{
+	bool ret = false;
+	if (parent->cameraPos)
+	{
+		float x = (*parent->cameraPos).x - globalObjPos.x;
+		float y = (*parent->cameraPos).y - globalObjPos.y;
+		float z = (*parent->cameraPos).z - globalObjPos.z;
+
+		cameraDist = x * x + y * y + z * z;
+		ret = true;
+	}
+	return ret;
 }
 
 void Emitter::StartEmitter()

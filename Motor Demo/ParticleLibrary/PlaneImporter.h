@@ -11,12 +11,7 @@ public:
 
 
 public:
-	unsigned int VBO = 0u;
-	unsigned int VBO_Position = 0u;
-	unsigned int VBO_Rotation = 0u;
-	unsigned int VBO_Size = 0u;
-	unsigned int VBO_Color = 0u;
-	unsigned int VBO_Texture = 0u;
+	unsigned int VBO[6];
 
 	unsigned int VAO = 0u;
 };

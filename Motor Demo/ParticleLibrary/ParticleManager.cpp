@@ -1,22 +1,17 @@
 #include "ParticleManager.h"
 #include <algorithm>
-#include "PlaneImporter.h"
 #include <iostream>
-#include <vector>
 #include <glad/glad.h>
 
 #include <Brofiler/Brofiler.h>
 
 ParticleManager::ParticleManager()
 {
-	plane = new PlaneImporter(MAX_PARTICLES);
-
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 }
 
 ParticleManager::~ParticleManager()
 {
-	delete plane;
 }
 
 bool ParticleManager::SetCameraPos(glm::vec3* cameraPos)
@@ -40,13 +35,12 @@ bool ParticleManager::Update(float dt)
 		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
 		{
 			(*it)->Update(dt);
+			ret = (*it)->SaveCameraDistance();
 		}
 	}
-	//Resize the vector to get only the active particles
-	activePartVec.resize(numActivePart);
+
+	if (ret)
 	{
-		BROFILER_CATEGORY("Particle Update", Profiler::Color::PapayaWhip);
-		int j = 0;
 		for (int i = 0; i < MAX_PARTICLES; ++i)
 		{
 			if (particleArray[i].isActive)
@@ -57,7 +51,6 @@ bool ParticleManager::Update(float dt)
 					particleArray[i].SaveCameraDistance(*cameraPos);
 				else
 					ret = false;
-				activePartVec[j++] = &particleArray[i];
 			}
 			else
 			{
@@ -65,8 +58,6 @@ bool ParticleManager::Update(float dt)
 			}
 		}
 	}
-
-
 	return ret;
 }
 
@@ -75,86 +66,25 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
-	ParticleSort();
-
-	if (activePartVec.size() > 0)
+	if (canDraw)
 	{
-		GetParticleValues();
+		//Sort back to front
+		emittersList.sort();
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		bool blend = glIsEnabled(GL_BLEND);
 		glEnable(GL_BLEND);
 		glDepthMask(GL_FALSE);
 
-		// Constant Uniforms
 		glUseProgram(shaderProgramUuid);
+		// Constant Uniforms
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
 
-		glUniform1f(glGetUniformLocation(shaderProgramUuid, "colorPercent"), activePartVec[0]->owner->colorPercent);
-		glUniform1i(glGetUniformLocation(shaderProgramUuid, "isAnimated"), activePartVec[0]->owner->isParticleAnimated);
-	
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, activePartVec[0]->owner->textureID);
-	
-		//Bind VAO
-		glBindVertexArray(plane->VAO);
-								
-		// Set mesh attributes
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-		// textCoords
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Texture);
-		//Textures modified	
-		glVertexAttribDivisor(2, 1);		
-		glEnableVertexAttribArray(2);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleTexture[0]);
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Color);
-		//Color
-		glVertexAttribDivisor(3, 1); 									
-		glEnableVertexAttribArray(3);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec4), &particleColor[0]);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Position);
-		//Position
-		glVertexAttribDivisor(4, 1);
-		glEnableVertexAttribArray(4);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(glm::vec3), &particlePosition[0]);
-		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Rotation);
-		//Rotation
-		glVertexAttribDivisor(5, 1);
-		glEnableVertexAttribArray(5);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(float), &particleAngleRot[0]);
-		glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_Size);
-		//Scale
-		glVertexAttribDivisor(6, 1);
-		glEnableVertexAttribArray(6);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, activePartVec.size() * sizeof(float), &particleSize[0]);
-		glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
-		
-
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, activePartVec.size());
-
-		glDisableVertexAttribArray(2);
-		glDisableVertexAttribArray(3);
-		glDisableVertexAttribArray(4);
-		glDisableVertexAttribArray(5);
-		glDisableVertexAttribArray(6);
-
-		glBindVertexArray(0);
+		for (std::list<Emitter*>::iterator iter = emittersList.begin(); iter != emittersList.end(); ++iter)
+		{
+			(*iter)->Draw(shaderProgramUuid);
+		}
 
 		glDepthMask(GL_TRUE);
 		glEnable(blend);
@@ -162,25 +92,6 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 	
 }
 
-void ParticleManager::GetParticleValues()
-{
-	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
-	//BROFILER_CATEGORY("Transform", Profiler::Color::AliceBlue);
-	for (int i = 0; i < activePartVec.size(); ++i)
-	{
-		activePartVec[i]->GetTransform(particlePosition[i], particleAngleRot[i], particleSize[i]);
-		particleColor[i] = activePartVec[i]->GetColor();
-		particleTexture[i] = activePartVec[i]->GetTextureCoords();
-	}
-}
-void ParticleManager::ParticleSort()
-{
-	//Sort the particles from end to beginning depend on the camera distance
-	std::sort(activePartVec.begin(), activePartVec.end(), [](const Particle* particle1, const Particle* particle2)
-		{
-			return particle1->cameraDist > particle2->cameraDist;
-		});
-}
 //Create new emitter
 Emitter* ParticleManager::CreateEmitter()
 {
@@ -228,13 +139,14 @@ void ParticleManager::StartAllEmitters()
 	{
 		(*it)->StartEmitter();
 	}
+	canDraw = true;
 }
 
 void ParticleManager::StartEmmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StartEmitter();
-	//std::cout << "START EMITTER" << std::endl;
+	canDraw = true;
 }
 
 void ParticleManager::PauseAllEmitters()
@@ -257,12 +169,14 @@ void ParticleManager::StopAllEmitters()
 	{
 		(*it)->StopEmitter();
 	}
+	canDraw = false;
 }
 
 void ParticleManager::StopEmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StopEmitter();
+	canDraw = false;
 }
 
 uint ParticleManager::GetRandomNum()

@@ -1,6 +1,9 @@
 #ifndef __Emitter_H__
 #define __Emitter_H__
 
+//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
+#define MAX_PARTICLES 20000
+
 #include <list>
 #include <string>
 
@@ -9,6 +12,7 @@
 
 class Particle;
 class ParticleManager;
+class PlaneImporter;
 
 struct ParticleColor
 {
@@ -99,12 +103,22 @@ public:
 	//Set the position of the emitter in the world coordinates
 	void SetGlobalPos(glm::vec3 globalPos);
 
+	bool SaveCameraDistance();
+
+	//Draw emitter by emitter for diferents textures
+	void Draw(unsigned int shaderUuid);
+	void GetParticleValues();
 	//Start to emit particles
 	void StartEmitter();
 	//Stop to emit particles
 	void StopEmitter();
 	//Stop to emit particles
 	void PauseEmitter();
+	//Order the colors depending on the position
+	bool operator<(const Emitter& emitter) const
+	{
+		return cameraDist > emitter.cameraDist;
+	}
 private:
 	/*Get the position according to the differents shapes we have, and set the particle direction 
 	BoxShape -> the particles will spawn in vec3 boxShapeSize
@@ -147,6 +161,7 @@ public:
 	between it will mix both colors depending on the percentage.
 	*/
 	float colorPercent = 0.5f;
+	float cameraDist = 0.0f;
 private:
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;
@@ -157,6 +172,14 @@ private:
 
 	//Calculation of the seconds to create one Particle depending on the "particlesEmittion"
 	float secParticleCreation = 0.0f;
+
+	PlaneImporter* plane = nullptr;
+
+	glm::vec3 particlePosition[MAX_PARTICLES];
+	float particleAngleRot[MAX_PARTICLES];
+	float particleSize[MAX_PARTICLES];
+	glm::vec4 particleColor[MAX_PARTICLES];
+	glm::vec4 particleTexture[MAX_PARTICLES];
 };
 
 #endif
