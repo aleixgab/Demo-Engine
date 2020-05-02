@@ -7,6 +7,7 @@
 
 class TextureImporter;
 class PlaneImporter;
+class GameObject;
 
 class ControllerRender : public Controller
 {
@@ -21,8 +22,7 @@ public:
 
 	std::list<TextureImporter*> textures;
 private:
-	Shader lightingShader;
-	Shader lampShader;
+	Shader basicShader;
 	Shader particleShader;
 
 	PlaneImporter* ground;

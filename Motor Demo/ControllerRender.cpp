@@ -7,6 +7,7 @@
 #include "ParticleLibrary/PlaneImporter.h"
 #include "ControllerWindow.h"
 #include "TextureImporter.h"
+#include <Brofiler/Brofiler.h>
 
 ControllerRender::ControllerRender(GameManager* mng) : Controller(mng)
 {
@@ -18,8 +19,7 @@ ControllerRender::~ControllerRender()
 
 bool ControllerRender::Start()
 {
-	lightingShader.SetShader("VShader_BasicLight.txt", "FShader_BasicLight.txt");
-	lampShader.SetShader("VShader_Lamp.txt", "FShader_Lamp.txt");
+	basicShader.SetShader("VertexShader.txt", "FragmentShader.txt");
 	particleShader.SetShader("ParticleLibrary/Shaders/Particle_VShader.txt", "ParticleLibrary/Shaders/Particle_FShader.txt");
 
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
@@ -45,47 +45,61 @@ bool ControllerRender::Start()
 
 bool ControllerRender::Update(float dt)
 {
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 	// render
 	// ------
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 	std::list<GameObject*> toDraw;
 	Mng->gameObject->GetGameObjects(toDraw);
 
 	// view/projection transformations
+
 	glm::mat4 projection = glm::perspective(Mng->scene->camera->zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = Mng->scene->camera->GetViewMatrix();
-
-	for (std::list<GameObject*>::iterator iterator = toDraw.begin(); iterator != toDraw.end(); ++iterator)
-	{
-		if ((*iterator)->isActive && iterator == toDraw.begin())
+	/*
+		if ((*toDraw.begin())->isActive)
 		{
-			lightingShader.UseProgram();
-			lightingShader.SetMat4("projection", projection);
-			lightingShader.SetMat4("view", view);
-			lightingShader.SetMat4("model", (*iterator)->GetComponentTransform()->GetTransform());
+			{
+				BROFILER_CATEGORY("USE PROGRAM", Profiler::Color::PapayaWhip);
+				basicShader.UseProgram();
+			}
+			{
+				BROFILER_CATEGORY("VIEW", Profiler::Color::PapayaWhip);
+				basicShader.SetMat4("view", view);
+			}
+			{
+				BROFILER_CATEGORY("PROJECTION", Profiler::Color::PapayaWhip);
+				basicShader.SetMat4("projection", projection);
+			}
+			{
+				BROFILER_CATEGORY("TRANSFORM", Profiler::Color::PapayaWhip);
+				basicShader.SetMat4("model", (*toDraw.begin())->GetComponentTransform()->GetTransform());
+			}
+			{
+				BROFILER_CATEGORY("COLOR", Profiler::Color::PapayaWhip);
+				basicShader.SetVec3("uColor", 1.0f, 0.5f, 0.31f);
+			}
 
-			// be sure to activate shader when setting uniforms/drawing objects
-			lightingShader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
-			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-			lightingShader.SetVec3("lightPos", 0.0f, 0.0f, 0.0f);
-			lightingShader.SetVec3("viewPos", Mng->scene->camera->Position);
+			// render Plane
+			{
 
-
-			// render the cube
-			glBindVertexArray(ground->VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+				BROFILER_CATEGORY("DRAW", Profiler::Color::PapayaWhip);
+				glBindVertexArray(ground->VAO);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+			}
 		}
-	}
-
+		*/
 	Mng->particle->particleManager->Draw(particleShader.uid, view, projection);
+
 	Mng->gui->Draw();
+
 	int display_w, display_h;
 	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
-	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-	// -------------------------------------------------------------------------------
+
 	glfwSwapBuffers(Mng->window->window);
 	glfwPollEvents();
 
