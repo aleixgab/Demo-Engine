@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "Emitter.h"
 #include "ParticleManager.h"
 #include "PlaneImporter.h"
 

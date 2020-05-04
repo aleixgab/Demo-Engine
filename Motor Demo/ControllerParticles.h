@@ -7,9 +7,6 @@
 #include "ParticleLibrary/Particle.h"
 #include "ComponentEmitter.h"
 
-//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
-#define MAX_PARTICLES 20000
-
 class ParticleManager;
 
 class ControllerParticles: public Controller

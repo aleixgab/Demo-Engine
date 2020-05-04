@@ -4,12 +4,13 @@
 #include <vector>
 #include "PartMath.h"
 
+//Number PI
 #define PI 3.14159265359
 
 typedef unsigned int uint;
 
-class ParticleStartValues;
 class Emitter;
+class ParticleStartValues;
 struct ParticleColor;
 struct ParticleAnimation;
 

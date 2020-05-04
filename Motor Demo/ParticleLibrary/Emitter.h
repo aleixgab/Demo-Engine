@@ -1,17 +1,13 @@
 #ifndef __Emitter_H__
 #define __Emitter_H__
 
-//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
-#define MAX_PARTICLES 20000
-
 #include <list>
 #include <string>
-
-#include "Timer.h"
 #include "PartMath.h"
+#include "Timer.h"
+#include "ParticleManager.h"
 
 class Particle;
-class ParticleManager;
 class PlaneImporter;
 
 struct ParticleColor

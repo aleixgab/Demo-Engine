@@ -1,8 +1,9 @@
 #include "ParticleManager.h"
-#include <algorithm>
-#include <iostream>
+#include "Emitter.h"
+
 #include <glad/glad.h>
 #include <Brofiler/Brofiler.h>
+
 
 ParticleManager::ParticleManager()
 {

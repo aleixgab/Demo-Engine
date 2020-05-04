@@ -1,16 +1,16 @@
 #ifndef __ParticleManager_H__
 #define __ParticleManager_H__
 
-
 #include <list>
-#include <vector>
-
-#include "Particle.h"
-#include "Emitter.h"
-
 #include <random>
+#include "Particle.h"
+
+//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
+#define MAX_PARTICLES 20000
 
 typedef unsigned int uint;
+
+class Emitter;
 
 class ParticleManager
 {
