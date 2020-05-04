@@ -3,12 +3,11 @@
 #include "PlaneImporter.h"
 
 #include <glad/glad.h>
-#include <glm/gtx/compatibility.hpp>
 #include <random>
 
 #include <Brofiler/Brofiler.h>
 
-void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
+void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
 {
 	this->owner = owner;
 
@@ -27,7 +26,7 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	isMulticolor = values.isMulticolor;
 	index = 0u;
 
-	transform.angle = glm::radians(CreateRandomNum(values.rotation));
+	transform.angle = CreateRandomNum(values.rotation) * (PI / 180.0f);
 	transform.position = pos;
 	transform.scale = CreateRandomNum(values.size);
 	countAnimTime = 0.0f;
@@ -60,7 +59,7 @@ void Particle::Update(float dt)
 		
 		//Tranlate
 		speed += acceleration * dt;
-		transform.position += direction * (speed * dt);
+		transform.position += (direction * speed * dt);
 
 		//Scale
 		transform.scale += sizeOverTime * dt;
@@ -82,7 +81,7 @@ void Particle::Update(float dt)
 				if (color[index + 1].position == 0)
 					timeNormalized = 0;
 				//LOG("%i", index);
-				finalColor = glm::lerp(color[index].color, color[index + 1].color, timeNormalized);
+				finalColor = color[index].color.PartLerp(color[index + 1].color, timeNormalized);
 				//LERP Color
 			}
 			else
@@ -130,24 +129,24 @@ void Particle::Update(float dt)
 	}
 }
 
-glm::vec4 Particle::GetTextureCoords() const
+PartVec4 Particle::GetTextureCoords() const
 {
-	return glm::vec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
+	return PartVec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
 }
 
-glm::vec4 Particle::GetColor() const
+PartVec4 Particle::GetColor() const
 {
 	return finalColor;
 }
 
-void Particle::GetTransform(glm::vec3& pos, float& angle, float& scale ) const
+void Particle::GetTransform(PartVec3& pos, float& angle, float& scale ) const
 {
 	pos = transform.position;
 	angle = transform.angle;
 	scale = transform.scale;
 }
 
-float Particle::CreateRandomNum(glm::vec2 edges)//.x = minPoint & .y = maxPoint
+float Particle::CreateRandomNum(PartVec2 edges)//.x = minPoint & .y = maxPoint
 {
 	float num = edges.x;
 	if (edges.x < edges.y)

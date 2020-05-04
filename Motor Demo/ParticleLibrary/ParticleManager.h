@@ -14,14 +14,6 @@ typedef unsigned int uint;
 
 class Shader;
 
-//TODO
-struct DrawInfo
-{
-	glm::mat4 transformation;
-	glm::vec4 color;
-	glm::vec4 textureRect;
-};
-
 class ParticleManager
 {
 public:
@@ -29,13 +21,13 @@ public:
 	~ParticleManager();
 
 	//Set camera pointers. If returns false it's mean the pointer it is null
-	bool SetCameraPos(glm::vec3* cameraPos);
+	bool SetCameraPos(float* cameraPos);
 
 	/*Send delta time that will affect the particles
 	Returns false if user doesn't set camera pointers correctly*/
 	bool Update(float dt);
 	//Draw function with shaderUuid, and camera view and projection
-	void Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix);
+	void Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix);
 	//You get the next slot in the array for the new particle
 	bool GetNextParticleSlot(int& id);
 
@@ -60,7 +52,7 @@ public:
 	int GetRandomNum(int min, int max);
 
 	//Create new emitter
-	Emitter* CreateEmitter();
+	Emitter* CreateEmitter(float* emitterPos);
 	//Remove the wanted emitter
 	void RemoveEmitter(Emitter* emitter);
 
@@ -72,7 +64,7 @@ public:
 	//Counter from all the active particles. This will let us ignore the other particles.
 	int numActivePart = 0;
 
-	glm::vec3* cameraPos = nullptr;
+	PartVec3* cameraPos = nullptr;
 
 private:
 	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	

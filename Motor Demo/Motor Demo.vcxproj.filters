@@ -44,6 +44,9 @@
     <Filter Include="Sources\3rd Party\Brofiler">
       <UniqueIdentifier>{b02f24ed-80e9-4308-8dbf-7c6a7063eb07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Library\Math">
+      <UniqueIdentifier>{9369ce2c-9901-4347-a767-ba26753dc902}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdPart\includes\glad\glad.c">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="TextureImporter.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\PartMath.cpp">
+      <Filter>Sources\Library\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="3rdPart\includes\Brofiler\Brofiler.h">
       <Filter>Sources\3rd Party\Brofiler</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\PartMath.h">
+      <Filter>Sources\Library\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

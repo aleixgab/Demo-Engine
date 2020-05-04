@@ -1,9 +1,8 @@
 #ifndef __Particle_H__
 #define __Particle_H__
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <vector>
+#include "PartMath.h"
 
 #define PI 3.14159265359
 #define MAX_UINT32 4294967295
@@ -14,13 +13,12 @@ class ParticleStartValues;
 class Emitter;
 struct ParticleColor;
 struct ParticleAnimation;
-struct DrawInfo;
 
 //Transform of the particle where there are Translation - Rotation - Scale
 struct PartTransform
 {
 	//global position
-	glm::vec3 position = glm::vec3(0.0f);
+	PartVec3 position = PartVec3(0.0f);
 	//Plane rotation
 	float angle = 0.0f;
 	//global scale
@@ -32,16 +30,16 @@ class Particle
 public:
 
 	//Set all the particle values and start the particle
-	void SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
+	void SetParticleValues(PartVec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	void Update(float dt);
-	glm::vec4 GetTextureCoords() const;
-	glm::vec4 GetColor() const;
-	void GetTransform(glm::vec3& pos, float& angle, float& scale) const;
+	PartVec4 GetTextureCoords() const;
+	PartVec4 GetColor() const;
+	void GetTransform(PartVec3& pos, float& angle, float& scale) const;
 
 private:
 
 	//Create random float betweet 2 edges
-	float CreateRandomNum(glm::vec2 edges);
+	float CreateRandomNum(PartVec2 edges);
 
 public:
 	//Bool to know if the particle is alive and operating
@@ -59,9 +57,9 @@ private:
 	float acceleration = 0.0f;
 
 	//Gravity of the world that affect the particle
-	glm::vec3 gravity = glm::vec3(0.0f, 0.0f, 0.0f);
+	PartVec3 gravity = PartVec3(0.0f);
 	//Direction of the particle in 3D
-	glm::vec3 direction = glm::vec3(0.0f, 1.0f, 0.0f);
+	PartVec3 direction = PartVec3(0.0f, 1.0f, 0.0f);
 
 	//Velocity of the rotation
 	float angularVelocity = 0.0f;
@@ -75,7 +73,7 @@ private:
 	bool isMulticolor = false;
 	uint index = 0u;
 
-	glm::vec4 finalColor = glm::vec4(1.0f);
+	PartVec4 finalColor = PartVec4(1.0f);
 	PartTransform transform;
 
 	//Number of rows and columns of the texture
@@ -96,7 +94,7 @@ private:
 	Diferent than currentFrmae because there are random cells and it might not goes in order
 	*/
 	uint contFrame = 0u;
-	glm::vec2 currMinUVCoord = glm::vec2(0.0f);
+	PartVec2 currMinUVCoord = PartVec2(0.0f, 0.0f);
 };
 
 #endif

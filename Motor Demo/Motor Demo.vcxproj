@@ -161,6 +161,7 @@
     <ClCompile Include="ParticleLibrary\Emitter.cpp" />
     <ClCompile Include="ParticleLibrary\Particle.cpp" />
     <ClCompile Include="ParticleLibrary\ParticleManager.cpp" />
+    <ClCompile Include="ParticleLibrary\PartMath.cpp" />
     <ClCompile Include="ParticleLibrary\PlaneImporter.cpp" />
     <ClCompile Include="ParticleLibrary\Timer.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="ParticleLibrary\Emitter.h" />
     <ClInclude Include="ParticleLibrary\Particle.h" />
     <ClInclude Include="ParticleLibrary\ParticleManager.h" />
+    <ClInclude Include="ParticleLibrary\PartMath.h" />
     <ClInclude Include="ParticleLibrary\PlaneImporter.h" />
     <ClInclude Include="ParticleLibrary\Timer.h" />
     <ClInclude Include="Shader.h" />

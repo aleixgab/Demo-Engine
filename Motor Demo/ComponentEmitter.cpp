@@ -11,7 +11,7 @@
 
 ComponentEmitter::ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller) : Component(gameObject, ComponentType_EMITTER)
 {
-	emitter = manager->CreateEmitter();
+	emitter = manager->CreateEmitter(&gameObject->transform->position.x);
 	this->controller = controller;
 }
 
@@ -72,7 +72,7 @@ void ComponentEmitter::StartValuesInsp()
 	}
 }
 
-void ComponentEmitter::ShowFloatValue(glm::vec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max)
+void ComponentEmitter::ShowFloatValue(PartVec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max)
 {
 	ImGui::SameLine();
 	if (checkBox)
@@ -96,7 +96,7 @@ void ComponentEmitter::ShowFloatValue(glm::vec2& value, bool checkBox, const cha
 	ImGui::PopItemWidth();
 }
 
-void ComponentEmitter::CheckMinMax(glm::vec2& value)
+void ComponentEmitter::CheckMinMax(PartVec2& value)
 {
 	if (value.x > value.y)
 		value.y = value.x;
@@ -198,7 +198,10 @@ void ComponentEmitter::ColorValuesInsp()
 			if (ImGui::Button("Add Color", ImVec2(125, 25)))
 			{
 				ParticleColor colorTime;
-				colorTime.color = nextColor;
+				colorTime.color.x = nextColor.x;
+				colorTime.color.y = nextColor.y;
+				colorTime.color.z = nextColor.z;
+				colorTime.color.w = nextColor.w;
 				colorTime.position = (float)nextPos / 100;
 				colorTime.name = std::to_string((int)nextPos) + "%";
 				emitter->startValues.colorList.push_back(colorTime);

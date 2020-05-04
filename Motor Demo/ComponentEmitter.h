@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "ParticleLibrary/Emitter.h"
+#include <glm/vec4.hpp>
 
 class ControllerParticles;
 class ComponentEmitter : public Component
@@ -19,9 +20,9 @@ public:
 	void ShapeValuesInsp();
 	void TextureValuesInsp();
 
-	void ShowFloatValue(glm::vec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
+	void ShowFloatValue(PartVec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
 
-	void CheckMinMax(glm::vec2& value);
+	void CheckMinMax(PartVec2& value);
 
 	bool EditColor(ParticleColor& colorTime, unsigned int pos = 0u);
 

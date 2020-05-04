@@ -2,24 +2,27 @@
 #include <algorithm>
 #include <iostream>
 #include <glad/glad.h>
-
 #include <Brofiler/Brofiler.h>
 
 ParticleManager::ParticleManager()
 {
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
+	cameraPos = new PartVec3(0.0f);
 }
 
 ParticleManager::~ParticleManager()
 {
+	delete cameraPos;
 }
 
-bool ParticleManager::SetCameraPos(glm::vec3* cameraPos)
+bool ParticleManager::SetCameraPos(float* cameraPos)
 {
 	bool ret = false;
 	if (cameraPos)
 	{
-		this->cameraPos = cameraPos;
+		this->cameraPos->x = cameraPos[0];
+		this->cameraPos->y = cameraPos[1];
+		this->cameraPos->z = cameraPos[2];
 
 		ret = true;
 	}
@@ -53,7 +56,7 @@ bool ParticleManager::Update(float dt)
 }
 
 //Call this function from the renderer to draw all the particles 
-void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::mat4 projMatrix)
+void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix)
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
@@ -73,13 +76,12 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 
 		glUseProgram(shaderProgramUuid);
 		// Constant Uniforms
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, &projMatrix[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, &viewMatrix[0][0]);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, projMatrix);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, viewMatrix);
 
 		for (std::list<Emitter*>::iterator iter = emittersList.begin(); iter != emittersList.end(); ++iter)
 		{
-			if((*iter)->runningTime)
-				(*iter)->Draw(shaderProgramUuid);
+			(*iter)->Draw(shaderProgramUuid);
 		}
 
 		glDepthMask(GL_TRUE);
@@ -89,9 +91,9 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 }
 
 //Create new emitter
-Emitter* ParticleManager::CreateEmitter()
+Emitter* ParticleManager::CreateEmitter(float* emitterPos)
 {
-	Emitter* newEmitter = new Emitter(this);
+	Emitter* newEmitter = new Emitter(this, emitterPos);
 	emittersList.push_back(newEmitter);
 
 	return newEmitter;

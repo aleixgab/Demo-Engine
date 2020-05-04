@@ -1,7 +1,7 @@
 #include "PlaneImporter.h"
 #include <glad/glad.h>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
+#include "PartMath.h"
+#include <cstddef>
 
 PlaneImporter::PlaneImporter()
 {
@@ -64,13 +64,13 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec4) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[3]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec3) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[4]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);

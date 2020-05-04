@@ -6,7 +6,7 @@
 #include <Brofiler/Brofiler.h>
 
 
-Emitter::Emitter(ParticleManager* parent): parent(parent) 
+Emitter::Emitter(ParticleManager* parent, float* emitterPos): parent(parent), globalObjPos(emitterPos[0])
 {
 	ParticleColor startColor;
 	startColor.name = "Start Color";
@@ -37,7 +37,7 @@ void Emitter::Update(float dt)
 	}
 }
 
-void Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
+void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition)
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
@@ -69,9 +69,9 @@ ShapeEmitter Emitter::GetShapeEmitter() const
 	return shapeEmitter;
 }
 
-void Emitter::SetGlobalPos(glm::vec3 globalPos)
+void Emitter::SetGlobalPos(float* globalPos)
 {
-	globalObjPos = globalPos;
+	globalObjPos = globalPos[0];
 }
 
 
@@ -102,14 +102,14 @@ void Emitter::Draw(unsigned int shaderUuid)
 	//Textures modified	
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(2);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(glm::vec4), &particleTexture[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec4), &particleTexture[0]);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[2]);
 	//Color
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(3);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(glm::vec4), &particleColor[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec4), &particleColor[0]);
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
@@ -117,7 +117,7 @@ void Emitter::Draw(unsigned int shaderUuid)
 	//Position
 	glVertexAttribDivisor(4, 1);
 	glEnableVertexAttribArray(4);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(glm::vec3), &particlePosition[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec3), &particlePosition[0]);
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
@@ -199,9 +199,9 @@ void Emitter::PauseEmitter()
 	runningTime = false;
 }
 
-glm::vec3 Emitter::GetRandomPos()
+PartVec3 Emitter::GetRandomPos()
 {
-	glm::vec3 randomPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	PartVec3 randomPos = PartVec3(0.0f);
 
 	switch (shapeEmitter)
 	{
@@ -211,7 +211,7 @@ glm::vec3 Emitter::GetRandomPos()
 		randomPos.y = parent->GetRandomNum(-boxShapeSize.y / 2, boxShapeSize.y / 2);
 		randomPos.z = parent->GetRandomNum(-boxShapeSize.z / 2, boxShapeSize.z / 2);
 
-		startValues.particleDirection = glm::vec3(0.0f, 1.0f, 0.0f);
+		startValues.particleDirection = PartVec3(0.0f, 1.0f, 0.0f);
 		break;
 	case SphereShape:
 	case SphereShapeCenter:
@@ -221,25 +221,26 @@ glm::vec3 Emitter::GetRandomPos()
 		randomPos.y = parent->GetRandomNum(-1.0f, 1.0f);
 		randomPos.z = parent->GetRandomNum(-1.0f, 1.0f);
 
-		randomPos = glm::normalize(randomPos);
+		randomPos = randomPos.Normalize();
 		startValues.particleDirection = randomPos;
 
 		if (shapeEmitter == SphereShape)
 			randomPos *= parent->GetRandomNum(0.0f, sphereShapeRad);
 		else if (shapeEmitter == SphereShapeCenter)
-			randomPos = glm::vec3(0.0f);
+			randomPos = PartVec3(0.0f);
 		else if (shapeEmitter == SphereShapeBorder)
 			randomPos = startValues.particleDirection * sphereShapeRad;
 		break;
 	case ConeShape:
 		//The position is always 0. We only change the direction
 	{
-		glm::vec3 destination;
+		PartVec3 destination;
 		destination.x = parent->GetRandomNum(-coneShapeRad, coneShapeRad);
 		destination.y = coneShapeHeight;
 		destination.z = parent->GetRandomNum(-coneShapeRad, coneShapeRad);
 
-		startValues.particleDirection = glm::normalize(destination);
+		startValues.particleDirection = destination.Normalize();
+
 	}
 	break;
 	default:

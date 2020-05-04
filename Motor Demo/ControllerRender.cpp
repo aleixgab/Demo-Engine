@@ -59,7 +59,7 @@ bool ControllerRender::Update(float dt)
 
 	glm::mat4 projection = glm::perspective(Mng->scene->camera->zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = Mng->scene->camera->GetViewMatrix();
-	/*
+	
 		if ((*toDraw.begin())->isActive)
 		{
 			{
@@ -91,9 +91,10 @@ bool ControllerRender::Update(float dt)
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 			}
 		}
-		*/
-	Mng->particle->particleManager->Draw(particleShader.uid, view, projection);
+		
 
+		Mng->particle->particleManager->Draw(particleShader.uid, &view[0][0], &projection[0][0]);
+		
 	Mng->gui->Draw();
 
 	int display_w, display_h;
