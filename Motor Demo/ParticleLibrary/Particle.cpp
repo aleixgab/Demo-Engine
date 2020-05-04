@@ -50,10 +50,8 @@ void Particle::SetParticleValues(glm::vec3 pos, ParticleStartValues values, Part
 	isActive = true;
 }
 
-bool Particle::Update(float dt)
+void Particle::Update(float dt)
 {
-	bool ret = true;
-
 	if (!owner->runningTime)
 		dt = 0.0f;
 
@@ -130,17 +128,6 @@ bool Particle::Update(float dt)
 		owner->parent->numActivePart--;
 		color.clear();
 	}
-
-	return ret;
-}
-
-void Particle::SaveCameraDistance(glm::vec3 cameraPosition)
-{
-	float x = cameraPosition.x - transform.position.x;
-	float y = cameraPosition.y - transform.position.y;
-	float z = cameraPosition.z - transform.position.z;
-
-	cameraDist = x * x + y * y + z * z;
 }
 
 glm::vec4 Particle::GetTextureCoords() const

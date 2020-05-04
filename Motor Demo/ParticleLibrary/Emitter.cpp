@@ -3,6 +3,8 @@
 #include "Timer.h"
 #include <glad/glad.h>
 #include "PlaneImporter.h"
+#include <Brofiler/Brofiler.h>
+
 
 Emitter::Emitter(ParticleManager* parent): parent(parent) 
 {
@@ -37,6 +39,8 @@ void Emitter::Update(float dt)
 
 void Emitter::CreateParticles(int numParticles, glm::vec3 globalPosition)
 {
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
+
 	for (int i = 0; i < numParticles; ++i)
 	{
 		int particleId = 0;

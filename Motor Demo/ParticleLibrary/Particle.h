@@ -33,9 +33,7 @@ public:
 
 	//Set all the particle values and start the particle
 	void SetParticleValues(glm::vec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
-	bool Update(float dt);
-	//We safe the distance between the camera and the particle to order by distance after this
-	void SaveCameraDistance(glm::vec3 cameraPosition);
+	void Update(float dt);
 	glm::vec4 GetTextureCoords() const;
 	glm::vec4 GetColor() const;
 	void GetTransform(glm::vec3& pos, float& angle, float& scale) const;
@@ -50,8 +48,6 @@ public:
 	bool isActive = false;
 	//Pointer to its own parent
 	Emitter* owner = nullptr;
-	//Float to know the distance between camera and this particle
-	float cameraDist = 0.0f;
 
 private:
 	//Time in seconds that the particle will be alive

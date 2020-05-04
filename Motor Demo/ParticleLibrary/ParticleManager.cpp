@@ -32,6 +32,7 @@ bool ParticleManager::Update(float dt)
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 	bool ret = true;
 	{
+		BROFILER_CATEGORY("Emitter", Profiler::Color::PapayaWhip);
 		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
 		{
 			(*it)->Update(dt);
@@ -41,21 +42,11 @@ bool ParticleManager::Update(float dt)
 
 	if (ret)
 	{
+		BROFILER_CATEGORY("Particle", Profiler::Color::PapayaWhip);
 		for (int i = 0; i < MAX_PARTICLES; ++i)
 		{
 			if (particleArray[i].isActive)
-			{
-				//We do the update only to the active particles. Then we add the particles in the vector to draw it after this
-				ret = particleArray[i].Update(dt);
-				if (cameraPos)
-					particleArray[i].SaveCameraDistance(*cameraPos);
-				else
-					ret = false;
-			}
-			else
-			{
-				particleArray[i].cameraDist = -1;
-			}
+				particleArray[i].Update(dt);
 		}
 	}
 	return ret;
@@ -87,7 +78,8 @@ void ParticleManager::Draw(uint shaderProgramUuid, glm::mat4 viewMatrix, glm::ma
 
 		for (std::list<Emitter*>::iterator iter = emittersList.begin(); iter != emittersList.end(); ++iter)
 		{
-			(*iter)->Draw(shaderProgramUuid);
+			if((*iter)->runningTime)
+				(*iter)->Draw(shaderProgramUuid);
 		}
 
 		glDepthMask(GL_TRUE);
@@ -180,7 +172,6 @@ void ParticleManager::StopEmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StopEmitter();
-	canDraw = false;
 }
 
 uint ParticleManager::GetRandomNum()

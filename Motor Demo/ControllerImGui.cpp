@@ -178,6 +178,11 @@ void ControllerImGui::PlayStop()
 				{
 					Mng->particle->particleManager->StopEmitter(component->emitter);
 				}
+				ImGui::SameLine();
+				if (ImGui::Button("Stop All", { 50,25 }))
+				{
+					Mng->particle->particleManager->StopAllEmitters();
+				}
 			}
 			ImGui::End();
 		}
