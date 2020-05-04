@@ -5,7 +5,6 @@
 #include "PartMath.h"
 
 #define PI 3.14159265359
-#define MAX_UINT32 4294967295
 
 typedef unsigned int uint;
 

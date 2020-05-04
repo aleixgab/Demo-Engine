@@ -12,8 +12,6 @@
 
 typedef unsigned int uint;
 
-class Shader;
-
 class ParticleManager
 {
 public:

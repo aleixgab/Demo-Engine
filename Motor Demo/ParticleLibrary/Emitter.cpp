@@ -71,7 +71,9 @@ ShapeEmitter Emitter::GetShapeEmitter() const
 
 void Emitter::SetGlobalPos(float* globalPos)
 {
-	globalObjPos = globalPos[0];
+	globalObjPos.x = globalPos[0];
+	globalObjPos.y = globalPos[1];
+	globalObjPos.z = globalPos[2];
 }
 
 
