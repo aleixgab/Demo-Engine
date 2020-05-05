@@ -59,44 +59,23 @@ bool ControllerRender::Update(float dt)
 
 	glm::mat4 projection = glm::perspective(Mng->scene->camera->zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = Mng->scene->camera->GetViewMatrix();
-	
-		if ((*toDraw.begin())->isActive)
-		{
-			{
-				BROFILER_CATEGORY("USE PROGRAM", Profiler::Color::PapayaWhip);
-				basicShader.UseProgram();
-			}
-			{
-				BROFILER_CATEGORY("VIEW", Profiler::Color::PapayaWhip);
-				basicShader.SetMat4("view", view);
-			}
-			{
-				BROFILER_CATEGORY("PROJECTION", Profiler::Color::PapayaWhip);
-				basicShader.SetMat4("projection", projection);
-			}
-			{
-				BROFILER_CATEGORY("TRANSFORM", Profiler::Color::PapayaWhip);
-				basicShader.SetMat4("model", (*toDraw.begin())->GetComponentTransform()->GetTransform());
-			}
-			{
-				BROFILER_CATEGORY("COLOR", Profiler::Color::PapayaWhip);
-				basicShader.SetVec3("uColor", 1.0f, 0.5f, 0.31f);
-			}
 
-			// render Plane
-			{
+	if ((*toDraw.begin())->isActive)
+	{
+			basicShader.UseProgram();
+			basicShader.SetMat4("view", view);
+			basicShader.SetMat4("projection", projection);
+			basicShader.SetMat4("model", (*toDraw.begin())->GetComponentTransform()->GetTransform());
+			basicShader.SetVec3("uColor", 1.0f, 0.5f, 0.31f);
 
-				BROFILER_CATEGORY("DRAW", Profiler::Color::PapayaWhip);
-				glBindVertexArray(ground->VAO);
-				glDrawArrays(GL_TRIANGLES, 0, 6);
-			}
-		}
-		
+		// render Plane
+			glBindVertexArray(ground->VAO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
 
-		Mng->particle->particleManager->Draw(particleShader.uid, &view[0][0], &projection[0][0]);
-		
+	Mng->particle->particleManager->Draw(particleShader.uid, &view[0][0], &projection[0][0]);
+
 	Mng->gui->Draw();
-
 	int display_w, display_h;
 	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
