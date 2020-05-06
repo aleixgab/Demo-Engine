@@ -11,7 +11,7 @@ Emitter::Emitter(ParticleManager* parent, float* emitterPos): parent(parent), gl
 	ParticleColor startColor;
 	startColor.name = "Start Color";
 	startValues.colorList.push_back(startColor);
-	plane = new PlaneImporter(MAX_PARTICLES);
+	plane = new PlaneImporter(MAX_PARTICLES * 6);
 }
 
 Emitter::~Emitter()
