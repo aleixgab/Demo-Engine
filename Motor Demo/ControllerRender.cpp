@@ -9,6 +9,7 @@
 #include "TextureImporter.h"
 #include <Brofiler/Brofiler.h>
 
+#include <iostream>
 ControllerRender::ControllerRender(GameManager* mng) : Controller(mng)
 {
 }

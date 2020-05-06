@@ -5,7 +5,7 @@
 #include "PlaneImporter.h"
 #include <Brofiler/Brofiler.h>
 
-
+#include <iostream>
 Emitter::Emitter(ParticleManager* parent, float* emitterPos): parent(parent), globalObjPos(emitterPos[0])
 {
 	ParticleColor startColor;
@@ -106,10 +106,10 @@ void Emitter::SetGlobalPos(float* globalPos)
 }
 
 
-void Emitter::Draw(unsigned int shaderUuid)
+void Emitter::Draw(unsigned int shaderUuid, float* viewMatrix)
 {
 
-	GetParticleValues();
+	GetParticleValues(viewMatrix);
 
 	glUniform1f(glGetUniformLocation(shaderUuid, "colorPercent"), colorPercent);
 	glUniform1i(glGetUniformLocation(shaderUuid, "isAnimated"), isParticleAnimated);
@@ -117,74 +117,40 @@ void Emitter::Draw(unsigned int shaderUuid)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
+
 	//Bind VAO
 	glBindVertexArray(plane->VAO);
 
 	// Set mesh attributes
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[0]);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(Vertex) * 6, &particlesVertex[0]);
 
-	// textCoords
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
-
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[1]);
-	//Textures modified	
-	glVertexAttribDivisor(2, 1);
-	glEnableVertexAttribArray(2);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec4), &particleTexture[0]);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[2]);
-	//Color
-	glVertexAttribDivisor(3, 1);
-	glEnableVertexAttribArray(3);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec4), &particleColor[0]);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
 	//Position
-	glVertexAttribDivisor(4, 1);
-	glEnableVertexAttribArray(4);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec3), &particlePosition[0]);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
-	//Rotation
-	glVertexAttribDivisor(5, 1);
-	glEnableVertexAttribArray(5);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleRot[0]);
-	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//TexturesCoords
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(PartVec3));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[5]);
-	//Scale
-	glVertexAttribDivisor(6, 1);
-	glEnableVertexAttribArray(6);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleSize[0]);
-	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//TexturesCoords
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(PartVec3) + sizeof(PartVec2)));
 
-
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particles.size());
-
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(5);
-	glDisableVertexAttribArray(6);
+	glDrawArrays(GL_TRIANGLES, 0, 6 * particles.size());
 
 	glBindVertexArray(0);
 }
 
-void Emitter::GetParticleValues()
+void Emitter::GetParticleValues(float* viewMatrix)
 {
+	PartVec3 cameraForward = PartVec3(viewMatrix[2], viewMatrix[6], viewMatrix[10]); //Camera Forward
+	PartVec3 cameraUp = PartVec3(viewMatrix[1], viewMatrix[5], viewMatrix[9]); //Camera Up
+
 	uint cont = 0u;
 	for (std::list<Particle*>::iterator iter = particles.begin(); iter != particles.end(); ++iter, ++cont)
 	{
-		(*iter)->GetTransform(particlePosition[cont], particleAngleRot[cont], particleSize[cont]);
-		particleColor[cont] = (*iter)->GetColor();
-		particleTexture[cont] = (*iter)->GetTextureCoords();
+		(*iter)->SetVertexs(&particlesVertex[cont * 6], cameraForward, cameraUp);
 	}
 }
 

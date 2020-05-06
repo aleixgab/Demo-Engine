@@ -10,6 +10,15 @@
 class Particle;
 class PlaneImporter;
 
+struct Vertex {
+	//Position
+	PartVec3 position;
+	// texCoords
+	PartVec2 texCoords;
+	// bitangent
+	PartVec4 color;
+};
+
 struct ParticleColor
 {
 	PartVec4 color = PartVec4(1.0f);
@@ -105,8 +114,8 @@ public:
 	bool SaveCameraDistance();
 
 	//Draw emitter by emitter for diferents textures
-	void Draw(unsigned int shaderUuid);
-	void GetParticleValues();
+	void Draw(unsigned int shaderUuid, float* viewMatrix);
+	void GetParticleValues(float* viewMatrix);
 	//Start to emit particles
 	void StartEmitter();
 	//Stop to emit particles
@@ -185,11 +194,7 @@ private:
 
 	PlaneImporter* plane = nullptr;
 
-	PartVec3 particlePosition[MAX_PARTICLES];
-	float particleAngleRot[MAX_PARTICLES];
-	float particleSize[MAX_PARTICLES];
-	PartVec4 particleColor[MAX_PARTICLES];
-	PartVec4 particleTexture[MAX_PARTICLES];
+	Vertex particlesVertex[MAX_PARTICLES * 6];
 
 	bool onceBurst = false;
 };

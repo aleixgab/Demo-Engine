@@ -110,3 +110,60 @@ PartVec4 PartVec4::PartLerp(PartVec4 final, float t)
 	return ret;
 }
 
+//_________________________________________________________________________________________________________________________
+//-------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------MATRIX4------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------
+
+PartMat4::PartMat4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33)
+{
+
+	mat[0][0] = m00;	mat[0][1] = m01;	mat[0][2] = m02;	mat[0][3] = m03;
+	mat[1][0] = m10;	mat[1][1] = m11;	mat[1][2] = m12;	mat[1][3] = m13;
+	mat[2][0] = m20;	mat[2][1] = m21;	mat[2][2] = m22;	mat[2][3] = m23;
+	mat[3][0] = m30;	mat[3][1] = m31;	mat[3][2] = m32;	mat[3][3] = m33;
+
+}
+
+void PartMat4::Multiply(const PartMat4& m)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			mat[i][j] = mat[i][0] * m.mat[0][j] + mat[i][1] * m.mat[1][j] + mat[i][2] * m.mat[2][j] + mat[i][3] * m.mat[3][j];
+		}
+	}
+}
+
+PartVec4 PartMat4::Multiply(const PartVec4& vec)
+{
+	return PartVec4(mat[0][0] * vec.x + mat[0][1] * vec.y + mat[0][2] * vec.z + mat[0][3] * vec.w,
+					mat[1][0] * vec.x + mat[1][1] * vec.y + mat[1][2] * vec.z + mat[1][3] * vec.w,
+					mat[2][0] * vec.x + mat[2][1] * vec.y + mat[2][2] * vec.z + mat[2][3] * vec.w,
+					mat[3][0] * vec.x + mat[3][1] * vec.y + mat[3][2] * vec.z + mat[3][3] * vec.w);
+}
+
+
+PartMat4& PartMat4::operator =(const PartMat4& m)
+{
+	mat[0][0] = m.mat[0][0];
+	mat[0][1] = m.mat[0][1];
+	mat[0][2] = m.mat[0][2];
+	mat[0][3] = m.mat[0][3];
+
+	mat[1][0] = m.mat[1][0];
+	mat[1][1] = m.mat[1][1];
+	mat[1][2] = m.mat[1][2];
+
+	mat[2][0] = m.mat[2][0];
+	mat[2][1] = m.mat[2][1];
+	mat[2][2] = m.mat[2][2];
+	mat[2][3] = m.mat[2][3];
+
+	mat[3][0] = m.mat[3][0];
+	mat[3][1] = m.mat[3][1];
+	mat[3][2] = m.mat[3][2];
+	mat[3][3] = m.mat[3][3];
+	return *this;
+}

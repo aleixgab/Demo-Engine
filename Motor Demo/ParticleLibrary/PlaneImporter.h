@@ -11,7 +11,7 @@ public:
 
 
 public:
-	unsigned int VBO[6];
+	unsigned int VBO = 0;
 
 	unsigned int VAO = 0u;
 };

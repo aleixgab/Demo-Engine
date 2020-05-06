@@ -13,6 +13,7 @@ class Emitter;
 class ParticleStartValues;
 struct ParticleColor;
 struct ParticleAnimation;
+struct Vertex;
 
 //Transform of the particle where there are Translation - Rotation - Scale
 struct PartTransform
@@ -32,9 +33,7 @@ public:
 	//Set all the particle values and start the particle
 	void SetParticleValues(PartVec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	void Update(float dt);
-	PartVec4 GetTextureCoords() const;
-	PartVec4 GetColor() const;
-	void GetTransform(PartVec3& pos, float& angle, float& scale) const;
+	void SetVertexs(Vertex* particleVertexs, PartVec3 cameraForward, PartVec3 cameraUp);
 
 private:
 

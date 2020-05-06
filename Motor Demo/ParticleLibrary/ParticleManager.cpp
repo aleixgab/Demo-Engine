@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <Brofiler/Brofiler.h>
 
-
+#include <iostream>
 ParticleManager::ParticleManager()
 {
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
@@ -67,7 +67,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 
 		for (std::list<Emitter*>::iterator iter = emittersList.begin(); iter != emittersList.end(); ++iter)
 		{
-			(*iter)->Draw(shaderProgramUuid);
+			(*iter)->Draw(shaderProgramUuid, viewMatrix);
 		}
 
 		glDepthMask(GL_TRUE);
