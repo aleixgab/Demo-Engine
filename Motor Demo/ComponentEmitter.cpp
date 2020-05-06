@@ -27,6 +27,8 @@ void ComponentEmitter::Inspector()
 	ImGui::Separator();
 	StartValuesInsp();
 	
+	BurstInsp();
+
 	ShapeValuesInsp();
 
 	ColorValuesInsp();
@@ -155,6 +157,40 @@ void ComponentEmitter::ShapeValuesInsp()
 		default:
 			break;
 		}
+	}
+}
+#pragma endregion
+
+#pragma region Burst
+void ComponentEmitter::BurstInsp()
+{
+	if (ImGui::CollapsingHeader("Particle Burst"))
+	{
+		ImGui::Checkbox("Burst", &emitter->isBurst);
+		if (ImGui::BeginMenu("Shape"))
+		{
+			if (ImGui::MenuItem("Box"))
+				emitter->SetBurstShapeEmitter(ShapeEmitter::BoxShape);
+			else if (ImGui::MenuItem("Sphere"))
+				emitter->SetBurstShapeEmitter(ShapeEmitter::SphereShape);
+			else if (ImGui::MenuItem("Sphere From center"))
+				emitter->SetBurstShapeEmitter(ShapeEmitter::SphereShapeCenter);
+			else if (ImGui::MenuItem("Sphere From Surface"))
+				emitter->SetBurstShapeEmitter(ShapeEmitter::SphereShapeBorder);
+			else if (ImGui::MenuItem("Cone"))
+				emitter->SetBurstShapeEmitter(ShapeEmitter::ConeShape);
+			ImGui::End();
+		}
+		ImGui::DragInt("Min particles", &emitter->minBurst, 1.0f, 0, 100);
+		if (emitter->minBurst > emitter->maxBurst)
+			emitter->maxBurst = emitter->minBurst;
+		ImGui::DragInt("Max Particles", &emitter->maxBurst, 1.0f, 0, 100);
+		if (emitter->maxBurst < emitter->minBurst)
+			emitter->minBurst = emitter->maxBurst;
+
+		ImGui::DragFloat("Seconds between Burst", &emitter->burstSeconds, 0.5f, 0.0f, 0.0f, "%.1f");
+
+		ImGui::Separator();
 	}
 }
 #pragma endregion

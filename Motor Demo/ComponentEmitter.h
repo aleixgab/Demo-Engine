@@ -15,6 +15,7 @@ public:
 
 	void Inspector();
 
+	void BurstInsp();
 	void ColorValuesInsp();
 	void StartValuesInsp();
 	void ShapeValuesInsp();
@@ -37,6 +38,7 @@ public:
 	bool checkAngularAcceleration = false;
 	bool checkAngularVelocity = false;
 	bool checkAnimationSpeed = false;
+	bool checkBurst = false;
 
 	// Loop the particle (if true the particle emitter will never stop)
 	bool loop = true;

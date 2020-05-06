@@ -16,21 +16,6 @@ ParticleManager::~ParticleManager()
 	delete cameraPos;
 }
 
-bool ParticleManager::SetCameraPos(float* cameraPos)
-{
-	bool ret = false;
-	if (cameraPos)
-	{
-		this->cameraPos->x = cameraPos[0];
-		this->cameraPos->y = cameraPos[1];
-		this->cameraPos->z = cameraPos[2];
-
-		ret = true;
-	}
-	return ret;
-}
-
-
 bool ParticleManager::Update(float dt)
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
@@ -187,7 +172,16 @@ float ParticleManager::GetRandomNum(float min, float max)
 	return (max - min) * (float)rng() / (float)rng.max() + min;
 }
 
-int ParticleManager::GetRandomNum(int min, int max)
+bool ParticleManager::SetCameraPos(float* cameraPos)
 {
-	return (max - min) * rng() / rng.max() + min;
+	bool ret = false;
+	if (cameraPos)
+	{
+		this->cameraPos->x = cameraPos[0];
+		this->cameraPos->y = cameraPos[1];
+		this->cameraPos->z = cameraPos[2];
+
+		ret = true;
+	}
+	return ret;
 }

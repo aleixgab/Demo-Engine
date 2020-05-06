@@ -22,22 +22,41 @@ Emitter::~Emitter()
 
 void Emitter::Update(float dt)
 {
-	if (particlesEmition > 0 && runningTime)
+	if (runningTime)
 	{
-		float time = emitterTimer.GetTimeMilisec() / 1000.0f;
-		if (time > secParticleCreation)
+		if (particlesEmition > 0)
 		{
-			int particlesToCreate = (time / (1.0f / particlesEmition));
-			CreateParticles(particlesToCreate, globalObjPos);
+			float time = emitterTimer.GetTime() / 1000.0f;
+			if (time > secParticleCreation)
+			{
+				int particlesToCreate = (time / (1.0f / particlesEmition));
+				CreateParticles(particlesToCreate, globalObjPos, shapeEmitter);
 
-			secParticleCreation = (1.0f / particlesEmition);
+				secParticleCreation = (1.0f / particlesEmition);
 
-			emitterTimer.Play();
+				emitterTimer.Play();
+			}
+		}
+		if (isBurst)
+		{
+			float time = burstTimer.GetTime() / 1000.0f;
+			if (time > burstSeconds && !onceBurst)
+			{
+				CreateParticles(parent->GetRandomNum(minBurst, maxBurst), globalObjPos, burstShapeEmitter);
+
+				if (burstSeconds == 0)
+				{
+					onceBurst = true;
+					burstTimer.Stop();
+				}
+				else
+					burstTimer.Play();
+			}
 		}
 	}
 }
 
-void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition)
+void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
@@ -46,7 +65,7 @@ void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition)
 		int particleId = 0;
 		if (parent->GetNextParticleSlot(particleId))
 		{
-			globalPosition += GetRandomPos();
+			globalPosition += GetRandomPos(emitter);
 			//Create the particle in the correctly slot in the pool
 			parent->particleArray[particleId].SetParticleValues(globalPosition, startValues, particleAnimation, this);
 			//Save the particle in emitter list to know wich particles have this emitter
@@ -67,6 +86,16 @@ void Emitter::SetShapeEmitter(ShapeEmitter shape)
 ShapeEmitter Emitter::GetShapeEmitter() const
 {
 	return shapeEmitter;
+}
+
+void Emitter::SetBurstShapeEmitter(ShapeEmitter shape)
+{
+	burstShapeEmitter = shape;
+}
+
+ShapeEmitter Emitter::GetBurstShapeEmitter() const
+{
+	return burstShapeEmitter;
 }
 
 void Emitter::SetGlobalPos(float* globalPos)
@@ -177,7 +206,9 @@ bool Emitter::SaveCameraDistance()
 void Emitter::StartEmitter()
 {
 	runningTime = true;
+	onceBurst = false;
 	emitterTimer.Play();
+	burstTimer.Play();
 }
 
 void Emitter::StopEmitter()
@@ -194,6 +225,7 @@ void Emitter::StopEmitter()
 
 	particles.clear();
 	emitterTimer.Stop();
+	burstTimer.Stop();
 }
 
 void Emitter::PauseEmitter()
@@ -201,11 +233,11 @@ void Emitter::PauseEmitter()
 	runningTime = false;
 }
 
-PartVec3 Emitter::GetRandomPos()
+PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 {
 	PartVec3 randomPos = PartVec3(0.0f);
 
-	switch (shapeEmitter)
+	switch (emitter)
 	{
 	case BoxShape:
 		//Box Size

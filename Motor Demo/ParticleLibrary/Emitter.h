@@ -52,7 +52,6 @@ enum ShapeEmitter {
 //Start values. All the values with a float2 are a possible random. They are just a float, this random will be calculated in the particle creation.
 struct ParticleStartValues
 {
-
 	//The seconds that the particle will be alive
 	PartVec2 life = PartVec2(5.0f, 5.0f);
 	//The initial velocity that will get the particle
@@ -88,14 +87,18 @@ public:
 
 	void Update(float dt);
 
+
 	/*Create Particle with the start values
 	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
-	And the global position in the world*/
-	void CreateParticles(int numParticles, PartVec3 globalPosition);
+	The global position in the world
+	And if we are in normal or burst mode */
+	void CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter);
 
 	//Set emision type to know witch direction will take the particles and witch shape
 	void SetShapeEmitter(ShapeEmitter shape);
 	ShapeEmitter GetShapeEmitter() const;
+	void SetBurstShapeEmitter(ShapeEmitter shape);
+	ShapeEmitter GetBurstShapeEmitter() const;
 	//Set the position of the emitter in the world coordinates
 	void SetGlobalPos(float* globalPos);
 
@@ -111,6 +114,7 @@ public:
 	//Stop to emit particles
 	void PauseEmitter();
 
+
 private:
 	/*Get the position according to the differents shapes we have, and set the particle direction 
 	BoxShape -> the particles will spawn in vec3 boxShapeSize
@@ -119,7 +123,7 @@ private:
 
 	IMPORTANT TO SET THE GLOBAL POS BEFORE CREATE THE PARTCLES
 	*/
-	PartVec3 GetRandomPos();
+	PartVec3 GetRandomPos(ShapeEmitter emitter);
 public:
 	//Public varible to have the particle start values acces out of this class
 	ParticleStartValues startValues;
@@ -138,6 +142,18 @@ public:
 
 	//The particles we want to create per second.
 	int particlesEmition = 1.0f;
+
+	//You active Burst option.
+	bool isBurst = false;
+	/*Seconds between bursts
+	If the busrt seconds are 0 will do the burst only onces*/
+	float burstSeconds = 1.0;
+	//Burst Timer
+	Timer burstTimer;
+	//numbers of particles in each Burst. Random between 2 values
+	int minBurst = 1;
+	int maxBurst = 10;
+	
 	//Set true if time is running for this emitter, false to pause it
 	bool runningTime = false;
 	//Texture id that draw function need it
@@ -157,6 +173,8 @@ public:
 private:
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;
+	ShapeEmitter burstShapeEmitter = BoxShape;
+
 	//Global position of the object of this emitter;
 	PartVec3 globalObjPos = PartVec3(0.0f, 0.0f, 0.0f);
 
@@ -172,6 +190,8 @@ private:
 	float particleSize[MAX_PARTICLES];
 	PartVec4 particleColor[MAX_PARTICLES];
 	PartVec4 particleTexture[MAX_PARTICLES];
+
+	bool onceBurst = false;
 };
 
 #endif

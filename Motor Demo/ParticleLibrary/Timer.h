@@ -26,9 +26,7 @@ public:
 	void Pause();
 
 	//Returns the time running with miliseconds
-	float GetTimeMilisec() const;
-	//Returns the time running with seconds
-	float GetTimeSec() const;
+	float GetTime() const;
 
 private:
 	Clock::time_point timeStart;
