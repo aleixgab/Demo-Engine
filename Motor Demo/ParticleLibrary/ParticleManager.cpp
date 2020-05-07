@@ -34,6 +34,7 @@ bool ParticleManager::SetCameraValues(glm::vec3* cameraUp, glm::vec3* cameraForw
 
 bool ParticleManager::Update(float dt)
 {
+	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 	bool ret = true;
 
 	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
