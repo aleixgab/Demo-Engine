@@ -136,12 +136,11 @@ void PartMat4::Multiply(const PartMat4& m)
 	}
 }
 
-PartVec4 PartMat4::Multiply(const PartVec4& vec)
+PartVec3 PartMat4::Multiply(const PartVec4& vec)
 {
-	return PartVec4(mat[0][0] * vec.x + mat[0][1] * vec.y + mat[0][2] * vec.z + mat[0][3] * vec.w,
+	return PartVec3(mat[0][0] * vec.x + mat[0][1] * vec.y + mat[0][2] * vec.z + mat[0][3] * vec.w,
 					mat[1][0] * vec.x + mat[1][1] * vec.y + mat[1][2] * vec.z + mat[1][3] * vec.w,
-					mat[2][0] * vec.x + mat[2][1] * vec.y + mat[2][2] * vec.z + mat[2][3] * vec.w,
-					mat[3][0] * vec.x + mat[3][1] * vec.y + mat[3][2] * vec.z + mat[3][3] * vec.w);
+					mat[2][0] * vec.x + mat[2][1] * vec.y + mat[2][2] * vec.z + mat[2][3] * vec.w);
 }
 
 

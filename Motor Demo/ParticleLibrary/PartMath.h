@@ -74,7 +74,7 @@ public:
 	PartMat4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33);
 
 	void Multiply(const PartMat4& m);
-	PartVec4 Multiply(const PartVec4& vec);
+	PartVec3 Multiply(const PartVec4& vec);
 
 	PartMat4& operator=(const PartMat4& m);
 public:

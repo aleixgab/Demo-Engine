@@ -29,7 +29,7 @@ void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Parti
 	isMulticolor = values.isMulticolor;
 	index = 0u;
 
-	transform.angle = CreateRandomNum(values.rotation) * (PI / 180.0f);
+ 	transform.angle = CreateRandomNum(values.rotation) * (PI / 180.0f);
 	transform.position = pos;
 	transform.scale = CreateRandomNum(values.size);
 	countAnimTime = 0.0f;
@@ -68,8 +68,8 @@ void Particle::Update(float dt)
 		transform.scale += sizeOverTime * dt;
 
 		//Rotation
-		angularVelocity += angularAcceleration * dt;
-		transform.angle += angularVelocity * dt;
+		angularVelocity += angularAcceleration *  dt;
+		transform.angle += angularVelocity * dt ;
 
 	//COLOR
 		if (color.size() == 1 || !isMulticolor)
@@ -135,13 +135,11 @@ void Particle::Update(float dt)
 void Particle::SetVertexs(Vertex* particleVertexs, PartVec3 cameraForward, PartVec3 cameraUp)
 {
 	//Billboard
-	PartVec3 zAxis = cameraForward;
-	PartVec3 yAxis = cameraUp;
-	PartVec3 xAxis = (yAxis.CrossProduct(zAxis)).Normalize();
+	PartVec3 xAxis = (cameraUp.CrossProduct(cameraForward)).Normalize();
 
-	PartMat4 aModel = PartMat4(xAxis.x, yAxis.x, zAxis.x, transform.position.x,
-								 xAxis.y, yAxis.y, zAxis.y, transform.position.y,
-								 xAxis.z, yAxis.z, zAxis.z, transform.position.z,
+	PartMat4 aModel = PartMat4(xAxis.x, cameraUp.x, cameraForward.x, transform.position.x,
+								 xAxis.y, cameraUp.y, cameraForward.y, transform.position.y,
+								 xAxis.z, cameraUp.z, cameraForward.z, transform.position.z,
 								 0.0f,0.0f,0.0f, 1.0f);
 	//Plane Rotation
 	aModel.Multiply(PartMat4(cos(transform.angle), -sin(transform.angle), 0.0, 0.0,
@@ -149,28 +147,23 @@ void Particle::SetVertexs(Vertex* particleVertexs, PartVec3 cameraForward, PartV
 							 0.0, 0.0, 1.0, 0.0,
 							 0.0, 0.0, 0.0, 1.0));
 
+	float maxTextCoordX = currMinUVCoord.x + textureColumnsNorm;
+	float maxTextCoordY = currMinUVCoord.y + textureRowsNorm;
+
 	float size = 0.5f * transform.scale;
-	PartVec4 posTopRigth = aModel.Multiply(PartVec4(size, size, 0.0f, 1.0f));
-	PartVec4 posBotRigth = aModel.Multiply(PartVec4(size, -size, 0.0f, 1.0f));
-	PartVec4 posTopLeft = aModel.Multiply(PartVec4(-size, size, 0.0f, 1.0f));
-	PartVec4 posBotLeft = aModel.Multiply(PartVec4(-size, -size, 0.0f, 1.0f));
-
-	float maxTextPosX = currMinUVCoord.x + textureColumnsNorm;
-	float maxTextPosY = currMinUVCoord.y + textureRowsNorm;
-
 	// top right	
-	particleVertexs[0].position = PartVec3(posTopRigth.x, posTopRigth.y, posTopRigth.z);
-	particleVertexs[0].texCoords = PartVec2(maxTextPosX, maxTextPosY);
+	particleVertexs[0].position = aModel.Multiply(PartVec4(size, size, 0.0f, 1.0f));
+	particleVertexs[0].texCoords = PartVec2(maxTextCoordX, maxTextCoordY);
 	particleVertexs[0].color = finalColor;
 	
 	// bottom right	
-	particleVertexs[1].position = PartVec3(posBotRigth.x, posBotRigth.y, posBotRigth.z);
-	particleVertexs[1].texCoords = PartVec2(maxTextPosX, currMinUVCoord.y);
+	particleVertexs[1].position = aModel.Multiply(PartVec4(size, -size, 0.0f, 1.0f));
+	particleVertexs[1].texCoords = PartVec2(maxTextCoordX, currMinUVCoord.y);
 	particleVertexs[1].color = finalColor;
 
 	// top left		
-	particleVertexs[2].position = PartVec3(posTopLeft.x, posTopLeft.y, posTopLeft.z);
-	particleVertexs[2].texCoords = PartVec2(currMinUVCoord.x, maxTextPosY);
+	particleVertexs[2].position = aModel.Multiply(PartVec4(-size, size, 0.0f, 1.0f));
+	particleVertexs[2].texCoords = PartVec2(currMinUVCoord.x, maxTextCoordY);
 	particleVertexs[2].color = finalColor;
 
 	// bottom right	
@@ -179,7 +172,7 @@ void Particle::SetVertexs(Vertex* particleVertexs, PartVec3 cameraForward, PartV
 	particleVertexs[3].color = particleVertexs[1].color;
 
 	// bottom left	
-	particleVertexs[4].position = PartVec3(posBotLeft.x, posBotLeft.y, posBotLeft.z);
+	particleVertexs[4].position = aModel.Multiply(PartVec4(-size, -size, 0.0f, 1.0f));
 	particleVertexs[4].texCoords = PartVec2(currMinUVCoord.x, currMinUVCoord.y);
 	particleVertexs[4].color = finalColor;
 
