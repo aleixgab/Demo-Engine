@@ -69,28 +69,6 @@ void Particle::Update(float dt)
 		angularVelocity += angularAcceleration * dt;
 		transform.angle += angularVelocity * dt;
 
-	//COLOR
-		if (color.size() == 1 || !isMulticolor)
-			finalColor = color.front().color;
-
-		else if (index + 1 < color.size())
-		{
-			float lifeNormalized = 1.0f - currLife / initialLife;
-			if (color[index + 1].position > lifeNormalized)
-			{
-				float timeNormalized = (lifeNormalized - color[index].position) / (color[index + 1].position - color[index].position);
-				if (color[index + 1].position == 0)
-					timeNormalized = 0;
-				//LOG("%i", index);
-				finalColor = color[index].color.PartLerp(color[index + 1].color, timeNormalized);
-				//LERP Color
-			}
-			else
-				index++;
-		}
-		else
-			finalColor = color[index].color;
-
 		//ANIMATION
 		if (owner->isParticleAnimated && (textureRows > 1 || textureColumns > 1))
 		{
@@ -135,9 +113,9 @@ PartVec4 Particle::GetTextureCoords() const
 	return PartVec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
 }
 
-PartVec4 Particle::GetColor() const
+PartVec2 Particle::GetCurrLife() const
 {
-	return finalColor;
+	return PartVec2(currLife,initialLife);
 }
 
 void Particle::GetTransform(PartVec3& pos, float& angle, float& scale ) const

@@ -33,7 +33,7 @@ public:
 	void SetParticleValues(PartVec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
 	void Update(float dt);
 	PartVec4 GetTextureCoords() const;
-	PartVec4 GetColor() const;
+	PartVec2 GetCurrLife() const;
 	void GetTransform(PartVec3& pos, float& angle, float& scale) const;
 
 private:

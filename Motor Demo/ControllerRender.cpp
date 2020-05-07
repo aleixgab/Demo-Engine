@@ -45,7 +45,6 @@ bool ControllerRender::Start()
 
 bool ControllerRender::Update(float dt)
 {
-	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 	// render
 	// ------
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);

@@ -1,6 +1,7 @@
 #version 330 core
 in vec2 texCoords;
 in vec4 particleColor;
+in float lifeNorm;
 
 out vec4 FragColor;
 

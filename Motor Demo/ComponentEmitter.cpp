@@ -201,7 +201,7 @@ void ComponentEmitter::ColorValuesInsp()
 	if (ImGui::CollapsingHeader("Particle Color"))
 	{
 		ImGui::Text("Particle Color");
-		ImGui::SameLine();
+		ImGui::Separator();
 		std::list<ParticleColor>::iterator iter = emitter->startValues.colorList.begin();
 		uint posList = 0u;
 		while (iter != emitter->startValues.colorList.end())
@@ -239,7 +239,6 @@ void ComponentEmitter::ColorValuesInsp()
 				colorTime.color.z = nextColor.z;
 				colorTime.color.w = nextColor.w;
 				colorTime.position = (float)nextPos / 100;
-				colorTime.name = std::to_string((int)nextPos) + "%";
 				emitter->startValues.colorList.push_back(colorTime);
 				emitter->startValues.colorList.sort();
 			}
@@ -256,26 +255,15 @@ bool ComponentEmitter::EditColor(ParticleColor& colorTime, uint pos)
 	color.z = colorTime.color.z;
 	color.w = colorTime.color.w;
 
-	if (ImGui::ColorButton(colorTime.name.data(), color, ImGuiColorEditFlags_None, ImVec2(100, 20)))
-		colorTime.changingColor = !colorTime.changingColor;
+	ImGui::ColorEdit4(std::to_string(colorTime.position).c_str(), &colorTime.color.x, ImGuiColorEditFlags_AlphaBar);
 
-	if (!colorTime.changingColor)
+	if (pos > 0)
 	{
-		ImGui::SameLine();
-		ImGui::TextUnformatted(colorTime.name.data());
-		if (pos > 0)
-		{
-			std::string colorStr = "Remove Color ";
-			colorStr.append(std::to_string(pos));
-			ImGui::SameLine();
-			if (ImGui::Button(colorStr.data(), ImVec2(125, 25)))
-				ret = false;
-		}
-		else if (!emitter->startValues.isMulticolor)
+		std::string colorStr = "Remove Color ";
+		colorStr.append(std::to_string(pos));
+		if (ImGui::Button(colorStr.data(), ImVec2(125, 25)))
 			ret = false;
 	}
-	else
-		ImGui::ColorEdit4(colorTime.name.data(), &colorTime.color.x, ImGuiColorEditFlags_AlphaBar);
 
 	return ret;
 }

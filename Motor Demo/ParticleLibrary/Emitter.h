@@ -15,11 +15,7 @@ struct ParticleColor
 	PartVec4 color = PartVec4(1.0f);
 	//position in percentage to paint correctly the colors during the time
 	float position = 0.0f;
-	//Name just to differentiate diferents colors
-	std::string name = " ";
-	//open window for change particle color
-	bool changingColor = false;
-	//Order the colors depending on the position
+
 	bool operator<(const ParticleColor& color) const
 	{
 		return position < color.position;
@@ -188,7 +184,7 @@ private:
 	PartVec3 particlePosition[MAX_PARTICLES];
 	float particleAngleRot[MAX_PARTICLES];
 	float particleSize[MAX_PARTICLES];
-	PartVec4 particleColor[MAX_PARTICLES];
+	PartVec2 particleLife[MAX_PARTICLES];
 	PartVec4 particleTexture[MAX_PARTICLES];
 
 	bool onceBurst = false;

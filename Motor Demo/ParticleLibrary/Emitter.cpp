@@ -9,7 +9,6 @@
 Emitter::Emitter(ParticleManager* parent, float* emitterPos): parent(parent), globalObjPos(emitterPos[0])
 {
 	ParticleColor startColor;
-	startColor.name = "Start Color";
 	startValues.colorList.push_back(startColor);
 	plane = new PlaneImporter(MAX_PARTICLES);
 }
@@ -113,6 +112,17 @@ void Emitter::Draw(unsigned int shaderUuid)
 
 	glUniform1f(glGetUniformLocation(shaderUuid, "colorPercent"), colorPercent);
 	glUniform1i(glGetUniformLocation(shaderUuid, "isAnimated"), isParticleAnimated);
+	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), startValues.colorList.size());
+
+	int cont = 0;
+	for (std::list<ParticleColor>::iterator iter = startValues.colorList.begin(); iter != startValues.colorList.end(); ++iter, ++cont)
+	{
+		std::string name = "colors[" + std::to_string(cont) + "]";
+		glUniform4fv(glGetUniformLocation(shaderUuid, name.c_str()), 4, &(*iter).color.x);
+
+		name = "positions[" + std::to_string(cont) + "]";
+		glUniform1fv(glGetUniformLocation(shaderUuid, name.c_str()), 1, &(*iter).position);
+	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
@@ -140,8 +150,8 @@ void Emitter::Draw(unsigned int shaderUuid)
 	//Color
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(3);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec4), &particleColor[0]);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec2), &particleLife[0]);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
@@ -183,7 +193,7 @@ void Emitter::GetParticleValues()
 	for (std::list<Particle*>::iterator iter = particles.begin(); iter != particles.end(); ++iter, ++cont)
 	{
 		(*iter)->GetTransform(particlePosition[cont], particleAngleRot[cont], particleSize[cont]);
-		particleColor[cont] = (*iter)->GetColor();
+		particleLife[cont] = (*iter)->GetCurrLife();
 		particleTexture[cont] = (*iter)->GetTextureCoords();
 	}
 }
