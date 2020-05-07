@@ -202,12 +202,12 @@ void ComponentEmitter::ColorValuesInsp()
 	{
 		ImGui::Text("Particle Color");
 		ImGui::Separator();
-		std::list<ParticleColor>::iterator iter = emitter->startValues.colorList.begin();
+		std::list<ParticleColor>::iterator iter = emitter->colorList.begin();
 		uint posList = 0u;
-		while (iter != emitter->startValues.colorList.end())
+		while (iter != emitter->colorList.end())
 		{
 			//TODO: they must be able to change position
-			if ((iter) == emitter->startValues.colorList.begin())
+			if ((iter) == emitter->colorList.begin())
 			{//Cant delete 1st color
 
 				if (!EditColor(*iter))
@@ -217,7 +217,7 @@ void ComponentEmitter::ColorValuesInsp()
 			else
 			{
 				if (!EditColor(*iter, posList))
-					emitter->startValues.colorList.erase(iter++);
+					emitter->colorList.erase(iter++);
 				else
 					iter++;
 			}
@@ -225,8 +225,8 @@ void ComponentEmitter::ColorValuesInsp()
 		}
 		ImGui::Separator();
 		ImGui::SliderFloat("Color Percentage", &emitter->colorPercent, 0.0f, 1.0f, "%.2f");
-		ImGui::Checkbox("Color time", &emitter->startValues.isMulticolor);
-		if (emitter->startValues.isMulticolor)
+		ImGui::Checkbox("Color time", &emitter->isMulticolor);
+		if (emitter->isMulticolor)
 		{
 
 			ImGui::DragInt("Position", &nextPos, 1.0f, 1, 100);
@@ -239,8 +239,8 @@ void ComponentEmitter::ColorValuesInsp()
 				colorTime.color.z = nextColor.z;
 				colorTime.color.w = nextColor.w;
 				colorTime.position = (float)nextPos / 100;
-				emitter->startValues.colorList.push_back(colorTime);
-				emitter->startValues.colorList.sort();
+				emitter->colorList.push_back(colorTime);
+				emitter->colorList.sort();
 			}
 		}
 	}
@@ -298,28 +298,23 @@ void ComponentEmitter::TextureValuesInsp()
 			{
 				if (!emitter->isParticleAnimated)
 				{
-					emitter->particleAnimation.textureRows = 1;
-					emitter->particleAnimation.textureColumns = 1;
+					emitter->textureRows = 1;
+					emitter->textureColumns = 1;
 					emitter->dieOnFinishAnim = false;
 				}
 			}
 			if (emitter->isParticleAnimated)
 			{
-				if (ImGui::Checkbox("##AnimationSpeed", &checkAnimationSpeed))
-					emitter->startValues.acceleration.y = emitter->startValues.acceleration.x;
-				ShowFloatValue(emitter->particleAnimation.animationSpeed, checkAnimationSpeed, "Animation Speed", 0.001, 0.0f, 5.0f);
+				ImGui::DragFloat("Animation Speed", &emitter->animationSpeed, 0.001f, 0.0f, 5.0f);
 
-				if (ImGui::DragInt("Rows", &emitter->particleAnimation.textureRows, 1, 1, 10))
-					emitter->particleAnimation.textureRowsNorm = 1.0f / emitter->particleAnimation.textureRows;
-				if (ImGui::DragInt("Columns", &emitter->particleAnimation.textureColumns, 1, 1, 10))
-					emitter->particleAnimation.textureColumnsNorm = 1.0f / emitter->particleAnimation.textureColumns;
+				ImGui::DragInt("Rows", &emitter->textureRows, 1, 1, 10);
+				ImGui::DragInt("Columns", &emitter->textureColumns, 1, 1, 10);
 
 				ImGui::Checkbox("Kill particle with animation", &emitter->dieOnFinishAnim);
-				ImGui::Checkbox("Random Starting Frame", &emitter->particleAnimation.isAnimRand);
 				if (emitter->dieOnFinishAnim)
 				{
 					checkLife = false;
-					emitter->startValues.life.x = emitter->particleAnimation.animationSpeed.x * (emitter->particleAnimation.textureColumns * emitter->particleAnimation.textureRows - 1);
+					emitter->startValues.life.x = emitter->animationSpeed * (emitter->textureColumns * emitter->textureRows - 1);
 				}
 			}
 			

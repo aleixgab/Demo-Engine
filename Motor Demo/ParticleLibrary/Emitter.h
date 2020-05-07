@@ -22,16 +22,6 @@ struct ParticleColor
 	}
 };
 
-struct ParticleAnimation
-{
-	int  textureRows = 1;
-	int  textureColumns = 1;
-	float textureRowsNorm = 1.0f;
-	float textureColumnsNorm = 1.0f;
-	PartVec2 animationSpeed = PartVec2(0.1f, 0.1f);
-	bool isAnimRand = false;
-};
-
 enum ShapeEmitter {
 	//Spawn particles from the box and takes object Up direction
 	BoxShape = 0,
@@ -67,10 +57,6 @@ struct ParticleStartValues
 	//The angular velocity of the plane 
 	PartVec2 angularVelocity = PartVec2(0.0f, 0.0f);
 
-	//Vector of all colors will be in the particle with RGBA. The colors will change during de time
-	std::list<ParticleColor> colorList;
-	//Knowing if we have more than one color during the time
-	bool isMulticolor = false;
 	//The initial direction that will take the particle
 	PartVec3 particleDirection = PartVec3(0.0f, 1.0f, 0.0f);
 };
@@ -155,9 +141,17 @@ public:
 	//Texture id that draw function need it
 	unsigned int textureID = 0u;
 
-	ParticleAnimation particleAnimation;
+	int  textureRows = 1;
+	int  textureColumns = 1;
+	float animationSpeed = 0.1f;
+
 	bool dieOnFinishAnim = false;
 	bool isParticleAnimated = false;
+
+	//Vector of all colors will be in the particle with RGBA. The colors will change during de time
+	std::list<ParticleColor> colorList;
+	//Knowing if we have more than one color during the time
+	bool isMulticolor = false;
 
 	/*Percentage of the color in the particle between 0 and 1
 	0.0f it will draw the texture color
@@ -185,7 +179,6 @@ private:
 	float particleAngleRot[MAX_PARTICLES];
 	float particleSize[MAX_PARTICLES];
 	PartVec2 particleLife[MAX_PARTICLES];
-	PartVec4 particleTexture[MAX_PARTICLES];
 
 	bool onceBurst = false;
 };

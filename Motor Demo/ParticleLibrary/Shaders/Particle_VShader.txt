@@ -1,14 +1,12 @@
 #version 330 core
 layout (location = 0) in vec3 aPos; 
 layout (location = 1) in vec2 aCoords; 
-layout (location = 2) in vec4 aCoordsRect; 
-layout (location = 3) in vec2 life; 
-layout (location = 4) in vec3 aPosition; 
-layout (location = 5) in float aAngle; 
-layout (location = 6) in float aSize; 
+layout (location = 2) in vec2 life; //.x = curr life //.y = Max life (particles may have diferent life times)
+layout (location = 3) in vec3 aPosition; 
+layout (location = 4) in float aAngle; 
+layout (location = 5) in float aSize; 
 
 out vec2 texCoords;
-out vec4 particleColor;
 out float lifeNorm;
 
 uniform mat4 view;
@@ -16,48 +14,30 @@ uniform mat4 projection;
 
 //Animated Particle
 uniform int isAnimated;
-
-uniform int colorSize;
-uniform	float positions[10];
-uniform	vec4 colors[10];
+uniform int textRows;
+uniform int textColumns;
+uniform float animatedTime;
 
 void main()
 {
 	lifeNorm = 1.0 - (life.x/life.y);
 
-		
-	//COLOR
-	if (colorSize == 1)
-		particleColor = colors[0];
-
-	else
+	//ANIMATION
+	if (isAnimated == 1)
 	{
-		bool findColor = false;
-		for (int i = 0; i < colorSize - 1; i++)
-		{
-			if (lifeNorm < positions[i + 1] && findColor == false)
-			{
-				float timeNorm = (lifeNorm - positions[i]) / (positions[i + 1] - positions[i]);
-				particleColor = mix(colors[i], colors[i + 1], timeNorm);
-				findColor = true;
-			}
-		}
-		if (findColor == false)
-		{
-			particleColor = colors[colorSize - 1];
-		}
-	}
+		float currentFrame = floor(mod((life.y - life.x) / animatedTime, textRows * textColumns));
+		vec2 normCoord = vec2(1.0 / textColumns, 1.0 / textRows);
 
-	if(isAnimated == 0)
-		texCoords = aCoords;
-	else
-	{
-		texCoords = aCoordsRect.xy;
+		texCoords.x = mod(currentFrame,textColumns) * normCoord.x;
+		texCoords.y = ((textRows - 1) - floor(currentFrame / textColumns)) * normCoord.y;
+
 		if(aCoords.x == 1)
-			texCoords.x += aCoordsRect.z;
+			texCoords.x += normCoord.x;
 		if(aCoords.y == 1)
-			texCoords.y += aCoordsRect.w;
+			texCoords.y += normCoord.y;
 	}
+	else
+		texCoords = aCoords;
 
 	//Billboard
 	vec3 zAxis = vec3(view[2].xyz); //Camera Forward

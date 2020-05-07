@@ -8,7 +8,7 @@
 
 #include <Brofiler/Brofiler.h>
 
-void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner)
+void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitter* owner)
 {
 	this->owner = owner;
 
@@ -21,31 +21,10 @@ void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Parti
 	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
 	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
-	for (std::list<ParticleColor>::iterator iter = values.colorList.begin(); iter != values.colorList.end(); ++iter)
-		color.push_back(*iter);
-
-	isMulticolor = values.isMulticolor;
-	index = 0u;
 
 	transform.angle = CreateRandomNum(values.rotation) * (PI / 180.0f);
 	transform.position = pos;
 	transform.scale = CreateRandomNum(values.size);
-	countAnimTime = 0.0f;
-
-	textureRows = animation.textureRows;
-	textureColumns = animation.textureColumns;
-	textureRowsNorm = animation.textureRowsNorm;
-	textureColumnsNorm = animation.textureColumnsNorm;
-	animTime = CreateRandomNum(animation.animationSpeed);
-
-	if (animation.isAnimRand)
-		currentFrame = owner->parent->GetRandomNum(0, textureColumns * textureRows);
-	else
-		currentFrame = 0u;
-
-	contFrame = 0u;
-	currMinUVCoord.x = (currentFrame % textureColumns) * textureColumnsNorm;
-	currMinUVCoord.y = ((textureRows - 1) - (currentFrame / textureColumns)) * textureRowsNorm;
 
 	isActive = true;
 }
@@ -69,33 +48,6 @@ void Particle::Update(float dt)
 		angularVelocity += angularAcceleration * dt;
 		transform.angle += angularVelocity * dt;
 
-		//ANIMATION
-		if (owner->isParticleAnimated && (textureRows > 1 || textureColumns > 1))
-		{
-			countAnimTime += dt;
-			if (countAnimTime > animTime)
-			{
-				if ((textureColumns * textureRows) > contFrame + 1)
-				{
-					if ((textureColumns * textureRows) > currentFrame + 1)
-					{
-						currentFrame++;
-						contFrame++;
-					}
-					else
-						currentFrame = 0;
-
-					currMinUVCoord.x = (currentFrame % textureColumns) * textureColumnsNorm;
-					currMinUVCoord.y = ((textureRows - 1) - (currentFrame / textureColumns)) * textureRowsNorm;
-					countAnimTime = 0.0f;
-				}
-				else if (!owner->dieOnFinishAnim)
-					contFrame = 0u;
-
-				else
-					currLife = 0.0f;
-			}
-		}
 		currLife -= dt;
 	}
 	else
@@ -104,13 +56,7 @@ void Particle::Update(float dt)
 		isActive = false;
 		owner->particles.remove(this);
 		owner->parent->numActivePart--;
-		color.clear();
 	}
-}
-
-PartVec4 Particle::GetTextureCoords() const
-{
-	return PartVec4(currMinUVCoord, textureColumnsNorm, textureRowsNorm);
 }
 
 PartVec2 Particle::GetCurrLife() const

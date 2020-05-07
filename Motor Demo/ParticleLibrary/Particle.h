@@ -30,9 +30,8 @@ class Particle
 public:
 
 	//Set all the particle values and start the particle
-	void SetParticleValues(PartVec3 pos, ParticleStartValues values, ParticleAnimation animation, Emitter* owner);
+	void SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitter* owner);
 	void Update(float dt);
-	PartVec4 GetTextureCoords() const;
 	PartVec2 GetCurrLife() const;
 	void GetTransform(PartVec3& pos, float& angle, float& scale) const;
 
@@ -69,32 +68,8 @@ private:
 	//Increase(or decrease if it's negative) of the size of the particle
 	float sizeOverTime = 0.0f;
 
-	std::vector<ParticleColor> color;
-	bool isMulticolor = false;
-	uint index = 0u;
-
 	PartVec4 finalColor = PartVec4(1.0f);
 	PartTransform transform;
-
-	//Number of rows and columns of the texture
-	int textureRows = 1;
-	int textureColumns = 1;
-	//Number of rows and columns of the texture between 0 and 1
-	float textureRowsNorm = 1.0f;
-	float textureColumnsNorm = 1.0f;
-
-	//Counter of the time to know when we should change the animation
-	float countAnimTime = 0.0f;
-	//Time value to say how seconds we will stay in each sprite
-	float animTime = 0.0f;
-
-	//It Says wich cell are to know the row and column
-	uint currentFrame = 0u;
-	/*Counter of the cells to know when it's finish
-	Diferent than currentFrmae because there are random cells and it might not goes in order
-	*/
-	uint contFrame = 0u;
-	PartVec2 currMinUVCoord = PartVec2(0.0f, 0.0f);
 };
 
 #endif

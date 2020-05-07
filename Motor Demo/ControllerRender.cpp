@@ -26,7 +26,7 @@ bool ControllerRender::Start()
 	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");
 	TextureImporter* newTexture3 = new TextureImporter("Assets/awesomeface.png");
 	TextureImporter* newTexture4 = new TextureImporter("Assets/Smoke30Frames_0.png");
-	TextureImporter* newTexture5 = new TextureImporter("Assets/Smoke30Frames_0.jpg");
+	TextureImporter* newTexture5 = new TextureImporter("Assets/smokeTest.jpg");
 	textures.push_back(newTexture);
 	textures.push_back(newTexture2);
 	textures.push_back(newTexture3);

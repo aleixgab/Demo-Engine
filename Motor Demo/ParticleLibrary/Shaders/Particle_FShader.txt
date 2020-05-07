@@ -1,6 +1,5 @@
 #version 330 core
 in vec2 texCoords;
-in vec4 particleColor;
 in float lifeNorm;
 
 out vec4 FragColor;
@@ -8,11 +7,36 @@ out vec4 FragColor;
 uniform sampler2D sprite;
 uniform float colorPercent;
 
+uniform int colorSize;
+uniform	float positions[10];
+uniform	vec4 colors[10];
+
 void main()
 {
 	vec4 tex = texture(sprite, texCoords);
 	if(colorPercent < 1.0 && tex.a < 0.1)
 		discard;
+
+	vec4 particleColor = colors[0];
+
+	//COLOR
+	if (colorSize > 1)
+	{
+		bool findColor = false;
+		for (int i = 0; i < colorSize - 1; i++)
+		{
+			if (lifeNorm < positions[i + 1] && findColor == false)
+			{
+				float timeNorm = (lifeNorm - positions[i]) / (positions[i + 1] - positions[i]);
+				particleColor = mix(colors[i], colors[i + 1], timeNorm);
+				findColor = true;
+			}
+		}
+		if (findColor == false)
+		{
+			particleColor = colors[colorSize - 1];
+		}
+	}
 
     FragColor = mix(tex, particleColor, colorPercent);
 }  

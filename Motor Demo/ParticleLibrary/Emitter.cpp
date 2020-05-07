@@ -9,7 +9,7 @@
 Emitter::Emitter(ParticleManager* parent, float* emitterPos): parent(parent), globalObjPos(emitterPos[0])
 {
 	ParticleColor startColor;
-	startValues.colorList.push_back(startColor);
+	colorList.push_back(startColor);
 	plane = new PlaneImporter(MAX_PARTICLES);
 }
 
@@ -66,7 +66,7 @@ void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEm
 		{
 			globalPosition += GetRandomPos(emitter);
 			//Create the particle in the correctly slot in the pool
-			parent->particleArray[particleId].SetParticleValues(globalPosition, startValues, particleAnimation, this);
+			parent->particleArray[particleId].SetParticleValues(globalPosition, startValues, this);
 			//Save the particle in emitter list to know wich particles have this emitter
 			particles.push_back(&parent->particleArray[particleId]);
 			//Add one count in the active particles from ParticleManager
@@ -111,17 +111,24 @@ void Emitter::Draw(unsigned int shaderUuid)
 	GetParticleValues();
 
 	glUniform1f(glGetUniformLocation(shaderUuid, "colorPercent"), colorPercent);
+	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), isMulticolor ? colorList.size() : 1);
+
 	glUniform1i(glGetUniformLocation(shaderUuid, "isAnimated"), isParticleAnimated);
-	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), startValues.colorList.size());
+	glUniform1i(glGetUniformLocation(shaderUuid, "textRows"), textureRows);
+	glUniform1i(glGetUniformLocation(shaderUuid, "textColumns"), textureColumns);
+	glUniform1f(glGetUniformLocation(shaderUuid, "animatedTime"), animationSpeed);
 
 	int cont = 0;
-	for (std::list<ParticleColor>::iterator iter = startValues.colorList.begin(); iter != startValues.colorList.end(); ++iter, ++cont)
+	for (std::list<ParticleColor>::iterator iter = colorList.begin(); iter != colorList.end(); ++iter, ++cont)
 	{
 		std::string name = "colors[" + std::to_string(cont) + "]";
 		glUniform4fv(glGetUniformLocation(shaderUuid, name.c_str()), 4, &(*iter).color.x);
 
 		name = "positions[" + std::to_string(cont) + "]";
 		glUniform1fv(glGetUniformLocation(shaderUuid, name.c_str()), 1, &(*iter).position);
+
+		if (!isMulticolor)
+			break;
 	}
 
 	glActiveTexture(GL_TEXTURE0);
@@ -140,40 +147,33 @@ void Emitter::Draw(unsigned int shaderUuid)
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[1]);
-	//Textures modified	
+	//Color
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(2);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec4), &particleTexture[0]);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec2), &particleLife[0]);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[2]);
-	//Color
+	//Position
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(3);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec2), &particleLife[0]);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec3), &particlePosition[0]);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
-	//Position
+	//Rotation
 	glVertexAttribDivisor(4, 1);
 	glEnableVertexAttribArray(4);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec3), &particlePosition[0]);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleRot[0]);
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
-	//Rotation
+	//Scale
 	glVertexAttribDivisor(5, 1);
 	glEnableVertexAttribArray(5);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleRot[0]);
-	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[5]);
-	//Scale
-	glVertexAttribDivisor(6, 1);
-	glEnableVertexAttribArray(6);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleSize[0]);
-	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particles.size());
@@ -182,7 +182,6 @@ void Emitter::Draw(unsigned int shaderUuid)
 	glDisableVertexAttribArray(3);
 	glDisableVertexAttribArray(4);
 	glDisableVertexAttribArray(5);
-	glDisableVertexAttribArray(6);
 
 	glBindVertexArray(0);
 }
@@ -194,7 +193,6 @@ void Emitter::GetParticleValues()
 	{
 		(*iter)->GetTransform(particlePosition[cont], particleAngleRot[cont], particleSize[cont]);
 		particleLife[cont] = (*iter)->GetCurrLife();
-		particleTexture[cont] = (*iter)->GetTextureCoords();
 	}
 }
 
