@@ -5,9 +5,6 @@
 #include <random>
 #include "Particle.h"
 
-//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
-#define MAX_PARTICLES 1000000
-
 typedef unsigned int uint;
 
 class Emitter;
@@ -24,7 +21,7 @@ public:
 	//Draw function with shaderUuid, and camera view and projection
 	void Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix);
 	//You get the next slot in the pool array for the new particle
-	bool GetNextParticleSlot(int& id);
+	//bool GetNextParticleSlot(int& id);
 
 	//Create new emitter
 	Emitter* CreateEmitter(float* emitterPos);
@@ -55,15 +52,10 @@ public:
 public:
 	//You have to add in this list all the emitters that you will have in your scene.
 	std::list<Emitter*> emittersList; 
-	//Particle pool where are all the particles (active and inactive)
-	Particle particleArray[MAX_PARTICLES];
 
 	PartVec3* cameraPos = nullptr;
 
 private:
-	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	
-	int lastUsedParticle = 0;
-
 	std::mt19937 rng;
 
 	bool canDraw = false;

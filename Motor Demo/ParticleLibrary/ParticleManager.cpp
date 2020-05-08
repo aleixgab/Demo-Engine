@@ -21,7 +21,6 @@ bool ParticleManager::Update(float dt)
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 	bool ret = true;
 	{
-		BROFILER_CATEGORY("Emitter", Profiler::Color::PapayaWhip);
 		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
 		{
 			(*it)->Update(dt);
@@ -29,15 +28,6 @@ bool ParticleManager::Update(float dt)
 		}
 	}
 
-	if (ret)
-	{
-		BROFILER_CATEGORY("Particle", Profiler::Color::PapayaWhip);
-		for (int i = 0; i < MAX_PARTICLES; ++i)
-		{
-			if (particleArray[i].isActive)
-				particleArray[i].Update(dt);
-		}
-	}
 	return ret;
 }
 
@@ -90,31 +80,6 @@ void ParticleManager::RemoveEmitter(Emitter* emitter)
 {
 	emittersList.remove(emitter);
 	delete emitter;
-}
-
-//You get the next slot in the array for the new particle
-bool ParticleManager::GetNextParticleSlot(int& id)
-{
-	for (int i = lastUsedParticle; i < MAX_PARTICLES; ++i)
-	{
-		if (!particleArray[i].isActive)
-		{
-			lastUsedParticle = i;
-			id = i;
-			return true;
-		}
-	}
-
-	for (int i = 0; i < lastUsedParticle; ++i)
-	{
-		if (!particleArray[i].isActive)
-		{
-			lastUsedParticle = i;
-			id = i;
-			return true;
-		}
-	}
-	return false;
 }
 
 void ParticleManager::StartAllEmitters()

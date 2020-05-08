@@ -53,8 +53,17 @@ void Emitter::Update(float dt)
 			}
 		}
 	}
-}
+	
+	for (int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		if (particles[i].isActive)
+		{
+			if (!particles[i].Update(dt))
+				particleActive--;
+		}
+	}
 
+}
 void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
@@ -62,13 +71,12 @@ void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEm
 	for (int i = 0; i < numParticles; ++i)
 	{
 		int particleId = 0;
-		if (parent->GetNextParticleSlot(particleId))
+		if (GetNextParticleSlot(particleId))
 		{
 			globalPosition += GetRandomPos(emitter);
 			//Create the particle in the correctly slot in the pool
-			parent->particleArray[particleId].SetParticleValues(globalPosition, startValues, this);
-			//Save the particle in emitter list to know wich particles have this emitter
-			particles.push_back(&parent->particleArray[particleId]);
+			particles[particleId].SetParticleValues(globalPosition, startValues, this);
+			particleActive++;
 		}
 		else
 			break;
@@ -148,7 +156,7 @@ void Emitter::Draw(unsigned int shaderUuid)
 	//Life
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(2);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec2), &particleLife[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec2), &particleLife[0]);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
@@ -156,83 +164,83 @@ void Emitter::Draw(unsigned int shaderUuid)
 	//Position
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(3);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec3), &particlePosition[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec3), &particlePosition[0]);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
 	//Direction
 	glVertexAttribDivisor(4, 1);
 	glEnableVertexAttribArray(4);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(PartVec3), &particleDirection[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec3), &particleDirection[0]);
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
 	//Speed
 	glVertexAttribDivisor(5, 1);
 	glEnableVertexAttribArray(5);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleSpeed[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSpeed[0]);
 	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[5]);
 	//Acceleration
 	glVertexAttribDivisor(6, 1);
 	glEnableVertexAttribArray(6);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAcceleration[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAcceleration[0]);
 	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[6]);
 	//Rotation
 	glVertexAttribDivisor(7, 1);
 	glEnableVertexAttribArray(7);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleRot[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAngleRot[0]);
 	glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[7]);
 	//Rotation Velocity
 	glVertexAttribDivisor(8, 1);
 	glEnableVertexAttribArray(8);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleVel[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAngleVel[0]);
 	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[8]);
 	//Rotation Acceleration
 	glVertexAttribDivisor(9, 1);
 	glEnableVertexAttribArray(9);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleAngleAccel[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAngleAccel[0]);
 	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[9]);
 	//Size
 	glVertexAttribDivisor(10, 1);
 	glEnableVertexAttribArray(10);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleSize[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSize[0]);
 	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[10]);
 	//Size Over Time
 	glVertexAttribDivisor(11, 1);
 	glEnableVertexAttribArray(11);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(float), &particleSizeTime[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSizeTime[0]);
 	glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particles.size());
-
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(3);
-	glDisableVertexAttribArray(4);
-	glDisableVertexAttribArray(5);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleActive);
 
 	glBindVertexArray(0);
 }
 
 void Emitter::GetParticleValues()
 {
+	BROFILER_CATEGORY("GetValues", Profiler::Color::PapayaWhip);
 	uint cont = 0u;
-	for (std::list<Particle*>::iterator iter = particles.begin(); iter != particles.end(); ++iter, ++cont)
+	for (int i = 0; i < MAX_PARTICLES; ++i)
 	{
-		(*iter)->GetTransform(particlePosition[cont], particleDirection[cont], particleSpeed[cont], particleAcceleration[cont],
-			particleAngleRot[cont], particleAngleVel[cont], particleAngleAccel[cont], particleSize[cont], particleSizeTime[cont]);
-		particleLife[cont] = (*iter)->GetCurrLife();
+		if (particles[i].isActive)
+		{
+			particles[i].GetTransform(particlePosition[cont], particleDirection[cont], particleSpeed[cont], particleAcceleration[cont],
+				particleAngleRot[cont], particleAngleVel[cont], particleAngleAccel[cont], particleSize[cont], particleSizeTime[cont]);
+			particleLife[cont] = particles[i].GetCurrLife();
+			cont++;
+		}
 	}
 }
 
@@ -261,16 +269,16 @@ void Emitter::StartEmitter()
 
 void Emitter::StopEmitter()
 {
-	for (std::list<Particle*>::iterator iterator = particles.begin(); iterator != particles.end(); ++iterator)
+	for (int i = 0; i < MAX_PARTICLES; ++i)
 	{
-		(*iterator)->isActive = false;
-		(*iterator)->owner = nullptr;
+		if (particles[i].isActive)
+			particles[i].isActive = false;
 	}
 
 	runningTime = false;
 	secParticleCreation = 0.0f;
 
-	particles.clear();
+	particleActive = 0;
 	emitterTimer.Stop();
 	burstTimer.Stop();
 }
@@ -330,5 +338,30 @@ PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 
 
 	return randomPos;
+}
+
+//You get the next slot in the array for the new particle
+bool Emitter::GetNextParticleSlot(int& id)
+{
+	for (int i = lastUsedParticle; i < MAX_PARTICLES; ++i)
+	{
+		if (!particles[i].isActive)
+		{
+			lastUsedParticle = i;
+			id = i;
+			return true;
+		}
+	}
+
+	for (int i = 0; i < lastUsedParticle; ++i)
+	{
+		if (!particles[i].isActive)
+		{
+			lastUsedParticle = i;
+			id = i;
+			return true;
+		}
+	}
+	return false;
 }
 

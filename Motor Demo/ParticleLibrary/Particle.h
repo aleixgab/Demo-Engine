@@ -31,22 +31,22 @@ public:
 
 	//Set all the particle values and start the particle
 	void SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitter* owner);
-	void Update(float dt);
+	bool Update(float dt);
 	PartVec2 GetCurrLife() const;
 	void GetTransform(PartVec3& initialPos, PartVec3& direction, float& speed, float& acceleration, float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const;
 
 private:
 
 	//Create random float betweet 2 edges
-	float CreateRandomNum(PartVec2 edges);
+	float CreateRandomNum(PartVec2 edges, Emitter* owner);
 
 public:
 	//Bool to know if the particle is alive and operating
 	bool isActive = false;
-	//Pointer to its own parent
-	Emitter* owner = nullptr;
 
 private:
+	bool* runningTime = nullptr;
+
 	//Time in seconds that the particle will be alive
 	float currLife, initialLife = 0.0f;
 

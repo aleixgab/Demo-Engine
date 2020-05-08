@@ -1,6 +1,9 @@
 #ifndef __Emitter_H__
 #define __Emitter_H__
 
+//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
+#define MAX_PARTICLES 100000
+
 #include <list>
 #include <string>
 #include "PartMath.h"
@@ -106,12 +109,13 @@ private:
 	IMPORTANT TO SET THE GLOBAL POS BEFORE CREATE THE PARTCLES
 	*/
 	PartVec3 GetRandomPos(ShapeEmitter emitter);
+	bool GetNextParticleSlot(int& id);
 public:
 	//Public varible to have the particle start values acces out of this class
 	ParticleStartValues startValues;
 
-	// Particles list of this emitter
-	std::list<Particle*> particles;
+	//Particle pool where are all the particles (active and inactive)
+	Particle particles[MAX_PARTICLES];
 	//The particle manager pointer to acces in the own functions
 	ParticleManager* parent;
 	//The dimensions of the box shape that will spawn the particles (width and height)
@@ -161,6 +165,9 @@ public:
 	float colorPercent = 0.5f;
 	float cameraDist = 0.0f;
 private:
+	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	
+	int lastUsedParticle = 0;
+	int particleActive = 0;
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;
 	ShapeEmitter burstShapeEmitter = BoxShape;

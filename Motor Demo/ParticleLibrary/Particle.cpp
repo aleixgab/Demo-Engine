@@ -10,29 +10,29 @@
 
 void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitter* owner)
 {
-	this->owner = owner;
+	runningTime = &owner->runningTime;
 
 	//Save all the initial values 
-	initialLife = CreateRandomNum(values.life);
+	initialLife = CreateRandomNum(values.life, owner);
 	currLife = 0.0f;
-	speed = CreateRandomNum(values.speed);
+	speed = CreateRandomNum(values.speed, owner);
 	gravity = values.gravity;
-	acceleration = CreateRandomNum(values.acceleration);
+	acceleration = CreateRandomNum(values.acceleration, owner);
 	direction = values.particleDirection;
-	angularVelocity = CreateRandomNum(values.angularVelocity);
-	angularAcceleration = CreateRandomNum(values.angularAcceleration);
-	sizeOverTime = CreateRandomNum(values.sizeOverTime);
+	angularVelocity = CreateRandomNum(values.angularVelocity, owner);
+	angularAcceleration = CreateRandomNum(values.angularAcceleration, owner);
+	sizeOverTime = CreateRandomNum(values.sizeOverTime, owner);
 
-	transform.angle = CreateRandomNum(values.rotation);
+	transform.angle = CreateRandomNum(values.rotation, owner);
 	transform.position = pos;
-	transform.scale = CreateRandomNum(values.size);
+	transform.scale = CreateRandomNum(values.size, owner);
 
 	isActive = true;
 }
 
-void Particle::Update(float dt)
+bool Particle::Update(float dt)
 {
-	if (!owner->runningTime)
+	if (!(*runningTime))
 		dt = 0.0f;
 
 	if (currLife < initialLife)
@@ -42,8 +42,8 @@ void Particle::Update(float dt)
 	{
 		//Deactivate the particle
 		isActive = false;
-		owner->particles.remove(this);
 	}
+	return isActive;
 }
 
 PartVec2 Particle::GetCurrLife() const
@@ -64,7 +64,7 @@ void Particle::GetTransform(PartVec3& initialPos, PartVec3& direction, float& sp
 	scaleTime = sizeOverTime;
 }
 
-float Particle::CreateRandomNum(PartVec2 edges)//.x = minPoint & .y = maxPoint
+float Particle::CreateRandomNum(PartVec2 edges, Emitter* owner)//.x = minPoint & .y = maxPoint
 {
 	float num = edges.x;
 	if (edges.x < edges.y)
