@@ -65,6 +65,7 @@ class Emitter
 {
 public:
 	Emitter(ParticleManager* parent, float* emitterPos, int maxParticles);
+	void ChangeMaxParticles(int maxParticles);
 	~Emitter();
 
 	void Update(float dt);
