@@ -67,9 +67,9 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 }
 
 //Create new emitter
-Emitter* ParticleManager::CreateEmitter(float* emitterPos)
+Emitter* ParticleManager::CreateEmitter(float* emitterPos, int maxParticles)
 {
-	Emitter* newEmitter = new Emitter(this, emitterPos);
+	Emitter* newEmitter = new Emitter(this, emitterPos, maxParticles);
 	emittersList.push_back(newEmitter);
 
 	return newEmitter;

@@ -20,11 +20,9 @@ public:
 	bool Update(float dt);
 	//Draw function with shaderUuid, and camera view and projection
 	void Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix);
-	//You get the next slot in the pool array for the new particle
-	//bool GetNextParticleSlot(int& id);
 
 	//Create new emitter
-	Emitter* CreateEmitter(float* emitterPos);
+	Emitter* CreateEmitter(float* emitterPos, int maxParticles);
 	//Remove the wanted emitter
 	void RemoveEmitter(Emitter* emitter);
 

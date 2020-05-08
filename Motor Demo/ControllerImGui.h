@@ -26,6 +26,8 @@ public:
 
 public:
 	bool hasFps = false;
+	bool popParticle = false;
+	int maxParticles = 0;
 };
 
 #endif

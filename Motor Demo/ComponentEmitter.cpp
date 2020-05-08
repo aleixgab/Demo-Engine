@@ -9,9 +9,9 @@
 #include "ParticleLibrary/ParticleManager.h"
 #include <string>
 
-ComponentEmitter::ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller) : Component(gameObject, ComponentType_EMITTER)
+ComponentEmitter::ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller, int maxParticles) : Component(gameObject, ComponentType_EMITTER)
 {
-	emitter = manager->CreateEmitter(&gameObject->transform->position.x);
+	emitter = manager->CreateEmitter(&gameObject->transform->position.x, maxParticles);
 	this->controller = controller;
 }
 

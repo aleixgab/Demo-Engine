@@ -23,7 +23,7 @@ public:
 	Transform* GetComponentTransform() const;
 	ComponentEmitter* GetComponentEmitter();
 
-	ComponentEmitter* AddComponentEmitter(ParticleManager* manager, ControllerParticles* controller);
+	ComponentEmitter* AddComponentEmitter(ControllerParticles* controller, int maxParticles);
 
 	bool HasEmitter();
 

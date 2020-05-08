@@ -9,7 +9,7 @@ class ControllerParticles;
 class ComponentEmitter : public Component
 {
 public:
-	ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller);
+	ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller, int maxParticles);
 
 	~ComponentEmitter();
 

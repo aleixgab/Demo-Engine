@@ -6,11 +6,28 @@
 #include <Brofiler/Brofiler.h>
 
 
-Emitter::Emitter(ParticleManager* parent, float* emitterPos): parent(parent), globalObjPos(emitterPos[0])
+Emitter::Emitter(ParticleManager* parent, float* emitterPos, int maxParticles): parent(parent), globalObjPos(emitterPos[0])
 {
 	ParticleColor startColor;
 	colorList.push_back(startColor);
-	plane = new PlaneImporter(MAX_PARTICLES);
+	plane = new PlaneImporter(maxParticles);
+
+	ChangeMaxParticles(maxParticles);
+}
+
+void Emitter::ChangeMaxParticles(int maxParticles)
+{
+	particles.resize(maxParticles);
+	particleLife.resize(maxParticles);
+	particlePosition.resize(maxParticles);
+	particleDirection.resize(maxParticles);
+	particleSpeed.resize(maxParticles);
+	particleAcceleration.resize(maxParticles);
+	particleAngleRot.resize(maxParticles);
+	particleAngleVel.resize(maxParticles);
+	particleAngleAccel.resize(maxParticles);
+	particleSize.resize(maxParticles);
+	particleSizeTime.resize(maxParticles);
 }
 
 Emitter::~Emitter()
@@ -54,7 +71,7 @@ void Emitter::Update(float dt)
 		}
 	}
 	
-	for (int i = 0; i < MAX_PARTICLES; ++i)
+	for (int i = 0; i < particles.size(); ++i)
 	{
 		if (particles[i].isActive)
 		{
@@ -232,7 +249,7 @@ void Emitter::GetParticleValues()
 {
 	BROFILER_CATEGORY("GetValues", Profiler::Color::PapayaWhip);
 	uint cont = 0u;
-	for (int i = 0; i < MAX_PARTICLES; ++i)
+	for (int i = 0; i < particles.size(); ++i)
 	{
 		if (particles[i].isActive)
 		{
@@ -269,7 +286,7 @@ void Emitter::StartEmitter()
 
 void Emitter::StopEmitter()
 {
-	for (int i = 0; i < MAX_PARTICLES; ++i)
+	for (int i = 0; i < particles.size(); ++i)
 	{
 		if (particles[i].isActive)
 			particles[i].isActive = false;
@@ -343,7 +360,7 @@ PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 //You get the next slot in the array for the new particle
 bool Emitter::GetNextParticleSlot(int& id)
 {
-	for (int i = lastUsedParticle; i < MAX_PARTICLES; ++i)
+	for (int i = lastUsedParticle; i < particles.size(); ++i)
 	{
 		if (!particles[i].isActive)
 		{

@@ -43,6 +43,25 @@ bool ControllerImGui::Update(float dt)
 	PlayStop();
 	
 	TimeGraph();
+
+	if (popParticle)
+	{
+		ImGui::OpenPopup("Select Max Particles");
+	}
+
+	if (ImGui::BeginPopupModal("Select Max Particles"))
+	{
+		ImGui::Text("Number aproximatly of particles that will be at the same time");
+		ImGui::DragInt("##MaxPart",&maxParticles);
+		if (ImGui::Button("Create", ImVec2(100.0f, 25.0f)))
+		{
+			if (maxParticles <= 0)
+				maxParticles = 1;
+			Mng->scene->currGO->AddComponentEmitter(Mng->particle, maxParticles);
+			popParticle = false;
+		}
+		ImGui::EndPopup();
+	}
 	return true;
 }
 
@@ -132,9 +151,7 @@ void ControllerImGui::ObjInspector()
 			if (ImGui::BeginMenu("Add new component"))
 			{
 				if (ImGui::MenuItem("Particle System", "", nullptr, !currObject->HasEmitter()))
-				{
-					currObject->AddComponentEmitter(Mng->particle->particleManager, Mng->particle);
-				}
+					popParticle = true;
 				ImGui::MenuItem("Cancel");
 				ImGui::EndMenu();
 			}

@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "ComponentEmitter.h"
+#include "GameManager.h"
 
 GameObject::GameObject(glm::vec3 position, glm::quat rotation, glm::vec3 scale, const char* name)
 {
@@ -35,9 +36,10 @@ ComponentEmitter* GameObject::GetComponentEmitter()
 	return ret;
 }
 
-ComponentEmitter* GameObject::AddComponentEmitter(ParticleManager* manager, ControllerParticles* controller)
+ComponentEmitter* GameObject::AddComponentEmitter(ControllerParticles* controller, int maxParticles)
 {
-	ComponentEmitter* newEmitter = new ComponentEmitter(this, manager, controller);
+
+	ComponentEmitter* newEmitter = new ComponentEmitter(this, controller->particleManager, controller, maxParticles);
 	components.push_back(newEmitter);
 
 	newEmitter->type = ComponentType_EMITTER;

@@ -1,9 +1,6 @@
 #ifndef __Emitter_H__
 #define __Emitter_H__
 
-//Max num of particles that the engine can support at the same time. You can change this number depends on your engine
-#define MAX_PARTICLES 100000
-
 #include <list>
 #include <string>
 #include "PartMath.h"
@@ -67,7 +64,7 @@ struct ParticleStartValues
 class Emitter
 {
 public:
-	Emitter(ParticleManager* parent, float* emitterPos);
+	Emitter(ParticleManager* parent, float* emitterPos, int maxParticles);
 	~Emitter();
 
 	void Update(float dt);
@@ -115,7 +112,7 @@ public:
 	ParticleStartValues startValues;
 
 	//Particle pool where are all the particles (active and inactive)
-	Particle particles[MAX_PARTICLES];
+	std::vector<Particle> particles;
 	//The particle manager pointer to acces in the own functions
 	ParticleManager* parent;
 	//The dimensions of the box shape that will spawn the particles (width and height)
@@ -182,16 +179,16 @@ private:
 
 	PlaneImporter* plane = nullptr;
 
-	PartVec2 particleLife[MAX_PARTICLES];
-	PartVec3 particlePosition[MAX_PARTICLES];
-	PartVec3 particleDirection[MAX_PARTICLES];
-	float particleSpeed[MAX_PARTICLES];
-	float particleAcceleration[MAX_PARTICLES];
-	float particleAngleRot[MAX_PARTICLES];
-	float particleAngleVel[MAX_PARTICLES];
-	float particleAngleAccel[MAX_PARTICLES];
-	float particleSize[MAX_PARTICLES];
-	float particleSizeTime[MAX_PARTICLES];
+	std::vector<PartVec2> particleLife;
+	std::vector<PartVec3> particlePosition;
+	std::vector <PartVec3> particleDirection;
+	std::vector<float> particleSpeed;
+	std::vector<float> particleAcceleration;
+	std::vector<float> particleAngleRot;
+	std::vector<float> particleAngleVel;
+	std::vector<float> particleAngleAccel;
+	std::vector<float> particleSize;
+	std::vector<float> particleSizeTime;
 
 	bool onceBurst = false;
 };
