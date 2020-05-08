@@ -6,7 +6,7 @@
 #include "Particle.h"
 
 //Max num of particles that the engine can support at the same time. You can change this number depends on your engine
-#define MAX_PARTICLES 10000000
+#define MAX_PARTICLES 20000
 
 typedef unsigned int uint;
 

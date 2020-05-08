@@ -50,11 +50,17 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	};
 
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO[0]); //Static VBO
-	glGenBuffers(1, &VBO[1]); //Particle Life
-	glGenBuffers(1, &VBO[2]); //Position
-	glGenBuffers(1, &VBO[3]); //Rotation
-	glGenBuffers(1, &VBO[4]); //Size
+	glGenBuffers(1, &VBO[0]);  //Static VBO
+	glGenBuffers(1, &VBO[1]);  //Particle Life
+	glGenBuffers(1, &VBO[2]);  //Position
+	glGenBuffers(1, &VBO[3]);  //Direction
+	glGenBuffers(1, &VBO[4]);  //Speed
+	glGenBuffers(1, &VBO[5]);  //Acceleration
+	glGenBuffers(1, &VBO[6]);  //Rotation
+	glGenBuffers(1, &VBO[7]);  //Rotation Vel
+	glGenBuffers(1, &VBO[8]);  //Rotation Accel 
+	glGenBuffers(1, &VBO[9]);  //Size
+	glGenBuffers(1, &VBO[10]); //Size over time
 
 
 	glBindVertexArray(VAO);
@@ -70,9 +76,27 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec3) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[3]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec3) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[4]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[5]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[6]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[7]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[9]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[10]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 }
 
@@ -84,5 +108,12 @@ PlaneImporter::~PlaneImporter()
 	glDeleteBuffers(1, &VBO[2]);
 	glDeleteBuffers(1, &VBO[3]);
 	glDeleteBuffers(1, &VBO[4]);
+	glDeleteBuffers(1, &VBO[5]);
+	glDeleteBuffers(1, &VBO[6]);
+	glDeleteBuffers(1, &VBO[7]);
+	glDeleteBuffers(1, &VBO[8]);
+	glDeleteBuffers(1, &VBO[9]); 
+	glDeleteBuffers(1, &VBO[10]);
+
 }
 

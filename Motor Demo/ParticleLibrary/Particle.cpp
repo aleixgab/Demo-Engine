@@ -13,7 +13,8 @@ void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitt
 	this->owner = owner;
 
 	//Save all the initial values 
-	initialLife = currLife = CreateRandomNum(values.life);
+	initialLife = CreateRandomNum(values.life);
+	currLife = 0.0f;
 	speed = CreateRandomNum(values.speed);
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
@@ -34,22 +35,9 @@ void Particle::Update(float dt)
 	if (!owner->runningTime)
 		dt = 0.0f;
 
-	if (currLife > 0.0f)
-	{
-		
-		//Tranlate
-		speed += acceleration * dt;
-		transform.position += (direction * speed * dt);
-
-		//Scale
-		transform.scale += sizeOverTime * dt;
-
-		//Rotation
-		angularVelocity += angularAcceleration * dt;
-		transform.angle += angularVelocity * dt;
-
-		currLife -= dt;
-	}
+	if (currLife < initialLife)
+		currLife += dt;
+	
 	else
 	{
 		//Deactivate the particle
@@ -64,11 +52,17 @@ PartVec2 Particle::GetCurrLife() const
 	return PartVec2(currLife,initialLife);
 }
 
-void Particle::GetTransform(PartVec3& pos, float& angle, float& scale ) const
+void Particle::GetTransform(PartVec3& initialPos, PartVec3& direction, float& speed, float& acceleration, float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const
 {
-	pos = transform.position;
+	initialPos = transform.position;
+	direction = this->direction;
+	speed = this->speed;
+	acceleration = this->acceleration;
 	angle = transform.angle;
+	angleVel = angularVelocity;
+	angleAccel = angularAcceleration;
 	scale = transform.scale;
+	scaleTime = sizeOverTime;
 }
 
 float Particle::CreateRandomNum(PartVec2 edges)//.x = minPoint & .y = maxPoint

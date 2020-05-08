@@ -175,10 +175,16 @@ private:
 
 	PlaneImporter* plane = nullptr;
 
-	PartVec3 particlePosition[MAX_PARTICLES];
-	float particleAngleRot[MAX_PARTICLES];
-	float particleSize[MAX_PARTICLES];
 	PartVec2 particleLife[MAX_PARTICLES];
+	PartVec3 particlePosition[MAX_PARTICLES];
+	PartVec3 particleDirection[MAX_PARTICLES];
+	float particleSpeed[MAX_PARTICLES];
+	float particleAcceleration[MAX_PARTICLES];
+	float particleAngleRot[MAX_PARTICLES];
+	float particleAngleVel[MAX_PARTICLES];
+	float particleAngleAccel[MAX_PARTICLES];
+	float particleSize[MAX_PARTICLES];
+	float particleSizeTime[MAX_PARTICLES];
 
 	bool onceBurst = false;
 };
