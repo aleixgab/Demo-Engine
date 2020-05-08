@@ -6,7 +6,7 @@
 #include "Particle.h"
 
 //Max num of particles that the engine can support at the same time. You can change this number depends on your engine
-#define MAX_PARTICLES 20000
+#define MAX_PARTICLES 1000000
 
 typedef unsigned int uint;
 
@@ -57,8 +57,6 @@ public:
 	std::list<Emitter*> emittersList; 
 	//Particle pool where are all the particles (active and inactive)
 	Particle particleArray[MAX_PARTICLES];
-	//Counter from all the active particles. This will let us ignore the other particles.
-	int numActivePart = 0;
 
 	PartVec3* cameraPos = nullptr;
 

@@ -19,11 +19,11 @@ void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitt
 	gravity = values.gravity;
 	acceleration = CreateRandomNum(values.acceleration);
 	direction = values.particleDirection;
-	angularVelocity = CreateRandomNum(values.angularVelocity) * (PI / 180.0f);
-	angularAcceleration = CreateRandomNum(values.angularAcceleration) * (PI / 180.0f);
+	angularVelocity = CreateRandomNum(values.angularVelocity);
+	angularAcceleration = CreateRandomNum(values.angularAcceleration);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime);
 
-	transform.angle = CreateRandomNum(values.rotation) * (PI / 180.0f);
+	transform.angle = CreateRandomNum(values.rotation);
 	transform.position = pos;
 	transform.scale = CreateRandomNum(values.size);
 
@@ -43,7 +43,6 @@ void Particle::Update(float dt)
 		//Deactivate the particle
 		isActive = false;
 		owner->particles.remove(this);
-		owner->parent->numActivePart--;
 	}
 }
 

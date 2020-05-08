@@ -69,8 +69,6 @@ void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEm
 			parent->particleArray[particleId].SetParticleValues(globalPosition, startValues, this);
 			//Save the particle in emitter list to know wich particles have this emitter
 			particles.push_back(&parent->particleArray[particleId]);
-			//Add one count in the active particles from ParticleManager
-			parent->numActivePart++;
 		}
 		else
 			break;
@@ -269,7 +267,6 @@ void Emitter::StopEmitter()
 		(*iterator)->owner = nullptr;
 	}
 
-	parent->numActivePart -= particles.size();
 	runningTime = false;
 	secParticleCreation = 0.0f;
 
