@@ -23,9 +23,9 @@ void Particle::SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitt
 	angularAcceleration = CreateRandomNum(values.angularAcceleration, owner);
 	sizeOverTime = CreateRandomNum(values.sizeOverTime, owner);
 
-	transform.angle = CreateRandomNum(values.rotation, owner);
-	transform.position = pos;
-	transform.scale = CreateRandomNum(values.size, owner);
+	angle = CreateRandomNum(values.rotation, owner);
+	initialPos = pos;
+	scale = CreateRandomNum(values.size, owner);
 
 	isActive = true;
 }
@@ -53,15 +53,16 @@ PartVec2 Particle::GetCurrLife() const
 
 void Particle::GetTransform(PartVec3& initialPos, PartVec3& direction, float& speed, float& acceleration, float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const
 {
-	initialPos = transform.position;
 	direction = this->direction;
 	speed = this->speed;
 	acceleration = this->acceleration;
-	angle = transform.angle;
 	angleVel = angularVelocity;
 	angleAccel = angularAcceleration;
-	scale = transform.scale;
 	scaleTime = sizeOverTime;
+
+	initialPos = this->initialPos;
+	angle = this->angle;
+	scale = this->scale;
 }
 
 float Particle::CreateRandomNum(PartVec2 edges, Emitter* owner)//.x = minPoint & .y = maxPoint
