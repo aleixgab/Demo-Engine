@@ -1,8 +1,8 @@
 #version 330 core
-layout (location = 0) in vec3 aPos; 
-layout (location = 1) in vec2 aCoords; 
+layout (location = 0) in vec3 aPos; //Static Pos
+layout (location = 1) in vec2 aCoords;
 layout (location = 2) in vec2 life; //.x = curr life //.y = Max life (particles may have diferent life times)
-layout (location = 3) in vec3 aPosition; 
+layout (location = 3) in vec3 aPosition; //Initial position
 layout (location = 4) in vec3 aDirection; 
 layout (location = 5) in float aSpeed; 
 layout (location = 6) in float aAcceleration; 
@@ -11,9 +11,6 @@ layout (location = 8) in float aAngleVel;
 layout (location = 9) in float aAngleAccel; 
 layout (location = 10) in float aSize; 
 layout (location = 11) in float aSizeTime; 
-
-out vec2 texCoords;
-out float lifeNorm;
 
 uniform mat4 view;
 uniform mat4 projection;
@@ -24,9 +21,17 @@ uniform int textRows;
 uniform int textColumns;
 uniform float animatedTime;
 
+//Color Particle
+uniform	float positions[10];
+uniform	float colorSize;
+uniform	vec4 colors[10];
+
+out vec2 texCoords;
+out vec4 particleColor;
+
 void main()
 {
-	lifeNorm = life.x/life.y;
+	float lifeNorm = life.x/life.y;
 
 	//ANIMATION
 	if (isAnimated == 1)
@@ -45,6 +50,27 @@ void main()
 	else
 		texCoords = aCoords;
 
+	//COLOR
+	particleColor = colors[0];
+
+	if (colorSize > 1)
+	{
+		bool findColor = false;
+		for (int i = 0; i < colorSize - 1; i++)
+		{
+			if (lifeNorm < positions[i + 1] && findColor == false)
+			{
+				float timeNorm = (lifeNorm - positions[i]) / (positions[i + 1] - positions[i]);
+				particleColor = mix(colors[i], colors[i + 1], timeNorm);
+				findColor = true;
+			}
+		}
+		if (findColor == false)
+		{
+			particleColor = colors[colorSize - 1];
+		}
+	}
+
 	//Billboard
 	vec3 zAxis = vec3(view[2].xyz); //Camera Forward
 	vec3 yAxis = vec3(view[1].xyz); //Camera Up
@@ -53,12 +79,13 @@ void main()
 	//Tranlate
 	vec3 pos = aPosition + aDirection * (aSpeed + aAcceleration * life.x) * life.x;
 
+	//Plane Rotation
+	float angle = aAngle + (aAngleVel + aAngleAccel * life.x) * life.x;
+
 	mat4 aModel = mat4(xAxis.x, yAxis.x, zAxis.x, 0.0f,
 					   xAxis.y, yAxis.y, zAxis.y, 0.0f,
 					   xAxis.z, yAxis.z, zAxis.z, 0.0f,
 					   pos,				  1.0f);
-	//Plane Rotation
-	float angle = aAngle + (aAngleVel + aAngleAccel * life.x) * life.x;
 
 	radians(angle);
 	aModel *= mat4(cos(angle), -sin(angle), 0.0, 0.0,

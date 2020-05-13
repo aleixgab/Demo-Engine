@@ -35,6 +35,5 @@ void Timer::Pause()
 
 float Timer::GetTime() const
 {
-	Clock::time_point currentTime = Clock::now();
-	return std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - timeStart).count() - timePaused;
+	return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - timeStart).count() - timePaused;
 }
