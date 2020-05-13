@@ -153,14 +153,9 @@ public:
 	//Vector of all colors will be in the particle with RGBA. The colors will change during de time
 	std::list<ParticleColor> colorList;
 	//Knowing if we have more than one color during the time
+	bool useTexture = false;
 	bool isMulticolor = false;
 
-	/*Percentage of the color in the particle between 0 and 1
-	0.0f it will draw the texture color
-	1.0f it will draw the colors that you chose
-	between it will mix both colors depending on the percentage.
-	*/
-	float colorPercent = 0.5f;
 	float cameraDist = 0.0f;
 private:
 	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	

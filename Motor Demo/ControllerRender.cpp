@@ -27,11 +27,15 @@ bool ControllerRender::Start()
 	TextureImporter* newTexture3 = new TextureImporter("Assets/awesomeface.png");
 	TextureImporter* newTexture4 = new TextureImporter("Assets/Smoke30Frames_0.png");
 	TextureImporter* newTexture5 = new TextureImporter("Assets/smokeTest.jpg");
+	TextureImporter* newTexture6 = new TextureImporter("Assets/FlameRoundParticleSheet.png");
+	TextureImporter* newTexture7 = new TextureImporter("Assets/Fire_sprites_v1.png");
 	textures.push_back(newTexture);
 	textures.push_back(newTexture2);
 	textures.push_back(newTexture3);
 	textures.push_back(newTexture4);
 	textures.push_back(newTexture5);
+	textures.push_back(newTexture6);
+	textures.push_back(newTexture7);
 
 	ground = new PlaneImporter();
 	// configure global opengl state
@@ -65,7 +69,7 @@ bool ControllerRender::Update(float dt)
 			basicShader.SetMat4("view", view);
 			basicShader.SetMat4("projection", projection);
 			basicShader.SetMat4("model", (*toDraw.begin())->GetComponentTransform()->GetTransform());
-			basicShader.SetVec3("uColor", 1.0f, 0.5f, 0.31f);
+			basicShader.SetVec3("uColor", 1.0f, 1.0f, 1.0f);
 
 		// render Plane
 			glBindVertexArray(ground->VAO);

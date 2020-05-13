@@ -5,7 +5,7 @@ in float lifeNorm;
 out vec4 FragColor;
 
 uniform sampler2D sprite;
-uniform float colorPercent;
+uniform int useTexture;
 
 uniform int colorSize;
 uniform	float positions[10];
@@ -14,7 +14,7 @@ uniform	vec4 colors[10];
 void main()
 {
 	vec4 tex = texture(sprite, texCoords);
-	if(colorPercent < 1.0 && tex.a < 0.1)
+	if(tex.a < 0.1 && useTexture == 1)
 		discard;
 
 	vec4 particleColor = colors[0];
@@ -38,5 +38,11 @@ void main()
 		}
 	}
 
-    FragColor = mix(tex, particleColor, colorPercent);
+	vec4 finalColor;
+	if(useTexture == 1)
+		finalColor = tex * particleColor;
+	else
+		finalColor = particleColor;
+
+	FragColor = finalColor;
 }  

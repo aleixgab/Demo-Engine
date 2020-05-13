@@ -133,8 +133,8 @@ void Emitter::Draw(unsigned int shaderUuid)
 
 	GetParticleValues();
 
-	glUniform1f(glGetUniformLocation(shaderUuid, "colorPercent"), colorPercent);
 	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), isMulticolor ? colorList.size() : 1);
+	glUniform1i(glGetUniformLocation(shaderUuid, "useTexture"), useTexture);
 
 	glUniform1i(glGetUniformLocation(shaderUuid, "isAnimated"), isParticleAnimated);
 	glUniform1i(glGetUniformLocation(shaderUuid, "textRows"), textureRows);

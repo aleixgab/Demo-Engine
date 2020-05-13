@@ -1,5 +1,5 @@
-#ifndef __PLANE_IMPORTER_H__
-#define __PLANE_IMPORTER_H__
+#ifndef __Plane_Importer_H__
+#define __Plane_Importer_H__
 
 class PlaneImporter
 {
