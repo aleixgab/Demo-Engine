@@ -15,16 +15,6 @@ struct ParticleColor;
 struct ParticleAnimation;
 
 //Transform of the particle where there are Translation - Rotation - Scale
-struct PartTransform
-{
-	//global position
-	PartVec3 position = PartVec3(0.0f);
-	//Plane rotation
-	float angle = 0.0f;
-	//global scale
-	float scale = 1.0f;
-};
-
 class Particle
 {
 public:
@@ -68,8 +58,14 @@ private:
 	//Increase(or decrease if it's negative) of the size of the particle
 	float sizeOverTime = 0.0f;
 
+	//global position
+	PartVec3 initialPos = PartVec3(0.0f);
+	//Plane rotation
+	float angle = 0.0f;
+	//global scale
+	float scale = 1.0f;
+
 	PartVec4 finalColor = PartVec4(1.0f);
-	PartTransform transform;
 };
 
 #endif

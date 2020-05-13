@@ -26,13 +26,6 @@ PartVec3 PartVec3::Normalize()
 	return copy;
 }
 
-PartVec3 PartVec3::CrossProduct(const PartVec3& vec)
-{
-	return PartVec3(y * vec.z - z * vec.y,
-		z * vec.x - x * vec.z,
-		x * vec.y - y * vec.x);
-}
-
 PartVec3& PartVec3::operator =(const PartVec3& vec)
 {
 	x = vec.x;
@@ -40,13 +33,7 @@ PartVec3& PartVec3::operator =(const PartVec3& vec)
 	z = vec.z;
 	return *this;
 }
-PartVec3& PartVec3::operator-()
-{
-	x = -x;
-	y = -y;
-	z = -z;
-	return *this;
-}
+
 PartVec3& PartVec3::operator +=(const PartVec3& vec)
 {
 	x += vec.x;
@@ -54,13 +41,7 @@ PartVec3& PartVec3::operator +=(const PartVec3& vec)
 	z += vec.z;
 	return *this;
 }
-PartVec3& PartVec3::operator/=(const PartVec3& vec)
-{
-	x /= vec.x;
-	y /= vec.y;
-	z /= vec.z;
-	return *this;
-}
+
 PartVec3& PartVec3::operator /=(const float num)
 {
 	x /= num;
@@ -94,19 +75,4 @@ PartVec3 PartVec3::operator*(const float num)
 
 PartVec4::PartVec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 
-PartVec4::PartVec4(PartVec2 xy, float z, float w) : x(xy.x), y(xy.y), z(z), w(w) {}
-
 PartVec4::PartVec4(float x) : x(x), y(x), z(x), w(x) {}
-
-PartVec4 PartVec4::PartLerp(PartVec4 final, float t)
-{
-	PartVec4 ret = PartVec4(0.0f);
-
-	ret.x = (final.x - x) * t + x;
-	ret.y = (final.y - y) * t + y;
-	ret.z = (final.z - z) * t + z;
-	ret.w = (final.w - w) * t + w;
-
-	return ret;
-}
-
