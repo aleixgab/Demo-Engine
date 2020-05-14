@@ -23,7 +23,7 @@ uniform float animatedTime;
 
 //Color Particle
 uniform	float positions[10];
-uniform	float colorSize;
+uniform	int colorSize;
 uniform	vec4 colors[10];
 
 out vec2 texCoords;
