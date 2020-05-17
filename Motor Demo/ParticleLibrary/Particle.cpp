@@ -51,11 +51,12 @@ PartVec2 Particle::GetCurrLife() const
 	return PartVec2(currLife,initialLife);
 }
 
-void Particle::GetTransform(PartVec3& initialPos, PartVec3& direction, float& speed, float& acceleration, float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const
+void Particle::GetTransform(PartVec3& initialPos, PartVec3& direction, PartVec3& gravity, float& speed, float& acceleration, float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const
 {
 	direction = this->direction;
 	speed = this->speed;
 	acceleration = this->acceleration;
+	gravity = this->gravity;
 	angleVel = angularVelocity;
 	angleAccel = angularAcceleration;
 	scaleTime = sizeOverTime;

@@ -51,6 +51,10 @@ void ComponentEmitter::StartValuesInsp()
 		ImGui::Checkbox("##Acceleration", &checkAcceleration);
 		ShowFloatValue(emitter->startValues.acceleration, checkAcceleration, "Acceleration", 0.25f, -5.0f, 5.0f);
 
+		ImGui::PushItemWidth(180.0f);
+		ImGui::DragFloat3("Acceleration 3D", &emitter->startValues.gravity.x);
+		ImGui::PopItemWidth();
+
 		ImGui::Checkbox("##Rotation", &checkRotation);
 		ShowFloatValue(emitter->startValues.rotation, checkRotation, "Initial Rotation", 0.25f, -360.0f, 360.0f);
 
@@ -69,7 +73,10 @@ void ComponentEmitter::StartValuesInsp()
 		ImGui::Checkbox("##SizeOverTime", &checkSizeOverTime);
 		ShowFloatValue(emitter->startValues.sizeOverTime, checkSizeOverTime, "SizeOverTime", 0.25f, -1.0f, 1.0f);
 
+		ImGui::PushItemWidth(200.0f);
 		ImGui::DragInt("Emition", &emitter->particlesEmition, 1.0f, 0.0f, 300.0f, "%.2f");
+		ImGui::PopItemWidth();
+
 	}
 }
 

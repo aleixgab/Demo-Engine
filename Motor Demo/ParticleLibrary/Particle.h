@@ -23,7 +23,8 @@ public:
 	void SetParticleValues(PartVec3 pos, ParticleStartValues values, Emitter* owner);
 	bool Update(float dt);
 	PartVec2 GetCurrLife() const;
-	void GetTransform(PartVec3& initialPos, PartVec3& direction, float& speed, float& acceleration, float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const;
+	void GetTransform(PartVec3& initialPos, PartVec3& direction, PartVec3& gravity, float& speed, float& acceleration,
+						float& angle, float& angleVel, float& angleAccel, float& scale, float& scaleTime) const;
 
 private:
 

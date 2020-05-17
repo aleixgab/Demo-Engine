@@ -178,6 +178,7 @@ private:
 	std::vector<PartVec2> particleLife;
 	std::vector<PartVec3> particlePosition;
 	std::vector <PartVec3> particleDirection;
+	std::vector <PartVec3> particleGravity;
 	std::vector<float> particleSpeed;
 	std::vector<float> particleAcceleration;
 	std::vector<float> particleAngleRot;

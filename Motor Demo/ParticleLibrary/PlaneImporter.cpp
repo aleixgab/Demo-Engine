@@ -56,11 +56,12 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	glGenBuffers(1, &VBO[3]);  //Direction
 	glGenBuffers(1, &VBO[4]);  //Speed
 	glGenBuffers(1, &VBO[5]);  //Acceleration
-	glGenBuffers(1, &VBO[6]);  //Rotation
-	glGenBuffers(1, &VBO[7]);  //Rotation Vel
-	glGenBuffers(1, &VBO[8]);  //Rotation Accel 
-	glGenBuffers(1, &VBO[9]);  //Size
-	glGenBuffers(1, &VBO[10]); //Size over time
+	glGenBuffers(1, &VBO[6]);  //Gravity - Acceleration 3D
+	glGenBuffers(1, &VBO[7]);  //Rotation
+	glGenBuffers(1, &VBO[8]);  //Rotation Vel
+	glGenBuffers(1, &VBO[9]);  //Rotation Accel 
+	glGenBuffers(1, &VBO[10]); //Size
+	glGenBuffers(1, &VBO[11]); //Size over time
 
 	glBindVertexArray(VAO);
 
@@ -94,24 +95,28 @@ void PlaneImporter::SetDynamicValues(unsigned int maxParticles)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[5]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	//Rotation
+	//Gravity - Acceleration 3D
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[6]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec3) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	//Rotation Vel
+	//Rotation
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[7]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	//Rotation Accel 
+	//Rotation Vel
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[8]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	//Size
+	//Rotation Accel 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[9]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 
-	//Size over time
+	//Size
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[10]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
+
+	//Size over time
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[11]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 }
 
@@ -130,6 +135,7 @@ PlaneImporter::~PlaneImporter()
 	glDeleteBuffers(1, &VBO[8]);
 	glDeleteBuffers(1, &VBO[9]); 
 	glDeleteBuffers(1, &VBO[10]);
+	glDeleteBuffers(1, &VBO[11]);
 
 }
 

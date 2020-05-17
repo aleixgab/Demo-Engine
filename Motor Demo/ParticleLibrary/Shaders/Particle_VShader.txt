@@ -6,11 +6,12 @@ layout (location = 3) in vec3 aPosition; //Initial position
 layout (location = 4) in vec3 aDirection; 
 layout (location = 5) in float aSpeed; 
 layout (location = 6) in float aAcceleration; 
-layout (location = 7) in float aAngle; 
-layout (location = 8) in float aAngleVel; 
-layout (location = 9) in float aAngleAccel; 
-layout (location = 10) in float aSize; 
-layout (location = 11) in float aSizeTime; 
+layout (location = 7) in vec3 aGravity;
+layout (location = 8) in float aAngle; 
+layout (location = 9) in float aAngleVel; 
+layout (location = 10) in float	aAngleAccel;
+layout (location = 11) in float	aSize; 
+layout (location = 12) in float aSizeTime;  
 
 uniform mat4 view;
 uniform mat4 projection;
@@ -77,7 +78,7 @@ void main()
 	vec3 xAxis = normalize(cross(yAxis, zAxis));
 
 	//Tranlate
-	vec3 pos = aPosition + aDirection * (aSpeed + aAcceleration * life.x) * life.x;
+	vec3 pos = aPosition + aDirection * (aSpeed + aAcceleration * life.x) * life.x + aGravity * life.x * life.x;
 
 	//Plane Rotation
 	float angle = aAngle + (aAngleVel + aAngleAccel * life.x) * life.x;

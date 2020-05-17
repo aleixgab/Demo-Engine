@@ -13,7 +13,7 @@ public:
 
 
 public:
-	unsigned int VBO[11];
+	unsigned int VBO[12];
 
 	unsigned int VAO = 0u;
 };
