@@ -7,6 +7,8 @@ public:
 	PlaneImporter();
 	PlaneImporter(unsigned int maxParticles);
 
+	void SetDynamicValues(unsigned int maxParticles);
+
 	~PlaneImporter();
 
 

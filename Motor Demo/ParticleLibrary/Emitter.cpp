@@ -17,6 +17,9 @@ Emitter::Emitter(ParticleManager* parent, float* emitterPos, int maxParticles): 
 
 void Emitter::ChangeMaxParticles(int maxParticles)
 {
+	if (maxParticles <= 0)
+		maxParticles = 1;
+
 	particles.resize(maxParticles);
 	particleLife.resize(maxParticles);
 	particlePosition.resize(maxParticles);
@@ -28,6 +31,8 @@ void Emitter::ChangeMaxParticles(int maxParticles)
 	particleAngleAccel.resize(maxParticles);
 	particleSize.resize(maxParticles);
 	particleSizeTime.resize(maxParticles);
+	
+	plane->SetDynamicValues(maxParticles);
 }
 
 Emitter::~Emitter()
@@ -289,7 +294,9 @@ void Emitter::StopEmitter()
 	for (int i = 0; i < particles.size(); ++i)
 	{
 		if (particles[i].isActive)
+		{
 			particles[i].isActive = false;
+		}
 	}
 
 	runningTime = false;

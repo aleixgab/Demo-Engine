@@ -68,6 +68,12 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
 
+	SetDynamicValues(maxParticles);
+
+}
+
+void PlaneImporter::SetDynamicValues(unsigned int maxParticles)
+{
 	//Particle Life
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(PartVec2) * maxParticles, NULL, GL_DYNAMIC_DRAW);
@@ -108,6 +114,7 @@ PlaneImporter::PlaneImporter(unsigned int maxParticles)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[10]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * maxParticles, NULL, GL_DYNAMIC_DRAW);
 }
+
 
 PlaneImporter::~PlaneImporter()
 {

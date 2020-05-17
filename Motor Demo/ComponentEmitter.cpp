@@ -13,6 +13,7 @@ ComponentEmitter::ComponentEmitter(GameObject* gameObject, ParticleManager* mana
 {
 	emitter = manager->CreateEmitter(&gameObject->transform->position.x, maxParticles);
 	this->controller = controller;
+	this->maxParticles = maxParticles;
 }
 
 ComponentEmitter::~ComponentEmitter()
@@ -25,6 +26,9 @@ void ComponentEmitter::Inspector()
 	ImGui::Separator();
 	ImGui::Text("Particle Emitter");
 	ImGui::Separator();
+	ImGui::InputInt("Max Particles", &maxParticles);
+	if (ImGui::Button("Change", ImVec2(125, 25)))
+		emitter->ChangeMaxParticles(maxParticles);
 	StartValuesInsp();
 	
 	BurstInsp();
@@ -66,11 +70,6 @@ void ComponentEmitter::StartValuesInsp()
 		ShowFloatValue(emitter->startValues.sizeOverTime, checkSizeOverTime, "SizeOverTime", 0.25f, -1.0f, 1.0f);
 
 		ImGui::DragInt("Emition", &emitter->particlesEmition, 1.0f, 0.0f, 300.0f, "%.2f");
-		/*
-		ImGui::Separator();
-		if (ImGui::Checkbox("Loop", &loop))
-		loopTimer.Start();
-		ImGui::DragFloat("Duration", &duration, 0.5f, 0.5f, 20.0f, "%.2f");*/
 	}
 }
 

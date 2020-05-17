@@ -45,6 +45,7 @@ public:
 
 	Emitter* emitter;
 
+	int maxParticles = 0;
 	int nextPos = 100;
 	glm::vec4 nextColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 

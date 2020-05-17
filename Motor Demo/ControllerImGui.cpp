@@ -49,14 +49,12 @@ bool ControllerImGui::Update(float dt)
 		ImGui::OpenPopup("Select Max Particles");
 	}
 
-	if (ImGui::BeginPopupModal("Select Max Particles"))
+	if (ImGui::BeginPopupModal("Select Max Particles", (bool*)0, ImGuiWindowFlags_NoResize))
 	{
 		ImGui::Text("Number aproximatly of particles that will be at the same time");
 		ImGui::DragInt("##MaxPart",&maxParticles);
 		if (ImGui::Button("Create", ImVec2(100.0f, 25.0f)))
 		{
-			if (maxParticles <= 0)
-				maxParticles = 1;
 			Mng->scene->currGO->AddComponentEmitter(Mng->particle, maxParticles);
 			popParticle = false;
 		}
