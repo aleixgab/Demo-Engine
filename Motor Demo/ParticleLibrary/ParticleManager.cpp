@@ -32,7 +32,7 @@ bool ParticleManager::Update(float dt)
 }
 
 //Call this function from the renderer to draw all the particles 
-void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix)
+void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<Emitter*> emittersToDraw)
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
@@ -40,7 +40,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 	{
 	
 		//Sort back to front
-		emittersList.sort([](const Emitter* emitter1, const Emitter* emitter2)
+		emittersToDraw.sort([](const Emitter* emitter1, const Emitter* emitter2)
 			{
 				return emitter1->cameraDist > emitter2->cameraDist;
 			});
@@ -55,7 +55,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, projMatrix);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, viewMatrix);
 
-		for (std::list<Emitter*>::iterator iter = emittersList.begin(); iter != emittersList.end(); ++iter)
+		for (std::list<Emitter*>::iterator iter = emittersToDraw.begin(); iter != emittersToDraw.end(); ++iter)
 		{
 			(*iter)->Draw(shaderProgramUuid);
 		}
@@ -64,6 +64,11 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 		glEnable(blend);
 	}
 	
+}
+
+void ParticleManager::GetEmitters(std::list<Emitter*>& emitters) const
+{
+	emitters = emittersList;
 }
 
 //Create new emitter

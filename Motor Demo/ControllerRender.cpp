@@ -76,7 +76,10 @@ bool ControllerRender::Update(float dt)
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	Mng->particle->particleManager->Draw(particleShader.uid, &view[0][0], &projection[0][0]);
+	std::list<Emitter*> emitterList;
+	Mng->particle->particleManager->GetEmitters(emitterList);
+
+	Mng->particle->particleManager->Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
 
 	Mng->gui->Draw();
 	int display_w, display_h;

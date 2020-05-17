@@ -18,8 +18,13 @@ public:
 	/*Send delta time that will affect the particles
 	Returns false if user doesn't set camera pointers correctly*/
 	bool Update(float dt);
-	//Draw function with shaderUuid, and camera view and projection
-	void Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix);
+	/*Draw function with shaderUuid, camera view and projection
+	You have to send emitter list. If you don't do camera culling send all the emitters,
+	otherwise send only the emitters that camera sees*/
+	void Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<Emitter*> emittersToDraw);
+
+	//Get All the emitters. You may need it for drawing with or without Camera Culling.
+	void GetEmitters(std::list<Emitter*>& emitters) const;
 
 	//Create new emitter
 	Emitter* CreateEmitter(float* emitterPos, int maxParticles);
