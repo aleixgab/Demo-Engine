@@ -139,7 +139,10 @@ uint ParticleManager::GetRandomNum()
 
 float ParticleManager::GetRandomNum(float min, float max)
 {
-	return (max - min) * (float)rng() / (float)rng.max() + min;
+	if (min < max)
+		return (max - min) * (float)rng() / (float)rng.max() + min;
+	else
+		return min;
 }
 
 bool ParticleManager::SetCameraPos(float* cameraPos)

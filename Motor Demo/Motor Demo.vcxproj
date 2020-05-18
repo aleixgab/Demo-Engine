@@ -163,7 +163,6 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ParticleLibrary\Emitter.cpp" />
-    <ClCompile Include="ParticleLibrary\Particle.cpp" />
     <ClCompile Include="ParticleLibrary\ParticleManager.cpp" />
     <ClCompile Include="ParticleLibrary\PartMath.cpp" />
     <ClCompile Include="ParticleLibrary\PlaneImporter.cpp" />
@@ -199,7 +198,6 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ParticleLibrary\Emitter.h" />
-    <ClInclude Include="ParticleLibrary\Particle.h" />
     <ClInclude Include="ParticleLibrary\ParticleManager.h" />
     <ClInclude Include="ParticleLibrary\PartMath.h" />
     <ClInclude Include="ParticleLibrary\PlaneImporter.h" />

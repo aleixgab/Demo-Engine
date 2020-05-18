@@ -3,7 +3,7 @@
 
 #include <list>
 #include <random>
-#include "Particle.h"
+#include "PartMath.h"
 
 typedef unsigned int uint;
 

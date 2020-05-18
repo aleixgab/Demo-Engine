@@ -7,7 +7,6 @@
 #include "Timer.h"
 #include "ParticleManager.h"
 
-class Particle;
 class PlaneImporter;
 
 struct ParticleColor
@@ -70,12 +69,16 @@ public:
 
 	void Update(float dt);
 
+	void SetNewBuffers();
+
 
 	/*Create Particle with the start values
 	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
 	The global position in the world
 	And if we are in normal or burst mode */
 	void CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter);
+
+	void SetParticleValues(PartVec3 pos);
 
 	//Set emision type to know witch direction will take the particles and witch shape
 	void SetShapeEmitter(ShapeEmitter shape);
@@ -89,7 +92,6 @@ public:
 
 	//Draw emitter by emitter for diferents textures
 	void Draw(unsigned int shaderUuid);
-	void GetParticleValues();
 	//Start to emit particles
 	void StartEmitter();
 	//Stop to emit particles
@@ -107,13 +109,10 @@ private:
 	IMPORTANT TO SET THE GLOBAL POS BEFORE CREATE THE PARTCLES
 	*/
 	PartVec3 GetRandomPos(ShapeEmitter emitter);
-	bool GetNextParticleSlot(int& id);
 public:
 	//Public varible to have the particle start values acces out of this class
 	ParticleStartValues startValues;
 
-	//Particle pool where are all the particles (active and inactive)
-	std::vector<Particle> particles;
 	//The particle manager pointer to acces in the own functions
 	ParticleManager* parent;
 	//The dimensions of the box shape that will spawn the particles (width and height)
@@ -158,6 +157,8 @@ public:
 
 	float cameraDist = 0.0f;
 private:
+
+	bool changeValues = false;
 	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	
 	int lastUsedParticle = 0;
 	int particleActive = 0;
@@ -177,8 +178,8 @@ private:
 
 	std::vector<PartVec2> particleLife;
 	std::vector<PartVec3> particlePosition;
-	std::vector <PartVec3> particleDirection;
-	std::vector <PartVec3> particleGravity;
+	std::vector<PartVec3> particleDirection;
+	std::vector<PartVec3> particleGravity;
 	std::vector<float> particleSpeed;
 	std::vector<float> particleAcceleration;
 	std::vector<float> particleAngleRot;
@@ -186,6 +187,7 @@ private:
 	std::vector<float> particleAngleAccel;
 	std::vector<float> particleSize;
 	std::vector<float> particleSizeTime;
+	std::vector<bool> particleActiveBool;
 
 	bool onceBurst = false;
 };

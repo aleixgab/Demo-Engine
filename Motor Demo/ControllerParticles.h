@@ -4,7 +4,6 @@
 #include "Controller.h"
 #include <list>
 
-#include "ParticleLibrary/Particle.h"
 #include "ComponentEmitter.h"
 
 class ParticleManager;
