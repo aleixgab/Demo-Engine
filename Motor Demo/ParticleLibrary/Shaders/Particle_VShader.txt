@@ -73,22 +73,19 @@ void main()
 	}
 
 	//Billboard
-	vec3 zAxis = vec3(view[2].xyz); //Camera Forward
-	vec3 yAxis = vec3(view[1].xyz); //Camera Up
-	vec3 xAxis = normalize(cross(yAxis, zAxis));
+	vec3 xAxis = normalize(cross(view[1].xyz, view[2].xyz));
 
 	//Tranlate
 	vec3 pos = aPosition + aDirection * (aSpeed + aAcceleration * life.x) * life.x + aGravity * life.x * life.x;
 
 	//Plane Rotation
-	float angle = aAngle + (aAngleVel + aAngleAccel * life.x) * life.x;
+	float angle = radians(aAngle) + (radians(aAngleVel) + radians(aAngleAccel) * life.x) * life.x;
 
-	mat4 aModel = mat4(xAxis.x, yAxis.x, zAxis.x, 0.0f,
-					   xAxis.y, yAxis.y, zAxis.y, 0.0f,
-					   xAxis.z, yAxis.z, zAxis.z, 0.0f,
+	mat4 aModel = mat4(xAxis.x, view[1].x, view[2].x, 0.0f,
+					   xAxis.y, view[1].y, view[2].y, 0.0f,
+					   xAxis.z, view[1].z, view[2].z, 0.0f,
 					   pos,				  1.0f);
 
-	radians(angle);
 	aModel *= mat4(cos(angle), -sin(angle), 0.0, 0.0,
 				   sin(angle),	cos(angle),  0.0, 0.0,
                    0.0,			0.0,		  1.0, 0.0,
