@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{9CB1EA63-8F26-42C3-B204-10D8E30999D2}</ProjectGuid>
+    <ProjectGuid>{ADF0C110-4B74-4BC4-A9EB-AB4264671406}</ProjectGuid>
     <RootNamespace>MotorDemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Demo Engine</ProjectName>

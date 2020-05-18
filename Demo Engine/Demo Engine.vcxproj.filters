@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="ControllerGameObject.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerImGui.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerParticles.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerRender.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerSceene.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerWindow.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui.cpp">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_demo.cpp">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_draw.cpp">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_glfw.cpp">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_impl_opengl3.cpp">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\imgui\imgui_widgets.cpp">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEmitter.cpp">
+      <Filter>GameObjects\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>GameObjects\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\ParticleManager.cpp">
+      <Filter>ParticleLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\Emitter.cpp">
+      <Filter>ParticleLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\Timer.cpp">
+      <Filter>ParticleLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\PartMath.cpp">
+      <Filter>ParticleLibrary\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLibrary\PlaneImporter.cpp">
+      <Filter>ParticleLibrary\PlaneImporter</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\glad\glad.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdPart\includes\STB\stb_image.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureImporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Controller.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerGameObject.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerImGui.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerParticles.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerRender.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerScene.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerWindow.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imconfig.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_glfw.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_impl_opengl3.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imgui_internal.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imstb_rectpack.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imstb_textedit.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\imgui\imstb_truetype.h">
+      <Filter>3rdParty\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\Brofiler\Brofiler.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentEmitter.h">
+      <Filter>GameObjects\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>GameObjects\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>GameObjects\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\ParticleManager.h">
+      <Filter>ParticleLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\Emitter.h">
+      <Filter>ParticleLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\Timer.h">
+      <Filter>ParticleLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\PartMath.h">
+      <Filter>ParticleLibrary\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLibrary\PlaneImporter.h">
+      <Filter>ParticleLibrary\PlaneImporter</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\glad\glad.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\glfw\glfw3.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\glfw\glfw3native.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdPart\includes\STB\stb_image.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureImporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt">
+      <Filter>ParticleLibrary\Shader</Filter>
+    </Text>
+    <Text Include="ParticleLibrary\Shaders\Particle_VShader.txt">
+      <Filter>ParticleLibrary\Shader</Filter>
+    </Text>
+    <Text Include="FragmentShader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="FShader_BasicLight.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="FShader_Lamp.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="VertexShader.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="VShader_BasicLight.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="VShader_Lamp.txt">
+      <Filter>Shaders</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Controllers">
+      <UniqueIdentifier>{16e3c62c-10aa-410b-8996-55d5225485ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty">
+      <UniqueIdentifier>{c5ec137a-2b9c-45f1-96ae-5905e155a9ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\ImGui">
+      <UniqueIdentifier>{d71fb2ec-7bdb-412c-a391-8c81583bcc17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{625e6c9c-b24e-40e6-9599-6e1dfa34d6a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Component">
+      <UniqueIdentifier>{7c206d6f-3e43-4029-ac84-636536516487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleLibrary">
+      <UniqueIdentifier>{bf0701d1-16d4-4287-9466-46332b341c1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleLibrary\Shader">
+      <UniqueIdentifier>{24648737-c78a-4502-af87-3c49360d6efa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleLibrary\Math">
+      <UniqueIdentifier>{c328cd08-cb00-481f-a96b-d48fa43dd027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleLibrary\PlaneImporter">
+      <UniqueIdentifier>{a1fd19e5-0c6e-42d4-83de-cfba42d413a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Importers">
+      <UniqueIdentifier>{53b50889-854e-49ce-a709-da621439fdcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{04fd05c0-6734-4628-b7b5-a91699e2809c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
