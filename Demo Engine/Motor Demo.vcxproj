@@ -23,6 +23,7 @@
     <ProjectGuid>{9CB1EA63-8F26-42C3-B204-10D8E30999D2}</ProjectGuid>
     <RootNamespace>MotorDemo</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Demo Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
