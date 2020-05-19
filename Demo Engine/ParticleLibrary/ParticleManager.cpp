@@ -36,9 +36,8 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 {
 	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
-	if (canDraw)
+	if (emittersToDraw.size() > 0)
 	{
-	
 		//Sort back to front
 		emittersToDraw.sort([](const Emitter* emitter1, const Emitter* emitter2)
 			{
@@ -57,15 +56,14 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 
 		for (std::list<Emitter*>::iterator iter = emittersToDraw.begin(); iter != emittersToDraw.end(); ++iter)
 		{
-			(*iter)->Draw(shaderProgramUuid);
+			if((*iter)->runningTime == TimerState::StatePlayed)
+				(*iter)->Draw(shaderProgramUuid);
 		}
 
 		glDepthMask(GL_TRUE);
 		glEnable(blend);
 	}
-	
 }
-
 void ParticleManager::GetEmitters(std::list<Emitter*>& emitters) const
 {
 	emitters = emittersList;
@@ -93,14 +91,12 @@ void ParticleManager::StartAllEmitters()
 	{
 		(*it)->StartEmitter();
 	}
-	canDraw = true;
 }
 
 void ParticleManager::StartEmmitter(Emitter* emitter)
 {
 	if (emitter)
 		emitter->StartEmitter();
-	canDraw = true;
 }
 
 void ParticleManager::PauseAllEmitters()
@@ -123,7 +119,6 @@ void ParticleManager::StopAllEmitters()
 	{
 		(*it)->StopEmitter();
 	}
-	canDraw = false;
 }
 
 void ParticleManager::StopEmitter(Emitter* emitter)

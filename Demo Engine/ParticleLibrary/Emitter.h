@@ -138,7 +138,7 @@ public:
 	int maxBurst = 10;
 	
 	//Set true if time is running for this emitter, false to pause it
-	bool runningTime = false;
+	TimerState runningTime = TimerState::StateStopped;
 	//Texture id that draw function need it
 	unsigned int textureID = 0u;
 

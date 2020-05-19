@@ -44,7 +44,7 @@ Emitter::~Emitter()
 
 void Emitter::Update(float dt)
 {
-	if (runningTime)
+	if (runningTime = TimerState::StatePlayed)
 	{
 		if (particlesEmition > 0)
 		{
@@ -353,7 +353,7 @@ bool Emitter::SaveCameraDistance()
 
 void Emitter::StartEmitter()
 {
-	runningTime = true;
+	runningTime = TimerState::StatePlayed;
 	onceBurst = false;
 	emitterTimer.Play();
 	burstTimer.Play();
@@ -369,7 +369,7 @@ void Emitter::StopEmitter()
 		}
 	}
 
-	runningTime = false;
+	runningTime = TimerState::StateStopped;
 	secParticleCreation = 0.0f;
 
 	particleActive = 0;
@@ -379,7 +379,7 @@ void Emitter::StopEmitter()
 
 void Emitter::PauseEmitter()
 {
-	runningTime = false;
+	runningTime = TimerState::StatePaused;
 }
 
 PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)

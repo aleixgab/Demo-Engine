@@ -60,8 +60,6 @@ public:
 
 private:
 	std::mt19937 rng;
-
-	bool canDraw = false;
 };
 
 #endif

@@ -3,16 +3,16 @@
 
 #include <chrono>
 
+enum TimerState
+{
+	StateStopped,
+	StatePlayed,
+	StatePaused
+};
+
 class Timer
 {
 	typedef std::chrono::high_resolution_clock Clock;
-	
-	enum TimerState
-	{
-		StateStopped,
-		StatePlayed,
-		StatePaused
-	};
 
 public:
 	Timer();
