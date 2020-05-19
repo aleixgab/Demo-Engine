@@ -3,7 +3,6 @@
 #include "Timer.h"
 #include <glad/glad.h>
 #include "PlaneImporter.h"
-#include <Brofiler/Brofiler.h>
 
 
 Emitter::Emitter(ParticleManager* parent, float* emitterPos, int maxParticles): parent(parent), globalObjPos(emitterPos[0])
@@ -161,8 +160,6 @@ void Emitter::SetNewBuffers()
 
 void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
 {
-	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
-
 	for (int i = 0; i < numParticles; ++i)
 	{
 		//int particleId = 0;

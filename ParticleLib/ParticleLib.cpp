@@ -1,8 +1,5 @@
 // ParticleLib.cpp : Define las funciones exportadas del archivo DLL.
 //
-
-#include "pch.h"
-#include "framework.h"
 #include "ParticleLib.h"
 
 

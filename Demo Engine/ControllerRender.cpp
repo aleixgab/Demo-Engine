@@ -4,7 +4,7 @@
 #include "ControllerRender.h"
 #include "ControllerParticles.h"
 #include "ParticleLibrary/ParticleManager.h"
-#include "ParticleLibrary/PlaneImporter.h"
+#include "GroundImporter.h"
 #include "ControllerWindow.h"
 #include "TextureImporter.h"
 #include <Brofiler/Brofiler.h>
@@ -37,7 +37,7 @@ bool ControllerRender::Start()
 	textures.push_back(newTexture6);
 	textures.push_back(newTexture7);
 
-	ground = new PlaneImporter();
+	ground = new GroundImporter();
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);

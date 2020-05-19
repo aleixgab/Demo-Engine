@@ -2,8 +2,6 @@
 #include "Emitter.h"
 
 #include <glad/glad.h>
-#include <Brofiler/Brofiler.h>
-
 
 ParticleManager::ParticleManager()
 {
@@ -18,7 +16,6 @@ ParticleManager::~ParticleManager()
 
 bool ParticleManager::Update(float dt)
 {
-	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 	bool ret = true;
 	{
 		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
@@ -34,7 +31,6 @@ bool ParticleManager::Update(float dt)
 //Call this function from the renderer to draw all the particles 
 void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<Emitter*> emittersToDraw)
 {
-	BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
 
 	if (emittersToDraw.size() > 0)
 	{
@@ -81,6 +77,7 @@ Emitter* ParticleManager::CreateEmitter(float* emitterPos, int maxParticles)
 //Remove the wanted emitter
 void ParticleManager::RemoveEmitter(Emitter* emitter)
 {
+	emitter->StopEmitter();
 	emittersList.remove(emitter);
 	delete emitter;
 }

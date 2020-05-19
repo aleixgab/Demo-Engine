@@ -64,29 +64,19 @@ class Emitter
 {
 public:
 	Emitter(ParticleManager* parent, float* emitterPos, int maxParticles);
-	void ChangeMaxParticles(int maxParticles);
 	~Emitter();
+
+	/*--*/void ChangeMaxParticles(int maxParticles);
 
 	void Update(float dt);
 
-	void SetNewBuffers();
-
-
-	/*Create Particle with the start values
-	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
-	The global position in the world
-	And if we are in normal or burst mode */
-	void CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter);
-
-	void SetParticleValues(PartVec3 pos);
-
 	//Set emision type to know witch direction will take the particles and witch shape
-	void SetShapeEmitter(ShapeEmitter shape);
-	ShapeEmitter GetShapeEmitter() const;
-	void SetBurstShapeEmitter(ShapeEmitter shape);
-	ShapeEmitter GetBurstShapeEmitter() const;
+	/*--*/void SetShapeEmitter(ShapeEmitter shape);
+	/*--*/ShapeEmitter GetShapeEmitter() const;
+	/*--*/void SetBurstShapeEmitter(ShapeEmitter shape);
+	/*--*/ShapeEmitter GetBurstShapeEmitter() const;
 	//Set the position of the emitter in the world coordinates
-	void SetGlobalPos(float* globalPos);
+	/*--*/void SetGlobalPos(float* globalPos);
 
 	bool SaveCameraDistance();
 
@@ -101,6 +91,16 @@ public:
 
 
 private:
+	/*Create Particle with the start values
+	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
+	The global position in the world
+	And if we are in normal or burst mode */
+	void CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter);
+
+	void SetParticleValues(PartVec3 pos);
+
+	void SetNewBuffers();
+
 	/*Get the position according to the differents shapes we have, and set the particle direction 
 	BoxShape -> the particles will spawn in vec3 boxShapeSize
 	SphereShape -> the particles will spawn in a sphere with this radius float sphereShapeRad

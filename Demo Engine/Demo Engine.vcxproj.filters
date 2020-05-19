@@ -49,21 +49,6 @@
     <ClCompile Include="ComponentTransform.cpp">
       <Filter>GameObjects\Component</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleLibrary\ParticleManager.cpp">
-      <Filter>ParticleLibrary</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleLibrary\Emitter.cpp">
-      <Filter>ParticleLibrary</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleLibrary\Timer.cpp">
-      <Filter>ParticleLibrary</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleLibrary\PartMath.cpp">
-      <Filter>ParticleLibrary\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleLibrary\PlaneImporter.cpp">
-      <Filter>ParticleLibrary\PlaneImporter</Filter>
-    </ClCompile>
     <ClCompile Include="3rdPart\includes\glad\glad.c">
       <Filter>3rdParty</Filter>
     </ClCompile>
@@ -74,6 +59,9 @@
       <Filter>Importers</Filter>
     </ClCompile>
     <ClCompile Include="TextureImporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundImporter.cpp">
       <Filter>Importers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,21 +128,6 @@
     <ClInclude Include="Component.h">
       <Filter>GameObjects\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleLibrary\ParticleManager.h">
-      <Filter>ParticleLibrary</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleLibrary\Emitter.h">
-      <Filter>ParticleLibrary</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleLibrary\Timer.h">
-      <Filter>ParticleLibrary</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleLibrary\PartMath.h">
-      <Filter>ParticleLibrary\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleLibrary\PlaneImporter.h">
-      <Filter>ParticleLibrary\PlaneImporter</Filter>
-    </ClInclude>
     <ClInclude Include="3rdPart\includes\glad\glad.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
@@ -173,14 +146,11 @@
     <ClInclude Include="TextureImporter.h">
       <Filter>Importers</Filter>
     </ClInclude>
+    <ClInclude Include="GroundImporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt">
-      <Filter>ParticleLibrary\Shader</Filter>
-    </Text>
-    <Text Include="ParticleLibrary\Shaders\Particle_VShader.txt">
-      <Filter>ParticleLibrary\Shader</Filter>
-    </Text>
     <Text Include="FragmentShader.txt">
       <Filter>Shaders</Filter>
     </Text>
@@ -215,18 +185,6 @@
     </Filter>
     <Filter Include="GameObjects\Component">
       <UniqueIdentifier>{7c206d6f-3e43-4029-ac84-636536516487}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ParticleLibrary">
-      <UniqueIdentifier>{bf0701d1-16d4-4287-9466-46332b341c1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ParticleLibrary\Shader">
-      <UniqueIdentifier>{24648737-c78a-4502-af87-3c49360d6efa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ParticleLibrary\Math">
-      <UniqueIdentifier>{c328cd08-cb00-481f-a96b-d48fa43dd027}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ParticleLibrary\PlaneImporter">
-      <UniqueIdentifier>{a1fd19e5-0c6e-42d4-83de-cfba42d413a0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Importers">
       <UniqueIdentifier>{53b50889-854e-49ce-a709-da621439fdcd}</UniqueIdentifier>

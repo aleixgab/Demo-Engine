@@ -44,13 +44,13 @@ public:
 	//Stop specific emitter
 	void StopEmitter(Emitter* emitter);
 
+	//Set camera pointers. If returns false it's mean the pointer it is null
+	bool SetCameraPos(float* cameraPos);
+
 	//Get random num between 0 and max uint32 value
 	uint GetRandomNum();
 	//Ger random float num with a min and max parameter
 	float GetRandomNum(float min, float max);
-
-	//Set camera pointers. If returns false it's mean the pointer it is null
-	bool SetCameraPos(float* cameraPos);
 
 public:
 	//You have to add in this list all the emitters that you will have in your scene.

@@ -9,25 +9,24 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Archivos de recursos">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="3rdParty">
       <UniqueIdentifier>{89a98bce-c0dd-4114-a063-74bc713103b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Helpers">
+      <UniqueIdentifier>{defad3fe-9f12-444a-be5c-bb2f9485a7e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Helpers">
+      <UniqueIdentifier>{06385530-d136-4a8c-8928-7212b504a4d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{f3963291-9fc1-4e43-a548-ef39933ba481}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleLib.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="3rdParty\KHR\khrplatform.h">
@@ -36,19 +35,51 @@
     <ClInclude Include="3rdParty\glad\glad.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="PartMath.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneImporter.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticleLib.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="3rdParty\glad\glad.c">
       <Filter>3rdParty</Filter>
     </ClCompile>
+    <ClCompile Include="PartMath.cpp">
+      <Filter>Archivos de origen\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneImporter.cpp">
+      <Filter>Archivos de origen\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Archivos de origen\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Demo Engine\ParticleLibrary\Shaders\Particle_FShader.txt">
+      <Filter>Shader</Filter>
+    </Text>
+    <Text Include="..\Demo Engine\ParticleLibrary\Shaders\Particle_VShader.txt">
+      <Filter>Shader</Filter>
+    </Text>
   </ItemGroup>
 </Project>

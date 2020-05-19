@@ -161,13 +161,9 @@
     <ClCompile Include="ControllerSceene.cpp" />
     <ClCompile Include="ControllerWindow.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GroundImporter.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="ParticleLibrary\Emitter.cpp" />
-    <ClCompile Include="ParticleLibrary\ParticleManager.cpp" />
-    <ClCompile Include="ParticleLibrary\PartMath.cpp" />
-    <ClCompile Include="ParticleLibrary\PlaneImporter.cpp" />
-    <ClCompile Include="ParticleLibrary\Timer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TextureImporter.cpp" />
   </ItemGroup>
@@ -198,11 +194,7 @@
     <ClInclude Include="ControllerWindow.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="ParticleLibrary\Emitter.h" />
-    <ClInclude Include="ParticleLibrary\ParticleManager.h" />
-    <ClInclude Include="ParticleLibrary\PartMath.h" />
-    <ClInclude Include="ParticleLibrary\PlaneImporter.h" />
-    <ClInclude Include="ParticleLibrary\Timer.h" />
+    <ClInclude Include="GroundImporter.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TextureImporter.h" />
   </ItemGroup>
@@ -210,8 +202,6 @@
     <Text Include="FragmentShader.txt" />
     <Text Include="FShader_BasicLight.txt" />
     <Text Include="FShader_Lamp.txt" />
-    <Text Include="ParticleLibrary\Shaders\Particle_FShader.txt" />
-    <Text Include="ParticleLibrary\Shaders\Particle_VShader.txt" />
     <Text Include="VertexShader.txt" />
     <Text Include="VShader_BasicLight.txt" />
     <Text Include="VShader_Lamp.txt" />
