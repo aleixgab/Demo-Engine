@@ -61,13 +61,13 @@ bool GameManager::Update()
 	}
 	//Get dt and save it in a Vector
 	float lastUpdatedFrame = (glfwGetTime() - BeginTime) * 1000;
-	for (uint i = dtVector.size() - 1; i > 0; --i)
+	for (unsigned int i = dtVector.size() - 1; i > 0; --i)
 		dtVector[i] = dtVector[i - 1];
 	dtVector[0] = lastUpdatedFrame;
 
 	//Get fps and save it in a Vector
 	float fps = 1000.0f / lastUpdatedFrame;
-	for (uint i = fpsVector.size() - 1; i > 0; --i)
+	for (unsigned int i = fpsVector.size() - 1; i > 0; --i)
 		fpsVector[i] = fpsVector[i - 1];
 	fpsVector[0] = fps;
 

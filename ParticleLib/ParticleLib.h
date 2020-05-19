@@ -19,4 +19,4 @@ public:
 
 extern PARTICLELIB_API int nParticleLib;
 
-PARTICLELIB_API int fnParticleLib(void);
+PARTICLELIB_API void fnParticleLib(const char* text);

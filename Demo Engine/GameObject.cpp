@@ -39,7 +39,7 @@ ComponentEmitter* GameObject::GetComponentEmitter()
 ComponentEmitter* GameObject::AddComponentEmitter(ControllerParticles* controller, int maxParticles)
 {
 
-	ComponentEmitter* newEmitter = new ComponentEmitter(this, controller->particleManager, controller, maxParticles);
+	ComponentEmitter* newEmitter = new ComponentEmitter(this,/* controller->particleManager,*/ controller, maxParticles);
 	components.push_back(newEmitter);
 
 	newEmitter->type = ComponentType_EMITTER;

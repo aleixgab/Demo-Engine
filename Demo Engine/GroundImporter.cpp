@@ -32,3 +32,9 @@ GroundImporter::GroundImporter()
 	glEnableVertexAttribArray(1);
 
 }
+
+GroundImporter::~GroundImporter()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+}

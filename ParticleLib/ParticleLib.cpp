@@ -2,14 +2,15 @@
 //
 #include "ParticleLib.h"
 
+#include <iostream>
 
 // Ejemplo de variable exportada
 PARTICLELIB_API int nParticleLib=0;
 
 // Ejemplo de función exportada.
-PARTICLELIB_API int fnParticleLib(void)
+PARTICLELIB_API void fnParticleLib(const char* text)
 {
-    return 0;
+	std::cout << text << std::endl;
 }
 
 // Constructor de clase exportada.

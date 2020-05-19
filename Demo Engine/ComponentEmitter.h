@@ -2,30 +2,29 @@
 #define __COMPONENT_EMITTER_H__
 
 #include "Component.h"
-#include "ParticleLibrary/Emitter.h"
 #include <glm/vec4.hpp>
 
 class ControllerParticles;
 class ComponentEmitter : public Component
 {
 public:
-	ComponentEmitter(GameObject* gameObject, ParticleManager* manager, ControllerParticles* controller, int maxParticles);
+	ComponentEmitter(GameObject* gameObject, /*ParticleManager* manager, */ControllerParticles* controller, int maxParticles);
 
 	~ComponentEmitter();
 
-	void Inspector();
+	//void Inspector();
 
-	void BurstInsp();
-	void ColorValuesInsp();
-	void StartValuesInsp();
-	void ShapeValuesInsp();
-	void TextureValuesInsp();
+	//void BurstInsp();
+	//void ColorValuesInsp();
+	//void StartValuesInsp();
+	//void ShapeValuesInsp();
+	//void TextureValuesInsp();
 
-	void ShowFloatValue(PartVec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
+	//void ShowFloatValue(PartVec2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
 
-	void CheckMinMax(PartVec2& value);
+	//void CheckMinMax(PartVec2& value);
 
-	bool EditColor(ParticleColor& colorTime, unsigned int pos = 0u);
+	//bool EditColor(ParticleColor& colorTime, unsigned int pos = 0u);
 
 public:
 	//Check box Randomize values
@@ -43,7 +42,7 @@ public:
 	// Loop the particle (if true the particle emitter will never stop)
 	bool loop = true;
 
-	Emitter* emitter;
+	//Emitter* emitter;
 
 	int maxParticles = 0;
 	int nextPos = 100;

@@ -6,7 +6,7 @@
 
 #include "ComponentEmitter.h"
 
-class ParticleManager;
+//class ParticleManager;
 
 class ControllerParticles: public Controller
 {
@@ -20,7 +20,7 @@ public:
 
 public:
 
-	ParticleManager* particleManager;
+	//ParticleManager* particleManager;
 
 };
 
