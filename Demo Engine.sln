@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo Engine", "Demo Engine\Demo Engine.vcxproj", "{ADF0C110-4B74-4BC4-A9EB-AB4264671406}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParticleLib", "ParticleLib\ParticleLib.vcxproj", "{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{ADF0C110-4B74-4BC4-A9EB-AB4264671406}.Release|x64.Build.0 = Release|x64
 		{ADF0C110-4B74-4BC4-A9EB-AB4264671406}.Release|x86.ActiveCfg = Release|Win32
 		{ADF0C110-4B74-4BC4-A9EB-AB4264671406}.Release|x86.Build.0 = Release|Win32
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Debug|x64.ActiveCfg = Debug|x64
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Debug|x64.Build.0 = Debug|x64
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Debug|x86.ActiveCfg = Debug|Win32
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Debug|x86.Build.0 = Debug|Win32
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Release|x64.ActiveCfg = Release|x64
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Release|x64.Build.0 = Release|x64
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Release|x86.ActiveCfg = Release|Win32
+		{3A6A2FF3-CCA4-4413-AD15-29EE6548E9B1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

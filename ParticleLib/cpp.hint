@@ -1,0 +1,2 @@
+#define PARTICLELIB_API __declspec(dllexport)
+#define PARTICLELIB_API __declspec(dllimport)
