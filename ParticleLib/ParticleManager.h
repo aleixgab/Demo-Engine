@@ -2,64 +2,59 @@
 #define __ParticleManager_H__
 
 #include <list>
-#include <random>
-#include "PartMath.h"
+#include <ParticleLib.h>
+#include <Emitter.h>
 
-typedef unsigned int uint;
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
+PARTICLELIB_API class ParticleEmitter;
 
-class Emitter;
+namespace Part {
 
-class ParticleManager
-{
-public:
-	ParticleManager();
-	~ParticleManager();
+	PARTICLELIB_API void StartLibrary();
+	PARTICLELIB_API void CleanUpLibrary();
+	//Create new emitter
+	PARTICLELIB_API ParticleEmitter* CreateEmitter(float* emitterPos, int maxParticles);
+	//Remove the wanted emitter
+	PARTICLELIB_API bool RemoveEmitter(ParticleEmitter* emitter);
 
-	/*Send delta time that will affect the particles
-	Returns false if user doesn't set camera pointers correctly*/
-	bool Update(float dt);
+	//Start Playing all the emitters
+	PARTICLELIB_API void StartAllEmitters();
+	//Start specific emitter
+	PARTICLELIB_API void StartEmmitter(ParticleEmitter* emitter);
+
+	PARTICLELIB_API void PauseAllEmitters();
+	PARTICLELIB_API void PauseEmmitter(ParticleEmitter* emitter);
+
+	//Stop Playing all the emitters
+	PARTICLELIB_API void StopAllEmitters();
+	//Stop specific emitter
+	PARTICLELIB_API void StopEmitter(ParticleEmitter* emitter);
+
+	//Set camera pointers. If returns false it's mean the pointer it is null
+	PARTICLELIB_API bool SetCameraPos(float* cameraPos);
+
 	/*Draw function with shaderUuid, camera view and projection
 	You have to send emitter list. If you don't do camera culling send all the emitters,
 	otherwise send only the emitters that camera sees*/
-	void Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<Emitter*> emittersToDraw);
+	PARTICLELIB_API void Draw(unsigned int shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<ParticleEmitter*> emittersToDraw);
 
 	//Get All the emitters. You may need it for drawing with or without Camera Culling.
-	void GetEmitters(std::list<Emitter*>& emitters) const;
+	PARTICLELIB_API void GetEmitters(std::list<ParticleEmitter*>& emitters);
 
-	//Create new emitter
-	Emitter* CreateEmitter(float* emitterPos, int maxParticles);
-	//Remove the wanted emitter
-	void RemoveEmitter(Emitter* emitter);
+	/*Send delta time that will affect the particles
+	Returns false if user doesn't set camera pointers correctly*/
+	PARTICLELIB_API bool Update(float dt);
 
-	//Start Playing all the emitters
-	void StartAllEmitters();
-	//Start specific emitter
-	void StartEmmitter(Emitter *emitter);
 
-	void PauseAllEmitters();
-	void PauseEmmitter(Emitter* emitter);
-
-	//Stop Playing all the emitters
-	void StopAllEmitters();
-	//Stop specific emitter
-	void StopEmitter(Emitter* emitter);
-
-	//Set camera pointers. If returns false it's mean the pointer it is null
-	bool SetCameraPos(float* cameraPos);
-
-	//Get random num between 0 and max uint32 value
-	uint GetRandomNum();
-	//Ger random float num with a min and max parameter
-	float GetRandomNum(float min, float max);
-
-public:
 	//You have to add in this list all the emitters that you will have in your scene.
-	std::list<Emitter*> emittersList; 
-
-	PartVec3* cameraPos = nullptr;
-
-private:
-	std::mt19937 rng;
-};
+	PARTICLELIB_API std::list<ParticleEmitter*> emittersList;
+	PARTICLELIB_API float* cameraPos;
+}
+#ifdef __cplusplus
+}
+#endif
 
 #endif

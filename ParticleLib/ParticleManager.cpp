@@ -3,39 +3,38 @@
 
 #include <glad/glad.h>
 
-ParticleManager::ParticleManager()
-{
-	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
-	cameraPos = new PartVec3(0.0f);
-}
-
-ParticleManager::~ParticleManager()
-{
-	delete cameraPos;
-}
-
-bool ParticleManager::Update(float dt)
+PARTICLELIB_API bool Part::Update(float dt)
 {
 	bool ret = true;
+	if (!Part::emittersList.empty())
 	{
-		for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
+		for (std::list<ParticleEmitter*>::iterator it = Part::emittersList.begin(); it != Part::emittersList.end(); ++it)
 		{
 			(*it)->Update(dt);
-			ret = (*it)->SaveCameraDistance();
+			ret = (*it)->SaveCameraDistance(Part::cameraPos);
 		}
 	}
-
 	return ret;
 }
 
+PARTICLELIB_API void Part::StartLibrary()
+{
+	Part::cameraPos = new float[3];
+}
+
+PARTICLELIB_API void Part::CleanUpLibrary()
+{
+	delete Part::cameraPos;
+}
+
 //Call this function from the renderer to draw all the particles 
-void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<Emitter*> emittersToDraw)
+PARTICLELIB_API void Part::Draw(unsigned int shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<ParticleEmitter*> emittersToDraw)
 {
 
 	if (emittersToDraw.size() > 0)
 	{
 		//Sort back to front
-		emittersToDraw.sort([](const Emitter* emitter1, const Emitter* emitter2)
+		emittersToDraw.sort([](const ParticleEmitter* emitter1, const ParticleEmitter* emitter2)
 			{
 				return emitter1->cameraDist > emitter2->cameraDist;
 			});
@@ -50,7 +49,7 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "projection"), 1, GL_FALSE, projMatrix);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgramUuid, "view"), 1, GL_FALSE, viewMatrix);
 
-		for (std::list<Emitter*>::iterator iter = emittersToDraw.begin(); iter != emittersToDraw.end(); ++iter)
+		for (std::list<ParticleEmitter*>::iterator iter = emittersToDraw.begin(); iter != emittersToDraw.end(); ++iter)
 		{
 			if((*iter)->runningTime == TimerState::StatePlayed)
 				(*iter)->Draw(shaderProgramUuid);
@@ -60,93 +59,98 @@ void ParticleManager::Draw(uint shaderProgramUuid, float* viewMatrix, float* pro
 		glEnable(blend);
 	}
 }
-void ParticleManager::GetEmitters(std::list<Emitter*>& emitters) const
+
+PARTICLELIB_API void Part::GetEmitters(std::list<ParticleEmitter*>& emitters)
 {
-	emitters = emittersList;
+	emitters = Part::emittersList;
 }
 
 //Create new emitter
-Emitter* ParticleManager::CreateEmitter(float* emitterPos, int maxParticles)
+PARTICLELIB_API ParticleEmitter* Part::CreateEmitter(float* emitterPos, int maxParticles)
 {
-	Emitter* newEmitter = new Emitter(this, emitterPos, maxParticles);
-	emittersList.push_back(newEmitter);
+	ParticleEmitter* newEmitter = new ParticleEmitter(emitterPos, maxParticles);
+	Part::emittersList.push_back(newEmitter);
 
 	return newEmitter;
 }
 
 //Remove the wanted emitter
-void ParticleManager::RemoveEmitter(Emitter* emitter)
+PARTICLELIB_API bool Part::RemoveEmitter(ParticleEmitter* emitter)
 {
-	emitter->StopEmitter();
-	emittersList.remove(emitter);
-	delete emitter;
+	bool ret = false;
+	if (emitter != nullptr)
+	{
+		emitter->StopEmitter();
+		Part::emittersList.remove(emitter);
+		delete emitter;
+		ret = true;
+	}
+
+	return ret;
 }
 
-void ParticleManager::StartAllEmitters()
+PARTICLELIB_API void Part::StartAllEmitters()
 {
-	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
+	if (!Part::emittersList.empty())
 	{
-		(*it)->StartEmitter();
+		for (std::list<ParticleEmitter*>::iterator it = Part::emittersList.begin(); it != Part::emittersList.end(); ++it)
+		{
+			(*it)->StartEmitter();
+		}
 	}
 }
-
-void ParticleManager::StartEmmitter(Emitter* emitter)
+PARTICLELIB_API void Part::StartEmmitter(ParticleEmitter* emitter)
 {
 	if (emitter)
 		emitter->StartEmitter();
 }
 
-void ParticleManager::PauseAllEmitters()
+PARTICLELIB_API void Part::PauseAllEmitters()
 {
-	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
+	if (!Part::emittersList.empty())
 	{
-		(*it)->PauseEmitter();
+		for (std::list<ParticleEmitter*>::iterator it = Part::emittersList.begin(); it != Part::emittersList.end(); ++it)
+		{
+			(*it)->PauseEmitter();
+		}
 	}
 }
 
-void ParticleManager::PauseEmmitter(Emitter* emitter)
+PARTICLELIB_API void Part::PauseEmmitter(ParticleEmitter* emitter)
 {
 	if (emitter)
 		emitter->PauseEmitter();
 }
 
-void ParticleManager::StopAllEmitters()
+PARTICLELIB_API void Part::StopAllEmitters()
 {
-	for (std::list<Emitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
+	if (!Part::emittersList.empty())
 	{
-		(*it)->StopEmitter();
+		for (std::list<ParticleEmitter*>::iterator it = Part::emittersList.begin(); it != Part::emittersList.end(); ++it)
+		{
+			(*it)->StopEmitter();
+		}
 	}
 }
 
-void ParticleManager::StopEmitter(Emitter* emitter)
+PARTICLELIB_API void Part::StopEmitter(ParticleEmitter* emitter)
 {
 	if (emitter)
 		emitter->StopEmitter();
 }
 
-uint ParticleManager::GetRandomNum()
-{
-	return rng();
-}
 
-float ParticleManager::GetRandomNum(float min, float max)
-{
-	if (min < max)
-		return (max - min) * (float)rng() / (float)rng.max() + min;
-	else
-		return min;
-}
-
-bool ParticleManager::SetCameraPos(float* cameraPos)
+PARTICLELIB_API bool Part::SetCameraPos(float* newCameraPos)
 {
 	bool ret = false;
-	if (cameraPos)
+	if (Part::cameraPos)
 	{
-		this->cameraPos->x = cameraPos[0];
-		this->cameraPos->y = cameraPos[1];
-		this->cameraPos->z = cameraPos[2];
+		Part::cameraPos[0] = newCameraPos[0];
+		Part::cameraPos[1] = newCameraPos[1];
+		Part::cameraPos[2] = newCameraPos[2];
 
 		ret = true;
 	}
 	return ret;
 }
+

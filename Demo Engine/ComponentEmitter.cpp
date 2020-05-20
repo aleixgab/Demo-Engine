@@ -6,30 +6,31 @@
 #include "TextureImporter.h"
 
 #include "GameObject.h"
-//#include "ParticleLibrary/ParticleManager.h"
+#include <ParticleManager.h>
 #include <string>
 
-ComponentEmitter::ComponentEmitter(GameObject* gameObject, /*ParticleManager* manager,*/ ControllerParticles* controller, int maxParticles) : Component(gameObject, ComponentType_EMITTER)
+ComponentEmitter::ComponentEmitter(GameObject* gameObject, ControllerParticles* controller, int maxParticles) : Component(gameObject, ComponentType_EMITTER)
 {
-	//emitter = manager->CreateEmitter(&gameObject->transform->position.x, maxParticles);
+	emitter = Part::CreateEmitter(&gameObject->transform->position.x, maxParticles);
 	this->controller = controller;
 	this->maxParticles = maxParticles;
 }
 
 ComponentEmitter::~ComponentEmitter()
 {
-	//emitter->parent->RemoveEmitter(emitter);
+	Part::RemoveEmitter(emitter);
 }
-//
-//void ComponentEmitter::Inspector()
-//{
-//	ImGui::Separator();
-//	ImGui::Text("Particle Emitter");
-//	ImGui::Separator();
-//	ImGui::InputInt("Max Particles", &maxParticles);
-//	if (ImGui::Button("Change", ImVec2(125, 25)))
-//		emitter->ChangeMaxParticles(maxParticles);
-//	StartValuesInsp();
+
+void ComponentEmitter::Inspector()
+{
+	ImGui::Separator();
+	ImGui::Text("Particle Emitter");
+	ImGui::Separator();
+	ImGui::InputInt("Max Particles", &maxParticles);
+	//if (ImGui::Button("Change", ImVec2(125, 25)))
+	//	emitter->ChangeMaxParticles(maxParticles);
+}
+//StartValuesInsp();
 //	
 //	BurstInsp();
 //

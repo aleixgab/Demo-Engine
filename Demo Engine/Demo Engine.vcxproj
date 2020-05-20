@@ -75,7 +75,7 @@
     <LibraryPath>$(ProjectDir)3rdPart\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)3rdPart\includes;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)3rdPart\includes;$(ProjectDir)..\ParticleLib;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)3rdPart\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,7 +83,7 @@
     <LibraryPath>$(ProjectDir)3rdPart\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)3rdPart\includes;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)3rdPart\includes;$(ProjectDir)..\ParticleLib;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)3rdPart\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -168,6 +168,7 @@
     <ClCompile Include="TextureImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ParticleLib\ParticleManager.h" />
     <ClInclude Include="3rdPart\includes\Brofiler\Brofiler.h" />
     <ClInclude Include="3rdPart\includes\glad\glad.h" />
     <ClInclude Include="3rdPart\includes\glfw\glfw3.h" />

@@ -3,7 +3,7 @@
 
 #include "ControllerRender.h"
 #include "ControllerParticles.h"
-#include "../ParticleLib/ParticleLib.h"
+#include <ParticleManager.h>
 #include "GroundImporter.h"
 #include "ControllerWindow.h"
 #include "TextureImporter.h"
@@ -19,7 +19,6 @@ ControllerRender::~ControllerRender()
 
 bool ControllerRender::Start()
 {
-	fnParticleLib("Hello world");
 
 	basicShader.SetShader("VertexShader.txt", "FragmentShader.txt");
 	//particleShader.SetShader("ParticleLibrary/Shaders/Particle_VShader.txt", "ParticleLibrary/Shaders/Particle_FShader.txt");
@@ -78,10 +77,10 @@ bool ControllerRender::Update(float dt)
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	//std::list<Emitter*> emitterList;
-	//Mng->particle->particleManager->GetEmitters(emitterList);
+	std::list<ParticleEmitter*> emitterList;
+	Part::GetEmitters(emitterList);
 
-	//Mng->particle->particleManager->Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
+	Part::Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
 
 	Mng->gui->Draw();
 	int display_w, display_h;

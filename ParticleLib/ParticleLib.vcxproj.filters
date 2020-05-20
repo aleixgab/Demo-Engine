@@ -23,9 +23,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ParticleLib.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -52,9 +49,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ParticleLib.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="3rdParty\glad\glad.c">
       <Filter>3rdParty</Filter>
     </ClCompile>

@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "ControllerParticles.h"
+#include <ParticleManager.h>
 
 ControllerParticles::ControllerParticles(GameManager* mng) : Controller(mng)
 {
@@ -8,24 +9,23 @@ ControllerParticles::ControllerParticles(GameManager* mng) : Controller(mng)
 
 ControllerParticles::~ControllerParticles()
 {
-	//if(particleManager)
-	//	delete particleManager;
+	//PART_CleanUpLibrary();
 }
 
 bool ControllerParticles::Start()
 {
-//	if(particleManager == nullptr)
-	//	particleManager = new ParticleManager();
-//	particleManager->SetCameraPos(&Mng->scene->camera->Position.x);
-	return true;
+	bool ret = false;	
+	Part::StartLibrary();
+	ret = Part::SetCameraPos(&Mng->scene->camera->Position.x);
+
+	return ret;
 }
 
 bool ControllerParticles::Update(float dt)
 {
-	//bool ret = false;
+	bool ret = false;
 
-	//if (particleManager)
-	//	ret = particleManager->Update(dt);
+	ret = Part::Update(dt);
 
 	return true;
 }

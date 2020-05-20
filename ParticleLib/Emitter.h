@@ -2,10 +2,16 @@
 #define __Emitter_H__
 
 #include <list>
+#include <vector>
 #include <string>
 #include "PartMath.h"
 #include "Timer.h"
-#include "ParticleManager.h"
+#include <random>
+
+#include "ParticleLib.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 class PlaneImporter;
 
@@ -60,11 +66,11 @@ struct ParticleStartValues
 	PartVec3 particleDirection = PartVec3(0.0f, 1.0f, 0.0f);
 };
 
-class Emitter
+PARTICLELIB_API class ParticleEmitter
 {
 public:
-	Emitter(ParticleManager* parent, float* emitterPos, int maxParticles);
-	~Emitter();
+	ParticleEmitter(float* emitterPos, int maxParticles);
+	~ParticleEmitter();
 
 	/*--*/void ChangeMaxParticles(int maxParticles);
 
@@ -78,7 +84,7 @@ public:
 	//Set the position of the emitter in the world coordinates
 	/*--*/void SetGlobalPos(float* globalPos);
 
-	bool SaveCameraDistance();
+	bool SaveCameraDistance(float* cameraPos);
 
 	//Draw emitter by emitter for diferents textures
 	void Draw(unsigned int shaderUuid);
@@ -109,12 +115,11 @@ private:
 	IMPORTANT TO SET THE GLOBAL POS BEFORE CREATE THE PARTCLES
 	*/
 	PartVec3 GetRandomPos(ShapeEmitter emitter);
+	float GetRandomNum(float min, float max);
 public:
 	//Public varible to have the particle start values acces out of this class
 	ParticleStartValues startValues;
 
-	//The particle manager pointer to acces in the own functions
-	ParticleManager* parent;
 	//The dimensions of the box shape that will spawn the particles (width and height)
 	PartVec3 boxShapeSize = PartVec3(1.0f);
 	//The radiant of the sphere shape that will spawn the particles
@@ -190,6 +195,11 @@ private:
 	std::vector<bool> particleActiveBool;
 
 	bool onceBurst = false;
+
+	std::mt19937 rng;
 };
+#ifdef __cplusplus
+}
+#endif
 
 #endif

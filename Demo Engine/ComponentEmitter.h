@@ -5,14 +5,15 @@
 #include <glm/vec4.hpp>
 
 class ControllerParticles;
+class ParticleEmitter;
 class ComponentEmitter : public Component
 {
 public:
-	ComponentEmitter(GameObject* gameObject, /*ParticleManager* manager, */ControllerParticles* controller, int maxParticles);
+	ComponentEmitter(GameObject* gameObject, ControllerParticles* controller, int maxParticles);
 
 	~ComponentEmitter();
 
-	//void Inspector();
+	void Inspector();
 
 	//void BurstInsp();
 	//void ColorValuesInsp();
@@ -42,7 +43,7 @@ public:
 	// Loop the particle (if true the particle emitter will never stop)
 	bool loop = true;
 
-	//Emitter* emitter;
+	ParticleEmitter* emitter;
 
 	int maxParticles = 0;
 	int nextPos = 100;

@@ -1,20 +1,19 @@
 #include "Emitter.h"
-#include "ParticleManager.h"
 #include "Timer.h"
 #include <glad/glad.h>
 #include "PlaneImporter.h"
 
-
-Emitter::Emitter(ParticleManager* parent, float* emitterPos, int maxParticles): parent(parent), globalObjPos(emitterPos[0])
+ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles): globalObjPos(emitterPos[0])
 {
 	ParticleColor startColor;
 	colorList.push_back(startColor);
 	plane = new PlaneImporter(maxParticles);
+	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 
 	ChangeMaxParticles(maxParticles);
 }
 
-void Emitter::ChangeMaxParticles(int maxParticles)
+void ParticleEmitter::ChangeMaxParticles(int maxParticles)
 {
 	if (maxParticles <= 0)
 		maxParticles = 1;
@@ -35,13 +34,13 @@ void Emitter::ChangeMaxParticles(int maxParticles)
 	plane->SetDynamicValues(maxParticles);
 }
 
-Emitter::~Emitter()
+ParticleEmitter::~ParticleEmitter()
 {
 	StopEmitter();
 	delete plane;
 }
 
-void Emitter::Update(float dt)
+void ParticleEmitter::Update(float dt)
 {
 	if (runningTime = TimerState::StatePlayed)
 	{
@@ -63,7 +62,7 @@ void Emitter::Update(float dt)
 			float time = burstTimer.GetTime() / 1000.0f;
 			if (time > burstSeconds && !onceBurst)
 			{
-				CreateParticles(parent->GetRandomNum(minBurst, maxBurst), globalObjPos, burstShapeEmitter);
+				CreateParticles(GetRandomNum(minBurst, maxBurst), globalObjPos, burstShapeEmitter);
 
 				if (burstSeconds == 0)
 				{
@@ -111,7 +110,7 @@ void Emitter::Update(float dt)
 	}
 }
 
-void Emitter::SetNewBuffers()
+void ParticleEmitter::SetNewBuffers()
 {
 	//Life
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[1]);
@@ -158,7 +157,7 @@ void Emitter::SetNewBuffers()
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSizeTime[0]);
 }
 
-void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
+void ParticleEmitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
 {
 	for (int i = 0; i < numParticles; ++i)
 	{
@@ -176,44 +175,44 @@ void Emitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEm
 	changeValues = true;
 }
 
-void Emitter::SetParticleValues(PartVec3 pos)
+void ParticleEmitter::SetParticleValues(PartVec3 pos)
 {
 	//Save all the initial values 
-	particleLife[particleActive] = PartVec2(0.0f, parent->GetRandomNum(startValues.life.x, startValues.life.y));
+	particleLife[particleActive] = PartVec2(0.0f, GetRandomNum(startValues.life.x, startValues.life.y));
 	particlePosition[particleActive] = pos;
 	particleDirection[particleActive] = startValues.particleDirection;
 	particleGravity[particleActive] = startValues.gravity;
-	particleSpeed[particleActive] = parent->GetRandomNum(startValues.speed.x, startValues.speed.y);
-	particleAcceleration[particleActive] = parent->GetRandomNum(startValues.acceleration.x, startValues.acceleration.y);
-	particleAngleRot[particleActive] = parent->GetRandomNum(startValues.rotation.x, startValues.rotation.y);
-	particleAngleVel[particleActive] = parent->GetRandomNum(startValues.angularVelocity.x, startValues.angularVelocity.y);
-	particleAngleAccel[particleActive] = parent->GetRandomNum(startValues.angularAcceleration.x, startValues.angularAcceleration.y);
-	particleSize[particleActive] = parent->GetRandomNum(startValues.size.x, startValues.size.y);
-	particleSizeTime[particleActive] = parent->GetRandomNum(startValues.sizeOverTime.x, startValues.sizeOverTime.y);
+	particleSpeed[particleActive] = GetRandomNum(startValues.speed.x, startValues.speed.y);
+	particleAcceleration[particleActive] = GetRandomNum(startValues.acceleration.x, startValues.acceleration.y);
+	particleAngleRot[particleActive] = GetRandomNum(startValues.rotation.x, startValues.rotation.y);
+	particleAngleVel[particleActive] = GetRandomNum(startValues.angularVelocity.x, startValues.angularVelocity.y);
+	particleAngleAccel[particleActive] = GetRandomNum(startValues.angularAcceleration.x, startValues.angularAcceleration.y);
+	particleSize[particleActive] = GetRandomNum(startValues.size.x, startValues.size.y);
+	particleSizeTime[particleActive] = GetRandomNum(startValues.sizeOverTime.x, startValues.sizeOverTime.y);
 
 	particleActiveBool[particleActive] = true;
 }
-void Emitter::SetShapeEmitter(ShapeEmitter shape)
+void ParticleEmitter::SetShapeEmitter(ShapeEmitter shape)
 {
 	shapeEmitter = shape;
 }
 
-ShapeEmitter Emitter::GetShapeEmitter() const
+ShapeEmitter ParticleEmitter::GetShapeEmitter() const
 {
 	return shapeEmitter;
 }
 
-void Emitter::SetBurstShapeEmitter(ShapeEmitter shape)
+void ParticleEmitter::SetBurstShapeEmitter(ShapeEmitter shape)
 {
 	burstShapeEmitter = shape;
 }
 
-ShapeEmitter Emitter::GetBurstShapeEmitter() const
+ShapeEmitter ParticleEmitter::GetBurstShapeEmitter() const
 {
 	return burstShapeEmitter;
 }
 
-void Emitter::SetGlobalPos(float* globalPos)
+void ParticleEmitter::SetGlobalPos(float* globalPos)
 {
 	globalObjPos.x = globalPos[0];
 	globalObjPos.y = globalPos[1];
@@ -221,7 +220,7 @@ void Emitter::SetGlobalPos(float* globalPos)
 }
 
 
-void Emitter::Draw(unsigned int shaderUuid)
+void ParticleEmitter::Draw(unsigned int shaderUuid)
 {
 
 	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), isMulticolor ? colorList.size() : 1);
@@ -333,14 +332,14 @@ void Emitter::Draw(unsigned int shaderUuid)
 	glBindVertexArray(0);
 }
 
-bool Emitter::SaveCameraDistance()
+bool ParticleEmitter::SaveCameraDistance(float* cameraPos)
 {
 	bool ret = false;
-	if (parent->cameraPos)
+	if (cameraPos)
 	{
-		float x = (*parent->cameraPos).x - globalObjPos.x;
-		float y = (*parent->cameraPos).y - globalObjPos.y;
-		float z = (*parent->cameraPos).z - globalObjPos.z;
+		float x = cameraPos[0] - globalObjPos.x;
+		float y = cameraPos[1] - globalObjPos.y;
+		float z = cameraPos[2] - globalObjPos.z;
 
 		cameraDist = x * x + y * y + z * z;
 		ret = true;
@@ -348,7 +347,7 @@ bool Emitter::SaveCameraDistance()
 	return ret;
 }
 
-void Emitter::StartEmitter()
+void ParticleEmitter::StartEmitter()
 {
 	runningTime = TimerState::StatePlayed;
 	onceBurst = false;
@@ -356,7 +355,7 @@ void Emitter::StartEmitter()
 	burstTimer.Play();
 }
 
-void Emitter::StopEmitter()
+void ParticleEmitter::StopEmitter()
 {
 	for (int i = 0; i < particleActive; ++i)
 	{
@@ -374,12 +373,12 @@ void Emitter::StopEmitter()
 	burstTimer.Stop();
 }
 
-void Emitter::PauseEmitter()
+void ParticleEmitter::PauseEmitter()
 {
 	runningTime = TimerState::StatePaused;
 }
 
-PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
+PartVec3 ParticleEmitter::GetRandomPos(ShapeEmitter emitter)
 {
 	PartVec3 randomPos = PartVec3(0.0f);
 
@@ -387,9 +386,9 @@ PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 	{
 	case BoxShape:
 		//Box Size
-		randomPos.x = parent->GetRandomNum(-boxShapeSize.x / 2, boxShapeSize.x / 2);
-		randomPos.y = parent->GetRandomNum(-boxShapeSize.y / 2, boxShapeSize.y / 2);
-		randomPos.z = parent->GetRandomNum(-boxShapeSize.z / 2, boxShapeSize.z / 2);
+		randomPos.x =GetRandomNum(-boxShapeSize.x / 2, boxShapeSize.x / 2);
+		randomPos.y =GetRandomNum(-boxShapeSize.y / 2, boxShapeSize.y / 2);
+		randomPos.z =GetRandomNum(-boxShapeSize.z / 2, boxShapeSize.z / 2);
 
 		startValues.particleDirection = PartVec3(0.0f, 1.0f, 0.0f);
 		break;
@@ -397,15 +396,15 @@ PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 	case SphereShapeCenter:
 	case SphereShapeBorder:
 		//Sphere rad
-		randomPos.x = parent->GetRandomNum(-1.0f, 1.0f);
-		randomPos.y = parent->GetRandomNum(-1.0f, 1.0f);
-		randomPos.z = parent->GetRandomNum(-1.0f, 1.0f);
+		randomPos.x = GetRandomNum(-1.0f, 1.0f);
+		randomPos.y = GetRandomNum(-1.0f, 1.0f);
+		randomPos.z = GetRandomNum(-1.0f, 1.0f);
 
 		randomPos = randomPos.Normalize();
 		startValues.particleDirection = randomPos;
 
 		if (shapeEmitter == SphereShape)
-			randomPos *= parent->GetRandomNum(0.0f, sphereShapeRad);
+			randomPos *= GetRandomNum(0.0f, sphereShapeRad);
 		else if (shapeEmitter == SphereShapeCenter)
 			randomPos = PartVec3(0.0f);
 		else if (shapeEmitter == SphereShapeBorder)
@@ -415,9 +414,9 @@ PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 		//The position is always 0. We only change the direction
 	{
 		PartVec3 destination;
-		destination.x = parent->GetRandomNum(-coneShapeRad, coneShapeRad);
+		destination.x = GetRandomNum(-coneShapeRad, coneShapeRad);
 		destination.y = coneShapeHeight;
-		destination.z = parent->GetRandomNum(-coneShapeRad, coneShapeRad);
+		destination.z = GetRandomNum(-coneShapeRad, coneShapeRad);
 
 		startValues.particleDirection = destination.Normalize();
 
@@ -431,3 +430,10 @@ PartVec3 Emitter::GetRandomPos(ShapeEmitter emitter)
 	return randomPos;
 }
 
+float ParticleEmitter::GetRandomNum(float min, float max)
+{
+	if (min < max)
+		return (max - min) * (float)rng() / (float)rng.max() + min;
+	else
+		return min;
+}

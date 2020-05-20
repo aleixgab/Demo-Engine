@@ -6,6 +6,7 @@
 #include "imgui/imgui.h"
 #include "3rdPart/includes/imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include <ParticleManager.h>
 
 ControllerImGui::ControllerImGui(GameManager* mng) : Controller(mng)
 {
@@ -179,22 +180,22 @@ void ControllerImGui::PlayStop()
 			{
 				if (ImGui::Button("Play", { 50,25 }))
 				{
-					//Mng->particle->particleManager->StartEmmitter(component->emitter);
+					Part::StartEmmitter(component->emitter);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Pause", { 50,25 }))
 				{
-					//Mng->particle->particleManager->PauseEmmitter(component->emitter);
+					Part::PauseEmmitter(component->emitter);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Stop", { 50,25 }))
 				{
-					//Mng->particle->particleManager->StopEmitter(component->emitter);
+					Part::StopEmitter(component->emitter);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Stop All", { 50,25 }))
 				{
-					//Mng->particle->particleManager->StopAllEmitters();
+					Part::StopAllEmitters();
 				}
 			}
 			ImGui::End();

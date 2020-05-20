@@ -149,6 +149,9 @@
     <ClInclude Include="GroundImporter.h">
       <Filter>Importers</Filter>
     </ClInclude>
+    <ClInclude Include="..\ParticleLib\ParticleManager.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FragmentShader.txt">
@@ -191,6 +194,9 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{04fd05c0-6734-4628-b7b5-a91699e2809c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{c7a00b39-a9a2-4bc0-a7f4-6fa625b3f100}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
