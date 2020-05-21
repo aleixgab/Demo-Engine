@@ -2,18 +2,18 @@
 #include "Timer.h"
 #include <glad/glad.h>
 #include "PlaneImporter.h"
+#include <string>
 
 ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles): globalObjPos(emitterPos[0])
 {
-	ParticleColor startColor;
-	colorList.push_back(startColor);
+	colorMap.insert(std::pair<float, PartVec4>(0.0f, PartVec4(1.0f)));
 	plane = new PlaneImporter(maxParticles);
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 
 	ChangeMaxParticles(maxParticles);
 }
 
-void ParticleEmitter::ChangeMaxParticles(int maxParticles)
+PARTICLELIB_API void ParticleEmitter::ChangeMaxParticles(int maxParticles)
 {
 	if (maxParticles <= 0)
 		maxParticles = 1;
@@ -32,6 +32,65 @@ void ParticleEmitter::ChangeMaxParticles(int maxParticles)
 	particleSizeTime.resize(maxParticles);
 	
 	plane->SetDynamicValues(maxParticles);
+}
+
+PARTICLELIB_API void ParticleEmitter::SetGlobalPos(float* globalPos)
+{
+	globalObjPos.x = globalPos[0];
+	globalObjPos.y = globalPos[1];
+	globalObjPos.z = globalPos[2];
+}
+
+PARTICLELIB_API void ParticleEmitter::AddColor(float* colorRGBA, const float position)
+{
+	colorMap.insert(std::pair<float, PartVec4>(position, PartVec4(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3])));
+}
+
+PARTICLELIB_API bool ParticleEmitter::EditColor(float* colorRGBA, const float position)
+{
+	bool ret = false;
+	std::map<float, PartVec4>::iterator iter = colorMap.find(position);
+	if (iter != colorMap.end())
+	{
+		(*iter).second = PartVec4(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+		ret = true;
+	}
+	return ret;
+}
+
+PARTICLELIB_API bool ParticleEmitter::GetColor(float* colorRGBA, const float position)
+{
+	bool ret = false;
+	std::map<float, PartVec4>::iterator iter = colorMap.find(position);
+	if (iter != colorMap.end())
+	{
+		colorRGBA[0] = (*iter).second.x;
+		colorRGBA[1] = (*iter).second.y;
+		colorRGBA[2] = (*iter).second.z;
+		colorRGBA[3] = (*iter).second.w;
+		ret = true;
+	}
+	return ret;
+}
+
+PARTICLELIB_API void ParticleEmitter::GetAllPositions(std::list<float>& positions)
+{
+	for (std::map<float, PartVec4>::iterator iter = colorMap.begin(); iter != colorMap.end(); ++iter)
+	{
+		positions.push_back((*iter).first);
+	}
+}
+
+PARTICLELIB_API bool ParticleEmitter::EraseColor(const float position)
+{
+	bool ret = false;
+	std::map<float, PartVec4>::iterator iter = colorMap.find(position);
+	if (iter != colorMap.end())
+	{
+		colorMap.erase(iter);
+		ret = true;
+	}
+	return ret;
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -100,12 +159,12 @@ void ParticleEmitter::Update(float dt)
 
 					particleActiveBool[particleActive] = false;
 
-					changeValues = true;
+					changeBuffers = true;
 				}
 			}
 		}
 
-		if (changeValues)
+		if (changeBuffers)
 			SetNewBuffers();
 	}
 }
@@ -172,58 +231,33 @@ void ParticleEmitter::CreateParticles(int numParticles, PartVec3 globalPosition,
 		else
 			break;
 	}
-	changeValues = true;
+	changeBuffers = true;
 }
 
 void ParticleEmitter::SetParticleValues(PartVec3 pos)
 {
 	//Save all the initial values 
-	particleLife[particleActive] = PartVec2(0.0f, GetRandomNum(startValues.life.x, startValues.life.y));
+	particleLife[particleActive] = PartVec2(0.0f, GetRandomNum(particleValues.life.x, particleValues.life.y));
 	particlePosition[particleActive] = pos;
-	particleDirection[particleActive] = startValues.particleDirection;
-	particleGravity[particleActive] = startValues.gravity;
-	particleSpeed[particleActive] = GetRandomNum(startValues.speed.x, startValues.speed.y);
-	particleAcceleration[particleActive] = GetRandomNum(startValues.acceleration.x, startValues.acceleration.y);
-	particleAngleRot[particleActive] = GetRandomNum(startValues.rotation.x, startValues.rotation.y);
-	particleAngleVel[particleActive] = GetRandomNum(startValues.angularVelocity.x, startValues.angularVelocity.y);
-	particleAngleAccel[particleActive] = GetRandomNum(startValues.angularAcceleration.x, startValues.angularAcceleration.y);
-	particleSize[particleActive] = GetRandomNum(startValues.size.x, startValues.size.y);
-	particleSizeTime[particleActive] = GetRandomNum(startValues.sizeOverTime.x, startValues.sizeOverTime.y);
+	particleDirection[particleActive] = initialParticleDirection;
+	particleGravity[particleActive] = particleValues.gravity;
+	particleSpeed[particleActive] = GetRandomNum(particleValues.speed.x, particleValues.speed.y);
+	particleAcceleration[particleActive] = GetRandomNum(particleValues.acceleration.x, particleValues.acceleration.y);
+	particleAngleRot[particleActive] = GetRandomNum(particleValues.rotation.x, particleValues.rotation.y);
+	particleAngleVel[particleActive] = GetRandomNum(particleValues.angularVelocity.x, particleValues.angularVelocity.y);
+	particleAngleAccel[particleActive] = GetRandomNum(particleValues.angularAcceleration.x, particleValues.angularAcceleration.y);
+	particleSize[particleActive] = GetRandomNum(particleValues.size.x, particleValues.size.y);
+	particleSizeTime[particleActive] = GetRandomNum(particleValues.sizeOverTime.x, particleValues.sizeOverTime.y);
 
 	particleActiveBool[particleActive] = true;
 }
-void ParticleEmitter::SetShapeEmitter(ShapeEmitter shape)
-{
-	shapeEmitter = shape;
-}
-
-ShapeEmitter ParticleEmitter::GetShapeEmitter() const
-{
-	return shapeEmitter;
-}
-
-void ParticleEmitter::SetBurstShapeEmitter(ShapeEmitter shape)
-{
-	burstShapeEmitter = shape;
-}
-
-ShapeEmitter ParticleEmitter::GetBurstShapeEmitter() const
-{
-	return burstShapeEmitter;
-}
-
-void ParticleEmitter::SetGlobalPos(float* globalPos)
-{
-	globalObjPos.x = globalPos[0];
-	globalObjPos.y = globalPos[1];
-	globalObjPos.z = globalPos[2];
-}
-
 
 void ParticleEmitter::Draw(unsigned int shaderUuid)
 {
+	if (runningTime == TimerState::StateStopped)
+		return;
 
-	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), isMulticolor ? colorList.size() : 1);
+	glUniform1i(glGetUniformLocation(shaderUuid, "colorSize"), activeMulticolor ? colorMap.size() : 1);
 	glUniform1i(glGetUniformLocation(shaderUuid, "useTexture"), useTexture);
 
 	glUniform1i(glGetUniformLocation(shaderUuid, "isAnimated"), isParticleAnimated);
@@ -232,15 +266,15 @@ void ParticleEmitter::Draw(unsigned int shaderUuid)
 	glUniform1f(glGetUniformLocation(shaderUuid, "animatedTime"), animationSpeed);
 
 	int cont = 0;
-	for (std::list<ParticleColor>::iterator iter = colorList.begin(); iter != colorList.end(); ++iter, ++cont)
+	for (std::map<float, PartVec4>::iterator iter = colorMap.begin(); iter != colorMap.end(); ++iter, ++cont)
 	{
 		std::string name = "colors[" + std::to_string(cont) + "]";
-		glUniform4fv(glGetUniformLocation(shaderUuid, name.c_str()), 4, &(*iter).color.x);
+		glUniform4fv(glGetUniformLocation(shaderUuid, name.c_str()), 4, &(*iter).second.x);
 
 		name = "positions[" + std::to_string(cont) + "]";
-		glUniform1fv(glGetUniformLocation(shaderUuid, name.c_str()), 1, &(*iter).position);
+		glUniform1fv(glGetUniformLocation(shaderUuid, name.c_str()), 1, &(*iter).first);
 
-		if (!isMulticolor)
+		if (!activeMulticolor)
 			break;
 	}
 
@@ -390,7 +424,7 @@ PartVec3 ParticleEmitter::GetRandomPos(ShapeEmitter emitter)
 		randomPos.y =GetRandomNum(-boxShapeSize.y / 2, boxShapeSize.y / 2);
 		randomPos.z =GetRandomNum(-boxShapeSize.z / 2, boxShapeSize.z / 2);
 
-		startValues.particleDirection = PartVec3(0.0f, 1.0f, 0.0f);
+		initialParticleDirection = PartVec3(0.0f, 1.0f, 0.0f);
 		break;
 	case SphereShape:
 	case SphereShapeCenter:
@@ -401,14 +435,14 @@ PartVec3 ParticleEmitter::GetRandomPos(ShapeEmitter emitter)
 		randomPos.z = GetRandomNum(-1.0f, 1.0f);
 
 		randomPos = randomPos.Normalize();
-		startValues.particleDirection = randomPos;
+		initialParticleDirection = randomPos;
 
 		if (shapeEmitter == SphereShape)
 			randomPos *= GetRandomNum(0.0f, sphereShapeRad);
 		else if (shapeEmitter == SphereShapeCenter)
 			randomPos = PartVec3(0.0f);
 		else if (shapeEmitter == SphereShapeBorder)
-			randomPos = startValues.particleDirection * sphereShapeRad;
+			randomPos = initialParticleDirection * sphereShapeRad;
 		break;
 	case ConeShape:
 		//The position is always 0. We only change the direction
@@ -418,7 +452,7 @@ PartVec3 ParticleEmitter::GetRandomPos(ShapeEmitter emitter)
 		destination.y = coneShapeHeight;
 		destination.z = GetRandomNum(-coneShapeRad, coneShapeRad);
 
-		startValues.particleDirection = destination.Normalize();
+		initialParticleDirection = destination.Normalize();
 
 	}
 	break;

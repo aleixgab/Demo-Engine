@@ -51,7 +51,6 @@ PARTICLELIB_API void Part::Draw(unsigned int shaderProgramUuid, float* viewMatri
 
 		for (std::list<ParticleEmitter*>::iterator iter = emittersToDraw.begin(); iter != emittersToDraw.end(); ++iter)
 		{
-			if((*iter)->runningTime == TimerState::StatePlayed)
 				(*iter)->Draw(shaderProgramUuid);
 		}
 

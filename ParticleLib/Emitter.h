@@ -1,9 +1,10 @@
 #ifndef __Emitter_H__
 #define __Emitter_H__
 
-#include <list>
+#include <map>
 #include <vector>
-#include <string>
+#include <list>
+
 #include "PartMath.h"
 #include "Timer.h"
 #include <random>
@@ -14,18 +15,6 @@ extern "C" {
 #endif
 
 class PlaneImporter;
-
-struct ParticleColor
-{
-	PartVec4 color = PartVec4(1.0f);
-	//position in percentage to paint correctly the colors during the time
-	float position = 0.0f;
-
-	bool operator<(const ParticleColor& color) const
-	{
-		return position < color.position;
-	}
-};
 
 enum ShapeEmitter {
 	//Spawn particles from the box and takes object Up direction
@@ -41,7 +30,7 @@ enum ShapeEmitter {
 };
 
 //Start values. All the values with a float2 are a possible random. They are just a float, this random will be calculated in the particle creation.
-struct ParticleStartValues
+PARTICLELIB_API struct ParticleValues
 {
 	//The seconds that the particle will be alive
 	PartVec2 life = PartVec2(5.0f, 5.0f);
@@ -61,9 +50,6 @@ struct ParticleStartValues
 	PartVec2 angularAcceleration = PartVec2(0.0f, 0.0f);
 	//The angular velocity of the plane 
 	PartVec2 angularVelocity = PartVec2(0.0f, 0.0f);
-
-	//The initial direction that will take the particle
-	PartVec3 particleDirection = PartVec3(0.0f, 1.0f, 0.0f);
 };
 
 PARTICLELIB_API class ParticleEmitter
@@ -72,18 +58,27 @@ public:
 	ParticleEmitter(float* emitterPos, int maxParticles);
 	~ParticleEmitter();
 
-	/*--*/void ChangeMaxParticles(int maxParticles);
+	PARTICLELIB_API void ChangeMaxParticles(int maxParticles);
+
+	//Set the position of the emitter in the world coordinates
+	PARTICLELIB_API void SetGlobalPos(float* globalPos);	
+	
+	/*Add New Color with RGBA & the percentatge position between 0 & 1 
+	The colors will change during the time depends on the position
+	position 0 = begining of the particle
+	position 1 = end of the particle 
+	DO NOT CREATE 2 COLORS IN THE SAME POSITION*/
+	PARTICLELIB_API void AddColor(float* colorRGBA, const float position);
+	//Edit the specific  color sending the own position
+	PARTICLELIB_API bool EditColor(float* colorRGBA, const float position);
+	//Get the specific color sending the own position
+	PARTICLELIB_API bool GetColor(float* colorRGBA, const float position);
+	//Get all the positions
+	PARTICLELIB_API void GetAllPositions(std::list<float>& positions);
+	//Erase Color sending the own position
+	PARTICLELIB_API bool EraseColor(const float position);
 
 	void Update(float dt);
-
-	//Set emision type to know witch direction will take the particles and witch shape
-	/*--*/void SetShapeEmitter(ShapeEmitter shape);
-	/*--*/ShapeEmitter GetShapeEmitter() const;
-	/*--*/void SetBurstShapeEmitter(ShapeEmitter shape);
-	/*--*/ShapeEmitter GetBurstShapeEmitter() const;
-	//Set the position of the emitter in the world coordinates
-	/*--*/void SetGlobalPos(float* globalPos);
-
 	bool SaveCameraDistance(float* cameraPos);
 
 	//Draw emitter by emitter for diferents textures
@@ -94,7 +89,6 @@ public:
 	void StopEmitter();
 	//Stop to emit particles
 	void PauseEmitter();
-
 
 private:
 	/*Create Particle with the start values
@@ -117,8 +111,21 @@ private:
 	PartVec3 GetRandomPos(ShapeEmitter emitter);
 	float GetRandomNum(float min, float max);
 public:
+//------------------------------------------------PARTICLES------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------
 	//Public varible to have the particle start values acces out of this class
-	ParticleStartValues startValues;
+	ParticleValues particleValues;
+
+	//The particles we want to create per second.
+	int particlesEmition = 1.0f;
+//_________________________________________________________________________________________________________________________________
+
+
+//------------------------------------------------SHAPE----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------
+	//Shape that the current emitter will have
+	ShapeEmitter shapeEmitter = BoxShape;
+	ShapeEmitter burstShapeEmitter = BoxShape;
 
 	//The dimensions of the box shape that will spawn the particles (width and height)
 	PartVec3 boxShapeSize = PartVec3(1.0f);
@@ -127,23 +134,25 @@ public:
 	//The height is the distance between the tip of the cone to the base, and the rad is witch radiant will have this base
 	float coneShapeHeight = 1.0f;
 	float coneShapeRad = 1.0f;
+//_________________________________________________________________________________________________________________________________
 
-	//The particles we want to create per second.
-	int particlesEmition = 1.0f;
 
+//------------------------------------------------BURST----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------
 	//You active Burst option.
 	bool isBurst = false;
 	/*Seconds between bursts
 	If the busrt seconds are 0 will do the burst only onces*/
 	float burstSeconds = 1.0;
-	//Burst Timer
-	Timer burstTimer;
+
 	//numbers of particles in each Burst. Random between 2 values
 	int minBurst = 1;
 	int maxBurst = 10;
-	
-	//Set true if time is running for this emitter, false to pause it
-	TimerState runningTime = TimerState::StateStopped;
+//_________________________________________________________________________________________________________________________________
+
+
+//------------------------------------------------TEXTURE--------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------
 	//Texture id that draw function need it
 	unsigned int textureID = 0u;
 
@@ -153,23 +162,38 @@ public:
 
 	bool dieOnFinishAnim = false;
 	bool isParticleAnimated = false;
-
-	//Vector of all colors will be in the particle with RGBA. The colors will change during de time
-	std::list<ParticleColor> colorList;
 	//Knowing if we have more than one color during the time
 	bool useTexture = false;
-	bool isMulticolor = false;
+//_________________________________________________________________________________________________________________________________
+
+
+//------------------------------------------------COLOR----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------
+	bool activeMulticolor = false;
+//_________________________________________________________________________________________________________________________________
 
 	float cameraDist = 0.0f;
+
+
 private:
 
-	bool changeValues = false;
-	//Counter to know which part of the array pool we are. This will allow us to continue the pool consecutively.	
-	int lastUsedParticle = 0;
+	/*Map of all colors will be in the particle with RGBA. The colors will change during the time
+	float is the number between 0 and 1. Means the position in percentage 
+	number 0 = begining of the particle
+	number 1 = end of the particle*/
+	std::map<float, PartVec4> colorMap;
+
+	//Set true if time is running for this emitter, false to pause it
+	TimerState runningTime = TimerState::StateStopped;
+
+	//Burst Timer
+	Timer burstTimer;
+
+	//The initial direction that will take the particle
+	PartVec3 initialParticleDirection = PartVec3(0.0f, 1.0f, 0.0f);
+
+	bool changeBuffers = false;
 	int particleActive = 0;
-	//Shape that the current emitter will have
-	ShapeEmitter shapeEmitter = BoxShape;
-	ShapeEmitter burstShapeEmitter = BoxShape;
 
 	//Global position of the object of this emitter;
 	PartVec3 globalObjPos = PartVec3(0.0f, 0.0f, 0.0f);
