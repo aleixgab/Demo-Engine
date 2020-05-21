@@ -1,0 +1,22 @@
+#version 330 core
+in vec2 texCoords;
+in vec4 particleColor;
+
+out vec4 FragColor;
+
+uniform sampler2D sprite;
+uniform int useTexture;
+
+void main()
+{
+	if(useTexture == 1)
+	{
+		vec4 tex = texture(sprite, texCoords);
+		if(tex.a < 0.1)
+			discard;
+
+		FragColor = tex * particleColor;
+	}
+	else
+		FragColor = particleColor;
+}  

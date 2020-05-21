@@ -1,5 +1,5 @@
-#ifndef __Plane_Importer_H__
-#define __Plane_Importer_H__
+#ifndef __Ground_Importer_H__
+#define __Ground_Importer_H__
 
 class GroundImporter
 {

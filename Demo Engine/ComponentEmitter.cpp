@@ -120,11 +120,11 @@ void ComponentEmitter::ShapeValuesInsp()
 		if (ImGui::BeginMenu("Change Shape"))
 		{
 			if (ImGui::MenuItem("Box"))
-				emitter->shapeEmitter == ShapeEmitter::BoxShape;
+				emitter->shapeEmitter = ShapeEmitter::BoxShape;
 			else if (ImGui::MenuItem("Sphere"))
-				emitter->shapeEmitter == ShapeEmitter::SphereShape;
+				emitter->shapeEmitter = ShapeEmitter::SphereShape;
 			else if (ImGui::MenuItem("Cone"))
-				emitter->shapeEmitter == ShapeEmitter::ConeShape;
+				emitter->shapeEmitter = ShapeEmitter::ConeShape;
 				ImGui::End();
 		}
 

@@ -4,7 +4,7 @@
 
 #pragma comment(lib, "3rdPart\\lib\\glfw3.lib")
 #pragma comment(lib, "3rdPart\\lib\\ProfilerCore64.lib")
-#pragma comment(lib, "3rdPart\\lib\\PARTICLELIB.lib")
+#pragma comment(lib, "3rdPart\\lib\\Particle.lib")
 
 
 GameManager* Mng = nullptr;

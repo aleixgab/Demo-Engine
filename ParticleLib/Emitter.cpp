@@ -101,7 +101,7 @@ ParticleEmitter::~ParticleEmitter()
 
 void ParticleEmitter::Update(float dt)
 {
-	if (runningTime = TimerState::StatePlayed)
+	if (runningTime == TimerState::StatePlayed)
 	{
 		if (particlesEmition > 0)
 		{

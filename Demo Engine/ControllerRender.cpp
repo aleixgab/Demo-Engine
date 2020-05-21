@@ -20,8 +20,8 @@ ControllerRender::~ControllerRender()
 bool ControllerRender::Start()
 {
 
-	basicShader.SetShader("VertexShader.txt", "FragmentShader.txt");
-	//particleShader.SetShader("ParticleLibrary/Shaders/Particle_VShader.txt", "ParticleLibrary/Shaders/Particle_FShader.txt");
+	basicShader.SetShader("Shaders/VertexShader.txt", "Shaders/FragmentShader.txt");
+	particleShader.SetShader("Shaders/Particle_VShader.txt", "Shaders/Particle_FShader.txt");
 
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
 	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");

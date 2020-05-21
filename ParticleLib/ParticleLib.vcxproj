@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>PARTICLELIB</TargetName>
+    <TargetName>Particle</TargetName>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir);$(ProjectDir)/3rdParty;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -81,7 +81,7 @@
     <IncludePath>$(ProjectDir)3rdParty;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>PARTICLELIB</TargetName>
+    <TargetName>Particle</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir);$(ProjectDir)/3rdParty;$(IncludePath)</IncludePath>
   </PropertyGroup>

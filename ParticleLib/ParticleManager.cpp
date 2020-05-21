@@ -19,6 +19,7 @@ PARTICLELIB_API bool Part::Update(float dt)
 
 PARTICLELIB_API void Part::StartLibrary()
 {
+	gladLoadGL();
 	Part::cameraPos = new float[3];
 }
 
@@ -51,7 +52,7 @@ PARTICLELIB_API void Part::Draw(unsigned int shaderProgramUuid, float* viewMatri
 
 		for (std::list<ParticleEmitter*>::iterator iter = emittersToDraw.begin(); iter != emittersToDraw.end(); ++iter)
 		{
-				(*iter)->Draw(shaderProgramUuid);
+			(*iter)->Draw(shaderProgramUuid);
 		}
 
 		glDepthMask(GL_TRUE);
