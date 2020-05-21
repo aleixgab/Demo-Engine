@@ -4,13 +4,46 @@
 #include <list>
 #include <ParticleLib.h>
 #include <Emitter.h>
+#include <PartMath.h>
+
+	
+class ParticleManager
+{
+public:
+	ParticleManager();
+	~ParticleManager();
+
+	/*Send delta time that will affect the particles
+	Returns false if user doesn't set camera pointers correctly*/
+	bool Update(float dt);
+	/*Draw function with shaderUuid, camera view and projection
+	You have to send emitter list. If you don't do camera culling send all the emitters,
+	otherwise send only the emitters that camera sees*/
+	void Draw(unsigned int shaderProgramUuid, float* viewMatrix, float* projMatrix, std::list<ParticleEmitter*> emittersToDraw);
+
+	//Start Playing all the emitters
+	void StartAllEmitters();
+	//Start specific emitter
+	void StartEmmitter(ParticleEmitter* emitter);
+
+	void PauseAllEmitters();
+	void PauseEmmitter(ParticleEmitter* emitter);
+
+	//Stop Playing all the emitters
+	void StopAllEmitters();
+	//Stop specific emitter
+	void StopEmitter(ParticleEmitter* emitter);
+
+public:
+	//You have to add in this list all the emitters that you will have in your scene.
+	std::list<ParticleEmitter*> emittersList;
+
+	float* cameraPos = nullptr;
+};
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-	
-PARTICLELIB_API class ParticleEmitter;
-
 namespace Part {
 
 	PARTICLELIB_API void StartLibrary();
@@ -48,11 +81,11 @@ namespace Part {
 	Returns false if user doesn't set camera pointers correctly*/
 	PARTICLELIB_API bool Update(float dt);
 
-
 	//You have to add in this list all the emitters that you will have in your scene.
-	PARTICLELIB_API std::list<ParticleEmitter*> emittersList;
-	PARTICLELIB_API float* cameraPos;
+	PARTICLELIB_API ParticleManager* manager;
 }
+
+
 #ifdef __cplusplus
 }
 #endif

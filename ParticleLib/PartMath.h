@@ -6,13 +6,11 @@ class PartVec2
 public:
 	PartVec2() {}
 	PartVec2(float x, float y);
-#pragma region XY Components
 public:
 	//X component.
 	float x = 0.0f;
 	//Y component.
 	float y = 0.0f;
-#pragma endregion
 };
 
 class PartVec3
@@ -29,7 +27,6 @@ public:
 	PartVec3& operator /=(const float num);
 	PartVec3& operator *=(const float num);
 	PartVec3 operator*(const float num);
-#pragma region XYZ Components
 public:
 	//X component.
 	float x = 0.0f;
@@ -37,7 +34,6 @@ public:
 	float y = 0.0f;
 	//Z component.
 	float z = 0.0f;
-#pragma endregion
 };
 
 class PartVec4

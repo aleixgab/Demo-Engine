@@ -6,7 +6,6 @@
 #include "TextureImporter.h"
 
 #include "GameObject.h"
-#include <ParticleManager.h>
 #include <string>
 
 ComponentEmitter::ComponentEmitter(GameObject* gameObject, ControllerParticles* controller, int maxParticles) : Component(gameObject, ComponentType_EMITTER)
@@ -29,7 +28,8 @@ void ComponentEmitter::Inspector()
 	ImGui::InputInt("Max Particles", &maxParticles);
 	if (ImGui::Button("Change", ImVec2(125, 25)))
 		emitter->ChangeMaxParticles(maxParticles);
-StartValuesInsp();
+
+	StartValuesInsp();
 	
 	BurstInsp();
 
@@ -46,35 +46,35 @@ void ComponentEmitter::StartValuesInsp()
 	if (ImGui::CollapsingHeader("Particle Values", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Checkbox("##Speed", &checkSpeed);
-		ShowFloatValue(&emitter->particleValues.speed.x, checkSpeed, "Speed", 0.25f, 0.25f, 20.0f);
+		ShowFloatValue(&particleValues.speed.x, checkSpeed, "Speed", 0.25f, 0.25f, 20.0f);
 
 		ImGui::Checkbox("##Acceleration", &checkAcceleration);
-		ShowFloatValue(&emitter->particleValues.acceleration.x, checkAcceleration, "Acceleration", 0.25f, -5.0f, 5.0f);
+		ShowFloatValue(&particleValues.acceleration.x, checkAcceleration, "Acceleration", 0.25f, -5.0f, 5.0f);
 
 		ImGui::PushItemWidth(180.0f);
-		ImGui::DragFloat3("Acceleration 3D", &emitter->particleValues.gravity.x);
+		ImGui::DragFloat3("Acceleration 3D", &particleValues.gravity.x);
 		ImGui::PopItemWidth();
 
 		ImGui::Checkbox("##Rotation", &checkRotation);
-		ShowFloatValue(&emitter->particleValues.rotation.x, checkRotation, "Initial Rotation", 0.25f, -360.0f, 360.0f);
+		ShowFloatValue(&particleValues.rotation.x, checkRotation, "Initial Rotation", 0.25f, -360.0f, 360.0f);
 
 		ImGui::Checkbox("##AngularVelocity", &checkAngularVelocity);
-		ShowFloatValue(&emitter->particleValues.angularVelocity.x, checkAngularVelocity, "Angular Velocity", 0.25f, -45.0f, 45.0f);
+		ShowFloatValue(&particleValues.angularVelocity.x, checkAngularVelocity, "Angular Velocity", 0.25f, -45.0f, 45.0f);
 
 		ImGui::Checkbox("##AngularAcceleration", &checkAngularAcceleration);
-		ShowFloatValue(&emitter->particleValues.angularAcceleration.x, checkAngularAcceleration, "Angular Acceleration", 0.25f, -45.0f, 45.0f);
+		ShowFloatValue(&particleValues.angularAcceleration.x, checkAngularAcceleration, "Angular Acceleration", 0.25f, -45.0f, 45.0f);
 
 		ImGui::Checkbox("##Lifetime", &checkLife);
-		ShowFloatValue(&emitter->particleValues.life.x, checkLife, "Lifetime", 0.5f, 1.0f, 20.0f);
+		ShowFloatValue(&particleValues.life.x, checkLife, "Lifetime", 0.5f, 1.0f, 20.0f);
 
 		ImGui::Checkbox("##Size", &checkSize);
-		ShowFloatValue(&emitter->particleValues.size.x, checkSize, "Size", 0.1f, 0.1f, 5.0f);
+		ShowFloatValue(&particleValues.size.x, checkSize, "Size", 0.1f, 0.1f, 5.0f);
 
 		ImGui::Checkbox("##SizeOverTime", &checkSizeOverTime);
-		ShowFloatValue(&emitter->particleValues.sizeOverTime.x, checkSizeOverTime, "SizeOverTime", 0.25f, -1.0f, 1.0f);
+		ShowFloatValue(&particleValues.sizeOverTime.x, checkSizeOverTime, "SizeOverTime", 0.25f, -1.0f, 1.0f);
 
 		ImGui::PushItemWidth(200.0f);
-		ImGui::DragInt("Emition", &emitter->particlesEmition, 1.0f, 0.0f, 300.0f, "%.2f");
+		ImGui::DragInt("Emition", &particleValues.particlesEmition, 1.0f, 0.0f, 300.0f, "%.2f");
 		ImGui::PopItemWidth();
 
 	}
@@ -120,44 +120,43 @@ void ComponentEmitter::ShapeValuesInsp()
 		if (ImGui::BeginMenu("Change Shape"))
 		{
 			if (ImGui::MenuItem("Box"))
-				emitter->shapeEmitter = ShapeEmitter::BoxShape;
+				emitterValues.shapeEmitter = ShapeEmitter::BoxShape;
 			else if (ImGui::MenuItem("Sphere"))
-				emitter->shapeEmitter = ShapeEmitter::SphereShape;
+				emitterValues.shapeEmitter = ShapeEmitter::SphereShape;
 			else if (ImGui::MenuItem("Cone"))
-				emitter->shapeEmitter = ShapeEmitter::ConeShape;
+				emitterValues.shapeEmitter = ShapeEmitter::ConeShape;
 				ImGui::End();
 		}
 
-		switch (emitter->shapeEmitter)
+		switch (emitterValues.shapeEmitter)
 		{
 		case BoxShape:
 			ImGui::Text("Box");
-			ImGui::DragFloat3("Box Size", &emitter->boxShapeSize.x, 0.1f, 0.1f, 20.0f, "%.2f");
+			ImGui::DragFloat3("Box Size", &emitterValues.boxShapeSize.x, 0.1f, 0.1f, 20.0f, "%.2f");
 
 			break;
 		case SphereShape:
 		case SphereShapeCenter:
 		case SphereShapeBorder:
 			ImGui::Text("Sphere");
-
 			ImGui::Text("Particle emision from:");
 
-			if (ImGui::RadioButton("Random", emitter->shapeEmitter == SphereShape))
-				emitter->shapeEmitter = ShapeEmitter::SphereShape;
+			if (ImGui::RadioButton("Random", emitterValues.shapeEmitter == SphereShape))
+				emitterValues.shapeEmitter = ShapeEmitter::SphereShape;
 			ImGui::SameLine();
-			if (ImGui::RadioButton("Center", emitter->shapeEmitter == SphereShapeCenter))
-				emitter->shapeEmitter = ShapeEmitter::SphereShapeCenter;
+			if (ImGui::RadioButton("Center", emitterValues.shapeEmitter == SphereShapeCenter))
+				emitterValues.shapeEmitter = ShapeEmitter::SphereShapeCenter;
 			ImGui::SameLine();
-			if (ImGui::RadioButton("Border", emitter->shapeEmitter == SphereShapeBorder))
-				emitter->shapeEmitter = ShapeEmitter::SphereShapeBorder;
+			if (ImGui::RadioButton("Border", emitterValues.shapeEmitter == SphereShapeBorder))
+				emitterValues.shapeEmitter = ShapeEmitter::SphereShapeBorder;
 
-			ImGui::DragFloat("Sphere Size", &emitter->sphereShapeRad, 0.25f, 1.0f, 20.0f, "%.2f");
+			ImGui::DragFloat("Sphere Size", &emitterValues.sphereShapeRad, 0.25f, 1.0f, 20.0f, "%.2f");
 
 			break;
 		case ConeShape:
 			ImGui::Text("Cone");
-			ImGui::DragFloat("Cone Circle Rad", &emitter->coneShapeRad, 0.25f, 0.25f, 20.0f, "%.2f");
-			ImGui::DragFloat("Height Cone", &emitter->coneShapeHeight, 0.25f, 0.25f, 20.0f, "%.2f");
+			ImGui::DragFloat("Cone Circle Rad", &emitterValues.coneShapeRad, 0.25f, 0.25f, 20.0f, "%.2f");
+			ImGui::DragFloat("Height Cone", &emitterValues.coneShapeHeight, 0.25f, 0.25f, 20.0f, "%.2f");
 			break;
 		default:
 			break;
@@ -171,29 +170,29 @@ void ComponentEmitter::BurstInsp()
 {
 	if (ImGui::CollapsingHeader("Particle Burst"))
 	{
-		ImGui::Checkbox("Burst", &emitter->isBurst);
+		ImGui::Checkbox("Burst", &emitterValues.isBurst);
 		if (ImGui::BeginMenu("Shape"))
 		{
 			if (ImGui::MenuItem("Box"))
-				emitter->burstShapeEmitter = ShapeEmitter::BoxShape;
+				emitterValues.burstShapeEmitter = ShapeEmitter::BoxShape;
 			else if (ImGui::MenuItem("Sphere"))
-				emitter->burstShapeEmitter = ShapeEmitter::SphereShape;
+				emitterValues.burstShapeEmitter = ShapeEmitter::SphereShape;
 			else if (ImGui::MenuItem("Sphere From center"))
-				emitter->burstShapeEmitter = ShapeEmitter::SphereShapeCenter;
+				emitterValues.burstShapeEmitter = ShapeEmitter::SphereShapeCenter;
 			else if (ImGui::MenuItem("Sphere From Surface"))
-				emitter->burstShapeEmitter = ShapeEmitter::SphereShapeBorder;
+				emitterValues.burstShapeEmitter = ShapeEmitter::SphereShapeBorder;
 			else if (ImGui::MenuItem("Cone"))
-				emitter->burstShapeEmitter = ShapeEmitter::ConeShape;
+				emitterValues.burstShapeEmitter = ShapeEmitter::ConeShape;
 			ImGui::End();
 		}
-		ImGui::DragInt("Min particles", &emitter->minBurst, 1.0f, 0, 100);
-		if (emitter->minBurst > emitter->maxBurst)
-			emitter->maxBurst = emitter->minBurst;
-		ImGui::DragInt("Max Particles", &emitter->maxBurst, 1.0f, 0, 100);
-		if (emitter->maxBurst < emitter->minBurst)
-			emitter->minBurst = emitter->maxBurst;
+		ImGui::DragInt("Min particles", &emitterValues.minBurst, 1.0f, 0, 100);
+		if (emitterValues.minBurst > emitterValues.maxBurst)
+			emitterValues.maxBurst = emitterValues.minBurst;
+		ImGui::DragInt("Max Particles", &emitterValues.maxBurst, 1.0f, 0, 100);
+		if (emitterValues.maxBurst < emitterValues.minBurst)
+			emitterValues.minBurst = emitterValues.maxBurst;
 
-		ImGui::DragFloat("Seconds between Burst", &emitter->burstSeconds, 0.5f, 0.0f, 0.0f, "%.1f");
+		ImGui::DragFloat("Seconds between Burst", &emitterValues.burstSeconds, 0.5f, 0.0f, 0.0f, "%.1f");
 
 		ImGui::Separator();
 	}
@@ -219,8 +218,8 @@ void ComponentEmitter::ColorValuesInsp()
 		}
 
 		ImGui::Separator();
-		ImGui::Checkbox("Color time", &emitter->activeMulticolor);
-		if (emitter->activeMulticolor)
+		ImGui::Checkbox("Color time", &particleValues.activeMulticolor);
+		if (particleValues.activeMulticolor)
 		{
 
 			ImGui::DragInt("Position", &nextPos, 1.0f, 1, 100);
@@ -262,13 +261,13 @@ void ComponentEmitter::TextureValuesInsp()
 {
 	if (ImGui::CollapsingHeader("Particle Texture", ImGuiTreeNodeFlags_FramePadding))
 	{
-		ImGui::Checkbox("Using texture", &emitter->useTexture);
+		ImGui::Checkbox("Using texture", &particleValues.useTexture);
 
-		if (emitter->textureID > 0u)
+		if (particleValues.textureID > 0u)
 		{
-			ImGui::Text("Texture num '%i'", emitter->textureID);
+			ImGui::Text("Texture num '%i'", particleValues.textureID);
 
-			ImGui::Image((void*)emitter->textureID, ImVec2(256.0f, 256.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
+			ImGui::Image((void*)particleValues.textureID, ImVec2(256.0f, 256.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 
 			if (ImGui::BeginMenu("Change Texture"))
 			{
@@ -279,38 +278,38 @@ void ComponentEmitter::TextureValuesInsp()
 					ImGui::Dummy(ImVec2(sz, sz));
 					ImGui::SameLine();
 					if (ImGui::MenuItem((*iter)->texture.name.c_str()))
-						emitter->textureID = (*iter)->texture.id;
+						particleValues.textureID = (*iter)->texture.id;
 				}
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::Checkbox("Animated sprite", &emitter->isParticleAnimated))
+			if (ImGui::Checkbox("Animated sprite", &particleValues.isParticleAnimated))
 			{
-				if (!emitter->isParticleAnimated)
+				if (!particleValues.isParticleAnimated)
 				{
-					emitter->textureRows = 1;
-					emitter->textureColumns = 1;
-					emitter->dieOnFinishAnim = false;
+					particleValues.textureRows = 1;
+					particleValues.textureColumns = 1;
+					particleValues.dieOnFinishAnim = false;
 				}
 			}
-			if (emitter->isParticleAnimated)
+			if (particleValues.isParticleAnimated)
 			{
-				ImGui::DragFloat("Animation Speed", &emitter->animationSpeed, 0.001f, 0.0f, 5.0f);
+				ImGui::DragFloat("Animation Speed", &particleValues.animationSpeed, 0.001f, 0.0f, 5.0f);
 
-				ImGui::DragInt("Rows", &emitter->textureRows, 1, 1, 10);
-				ImGui::DragInt("Columns", &emitter->textureColumns, 1, 1, 10);
+				ImGui::DragInt("Rows", &particleValues.textureRows, 1, 1, 10);
+				ImGui::DragInt("Columns", &particleValues.textureColumns, 1, 1, 10);
 
-				ImGui::Checkbox("Kill particle with animation", &emitter->dieOnFinishAnim);
-				if (emitter->dieOnFinishAnim)
+				ImGui::Checkbox("Kill particle with animation", &particleValues.dieOnFinishAnim);
+				if (particleValues.dieOnFinishAnim)
 				{
 					checkLife = false;
-					emitter->particleValues.life.x = emitter->animationSpeed * (emitter->textureColumns * emitter->textureRows - 1);
+					particleValues.life.x = particleValues.animationSpeed * (particleValues.textureColumns * particleValues.textureRows - 1);
 				}
 			}
 			
 			if (ImGui::Button("Remove Texture", ImVec2(125, 25)))
 			{
-				emitter->textureID = 0u;
+				particleValues.textureID = 0u;
 			}
 		}
 		else
@@ -324,7 +323,7 @@ void ComponentEmitter::TextureValuesInsp()
 					ImGui::Dummy(ImVec2(sz, sz));
 					ImGui::SameLine();
 					if (ImGui::MenuItem((*iter)->texture.name.c_str()))
-						emitter->textureID = (*iter)->texture.id;
+						particleValues.textureID = (*iter)->texture.id;
 				}
 				ImGui::EndMenu();
 			}

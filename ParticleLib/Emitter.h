@@ -5,18 +5,19 @@
 #include <vector>
 #include <list>
 
-#include "PartMath.h"
-#include "Timer.h"
+#include <PartMath.h>
+#include <Timer.h>
 #include <random>
 
-#include "ParticleLib.h"
+#include <ParticleLib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 class PlaneImporter;
 
-enum ShapeEmitter {
+PARTICLELIB_API enum ShapeEmitter {
 	//Spawn particles from the box and takes object Up direction
 	BoxShape = 0,
 	//Spawn particles from all the sphere size
@@ -32,31 +33,97 @@ enum ShapeEmitter {
 //Start values. All the values with a float2 are a possible random. They are just a float, this random will be calculated in the particle creation.
 PARTICLELIB_API struct ParticleValues
 {
+	//------------------------------------------------BASIC VALUES--------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------
 	//The seconds that the particle will be alive
-	PartVec2 life = PartVec2(5.0f, 5.0f);
+	PartVec2 life /*= PartVec2(5.0f, 5.0f)*/;
 	//The initial velocity that will get the particle
-	PartVec2 speed = PartVec2(3.0f, 3.0f);
+	PartVec2 speed /*= PartVec2(3.0f, 3.0f)*/;
 	//The acceleration in world coordinates that will afect the particle
-	PartVec3 gravity = PartVec3(0.0f, 0.0f, 0.0f);
+	PartVec3 gravity /*= PartVec3(0.0f, 0.0f, 0.0f)*/;
 	//The acceleration that will afect the particle velocity without changing the direction
-	PartVec2 acceleration = PartVec2(0.0f, 0.0f);
+	PartVec2 acceleration/* = PartVec2(0.0f, 0.0f)*/;
 	//The initial plane size
-	PartVec2 size = PartVec2(1.0f, 1.0f);
+	PartVec2 size/* = PartVec2(1.0f, 1.0f)*/;
 	//The acceleration plane size
-	PartVec2 sizeOverTime = PartVec2(0.0f, 0.0f);
+	PartVec2 sizeOverTime/* = PartVec2(0.0f, 0.0f)*/;
 	//The initial rotation plane
-	PartVec2 rotation = PartVec2(0.0f, 0.0f);
+	PartVec2 rotation /*= PartVec2(0.0f, 0.0f)*/;
 	//The angular acceleration of the plane 
-	PartVec2 angularAcceleration = PartVec2(0.0f, 0.0f);
+	PartVec2 angularAcceleration/* = PartVec2(0.0f, 0.0f)*/;
 	//The angular velocity of the plane 
-	PartVec2 angularVelocity = PartVec2(0.0f, 0.0f);
+	PartVec2 angularVelocity /*= PartVec2(0.0f, 0.0f)*/;
+	//_________________________________________________________________________________________________________________________________
+
+	//------------------------------------------------TEXTURE--------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------
+	//Texture id that draw function need it
+	unsigned int textureID = 0u;
+
+	int  textureRows = 1;
+	int  textureColumns = 1;
+	float animationSpeed = 0.1f;
+
+	bool dieOnFinishAnim = false;
+	bool isParticleAnimated = false;
+	//Knowing if we have more than one color during the time
+	bool useTexture = false;
+	//_________________________________________________________________________________________________________________________________
+
+
+	//------------------------------------------------COLOR----------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------
+	bool activeMulticolor = false;
+	//_________________________________________________________________________________________________________________________________
+
+	//The particles we want to create per second.
+	int particlesEmition = 1.0f;
+};
+
+PARTICLELIB_API struct EmitterValues
+{
+	//------------------------------------------------SHAPE----------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------
+	//Shape that the current emitter will have
+	ShapeEmitter shapeEmitter = BoxShape;
+	ShapeEmitter burstShapeEmitter = BoxShape;
+
+	//The dimensions of the box shape that will spawn the particles (width and height)
+	PartVec3 boxShapeSize /*= PartVec3(1.0f)*/;
+	//The radiant of the sphere shape that will spawn the particles
+	float sphereShapeRad = 1.0f;
+	//The height is the distance between the tip of the cone to the base, and the rad is witch radiant will have this base
+	float coneShapeHeight = 1.0f;
+	float coneShapeRad = 1.0f;
+	//_________________________________________________________________________________________________________________________________
+
+
+	//------------------------------------------------BURST----------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------
+		//You active Burst option.
+	bool isBurst = false;
+	/*Seconds between bursts
+	If the busrt seconds are 0 will do the burst only onces*/
+	float burstSeconds = 1.0;
+
+	//numbers of particles in each Burst. Random between 2 values
+	int minBurst = 1;
+	int maxBurst = 10;
+	//_________________________________________________________________________________________________________________________________
 };
 
 PARTICLELIB_API class ParticleEmitter
 {
 public:
+	friend class ParticleManager;
 	ParticleEmitter(float* emitterPos, int maxParticles);
 	~ParticleEmitter();
+
+	PARTICLELIB_API void SetParticleValues(ParticleValues values);
+	PARTICLELIB_API ParticleValues GetParticleValues() const;
+
+	PARTICLELIB_API void SetParticleValues(EmitterValues values);
+	PARTICLELIB_API EmitterValues GetEmitterValues() const;
 
 	PARTICLELIB_API void ChangeMaxParticles(int maxParticles);
 
@@ -78,9 +145,9 @@ public:
 	//Erase Color sending the own position
 	PARTICLELIB_API bool EraseColor(const float position);
 
+private:
 	void Update(float dt);
 	bool SaveCameraDistance(float* cameraPos);
-
 	//Draw emitter by emitter for diferents textures
 	void Draw(unsigned int shaderUuid);
 	//Start to emit particles
@@ -90,7 +157,6 @@ public:
 	//Stop to emit particles
 	void PauseEmitter();
 
-private:
 	/*Create Particle with the start values
 	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
 	The global position in the world
@@ -110,72 +176,11 @@ private:
 	*/
 	PartVec3 GetRandomPos(ShapeEmitter emitter);
 	float GetRandomNum(float min, float max);
-public:
-//------------------------------------------------PARTICLES------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------
-	//Public varible to have the particle start values acces out of this class
-	ParticleValues particleValues;
-
-	//The particles we want to create per second.
-	int particlesEmition = 1.0f;
-//_________________________________________________________________________________________________________________________________
-
-
-//------------------------------------------------SHAPE----------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------
-	//Shape that the current emitter will have
-	ShapeEmitter shapeEmitter = BoxShape;
-	ShapeEmitter burstShapeEmitter = BoxShape;
-
-	//The dimensions of the box shape that will spawn the particles (width and height)
-	PartVec3 boxShapeSize = PartVec3(1.0f);
-	//The radiant of the sphere shape that will spawn the particles
-	float sphereShapeRad = 1.0f;
-	//The height is the distance between the tip of the cone to the base, and the rad is witch radiant will have this base
-	float coneShapeHeight = 1.0f;
-	float coneShapeRad = 1.0f;
-//_________________________________________________________________________________________________________________________________
-
-
-//------------------------------------------------BURST----------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------
-	//You active Burst option.
-	bool isBurst = false;
-	/*Seconds between bursts
-	If the busrt seconds are 0 will do the burst only onces*/
-	float burstSeconds = 1.0;
-
-	//numbers of particles in each Burst. Random between 2 values
-	int minBurst = 1;
-	int maxBurst = 10;
-//_________________________________________________________________________________________________________________________________
-
-
-//------------------------------------------------TEXTURE--------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------
-	//Texture id that draw function need it
-	unsigned int textureID = 0u;
-
-	int  textureRows = 1;
-	int  textureColumns = 1;
-	float animationSpeed = 0.1f;
-
-	bool dieOnFinishAnim = false;
-	bool isParticleAnimated = false;
-	//Knowing if we have more than one color during the time
-	bool useTexture = false;
-//_________________________________________________________________________________________________________________________________
-
-
-//------------------------------------------------COLOR----------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------
-	bool activeMulticolor = false;
-//_________________________________________________________________________________________________________________________________
-
+private:
 	float cameraDist = 0.0f;
 
-
-private:
+	ParticleValues particleValues;
+	EmitterValues emitterValues;
 
 	/*Map of all colors will be in the particle with RGBA. The colors will change during the time
 	float is the number between 0 and 1. Means the position in percentage 

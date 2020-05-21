@@ -3,9 +3,10 @@
 
 #include "Component.h"
 #include <glm/vec4.hpp>
+#include <ParticleManager.h>
 
 class ControllerParticles;
-class ParticleEmitter;
+
 class ComponentEmitter : public Component
 {
 public:
@@ -45,6 +46,9 @@ public:
 	bool loop = true;
 
 	ParticleEmitter* emitter;
+
+	ParticleValues particleValues;
+	EmitterValues emitterValues;
 
 	int maxParticles = 0;
 	int nextPos = 100;
