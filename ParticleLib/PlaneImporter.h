@@ -4,7 +4,7 @@
 class PlaneImporter
 {
 public:
-	PlaneImporter(unsigned int maxParticles);
+	PlaneImporter();
 
 	void SetDynamicValues(unsigned int maxParticles);
 

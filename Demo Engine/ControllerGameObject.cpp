@@ -20,6 +20,10 @@ bool ControllerGameObject::Update(float dt)
 	{
 		if ((*iter)->toDelete)
 		{
+			ComponentEmitter* comp = (*iter)->GetComponentEmitter();
+			if (comp)
+				delete comp;
+				
 			gameObjectVec.erase(iter++);  // alternatively, i = items.erase(i);
 		}
 		else

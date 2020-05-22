@@ -12,7 +12,11 @@ ComponentEmitter::ComponentEmitter(GameObject* gameObject, ControllerParticles* 
 {
 	emitter = Part::CreateEmitter(&gameObject->transform->position.x, maxParticles);
 	this->controller = controller;
+	if (maxParticles <= 0)
+		maxParticles = 1;
 	this->maxParticles = maxParticles;
+	particleValues = emitter->GetParticleValues();
+	emitterValues = emitter->GetEmitterValues();
 }
 
 ComponentEmitter::~ComponentEmitter()
@@ -38,6 +42,17 @@ void ComponentEmitter::Inspector()
 	ColorValuesInsp();
 
 	TextureValuesInsp();
+
+	if (particleChange)
+	{
+		emitter->SetParticleValues(particleValues);
+		particleChange = false;
+	}
+	if (emitterChange)
+	{
+		emitter->SetEmitterValues(emitterValues);
+		emitterChange = false;	
+	}
 }
 
 #pragma region StartValues
@@ -52,7 +67,8 @@ void ComponentEmitter::StartValuesInsp()
 		ShowFloatValue(&particleValues.acceleration.x, checkAcceleration, "Acceleration", 0.25f, -5.0f, 5.0f);
 
 		ImGui::PushItemWidth(180.0f);
-		ImGui::DragFloat3("Acceleration 3D", &particleValues.gravity.x);
+		if (ImGui::DragFloat3("Acceleration 3D", &particleValues.gravity.x))
+			particleChange = true;
 		ImGui::PopItemWidth();
 
 		ImGui::Checkbox("##Rotation", &checkRotation);
@@ -74,7 +90,8 @@ void ComponentEmitter::StartValuesInsp()
 		ShowFloatValue(&particleValues.sizeOverTime.x, checkSizeOverTime, "SizeOverTime", 0.25f, -1.0f, 1.0f);
 
 		ImGui::PushItemWidth(200.0f);
-		ImGui::DragInt("Emition", &particleValues.particlesEmition, 1.0f, 0.0f, 300.0f, "%.2f");
+		if(ImGui::DragInt("Emition", &particleValues.particlesEmition, 1.0f, 0.0f, 300.0f, "%.2f"))
+			particleChange = true;
 		ImGui::PopItemWidth();
 
 	}
@@ -99,7 +116,10 @@ void ComponentEmitter::ShowFloatValue(float* value, bool checkBox, const char* n
 	{
 		ImGui::PushItemWidth(148.0f);
 		if (ImGui::DragFloat(name, &value[0], v_speed, v_min, v_max, "%.2f"))
+		{
 			value[1] = value[0];
+			particleChange = true;
+		}
 	}
 	ImGui::PopItemWidth();
 }
@@ -108,6 +128,7 @@ void ComponentEmitter::CheckMinMax(float* value)
 {
 	if (value[0] > value[1])
 		value[1] = value[0];
+	particleChange = true;
 }
 #pragma endregion
 
@@ -120,11 +141,20 @@ void ComponentEmitter::ShapeValuesInsp()
 		if (ImGui::BeginMenu("Change Shape"))
 		{
 			if (ImGui::MenuItem("Box"))
+			{
 				emitterValues.shapeEmitter = ShapeEmitter::BoxShape;
+				emitterChange = true;
+			}
 			else if (ImGui::MenuItem("Sphere"))
+			{
 				emitterValues.shapeEmitter = ShapeEmitter::SphereShape;
+				emitterChange = true;
+			}
 			else if (ImGui::MenuItem("Cone"))
+			{
 				emitterValues.shapeEmitter = ShapeEmitter::ConeShape;
+				emitterChange = true;
+			}
 				ImGui::End();
 		}
 
@@ -132,7 +162,8 @@ void ComponentEmitter::ShapeValuesInsp()
 		{
 		case BoxShape:
 			ImGui::Text("Box");
-			ImGui::DragFloat3("Box Size", &emitterValues.boxShapeSize.x, 0.1f, 0.1f, 20.0f, "%.2f");
+			if(ImGui::DragFloat3("Box Size", &emitterValues.boxShapeSize.x, 0.1f, 0.1f, 20.0f, "%.2f"))
+				emitterChange = true;
 
 			break;
 		case SphereShape:
@@ -142,21 +173,33 @@ void ComponentEmitter::ShapeValuesInsp()
 			ImGui::Text("Particle emision from:");
 
 			if (ImGui::RadioButton("Random", emitterValues.shapeEmitter == SphereShape))
+			{
 				emitterValues.shapeEmitter = ShapeEmitter::SphereShape;
+				emitterChange = true;
+			}
 			ImGui::SameLine();
 			if (ImGui::RadioButton("Center", emitterValues.shapeEmitter == SphereShapeCenter))
+			{
 				emitterValues.shapeEmitter = ShapeEmitter::SphereShapeCenter;
+				emitterChange = true;
+			}
 			ImGui::SameLine();
 			if (ImGui::RadioButton("Border", emitterValues.shapeEmitter == SphereShapeBorder))
+			{
 				emitterValues.shapeEmitter = ShapeEmitter::SphereShapeBorder;
+				emitterChange = true;
+			}
 
-			ImGui::DragFloat("Sphere Size", &emitterValues.sphereShapeRad, 0.25f, 1.0f, 20.0f, "%.2f");
+			if(ImGui::DragFloat("Sphere Size", &emitterValues.sphereShapeRad, 0.25f, 1.0f, 20.0f, "%.2f"))
+				emitterChange = true;
 
 			break;
 		case ConeShape:
 			ImGui::Text("Cone");
-			ImGui::DragFloat("Cone Circle Rad", &emitterValues.coneShapeRad, 0.25f, 0.25f, 20.0f, "%.2f");
-			ImGui::DragFloat("Height Cone", &emitterValues.coneShapeHeight, 0.25f, 0.25f, 20.0f, "%.2f");
+			if(ImGui::DragFloat("Cone Circle Rad", &emitterValues.coneShapeRad, 0.25f, 0.25f, 20.0f, "%.2f"))
+				emitterChange = true;
+			if(ImGui::DragFloat("Height Cone", &emitterValues.coneShapeHeight, 0.25f, 0.25f, 20.0f, "%.2f"))
+				emitterChange = true;
 			break;
 		default:
 			break;
@@ -170,29 +213,52 @@ void ComponentEmitter::BurstInsp()
 {
 	if (ImGui::CollapsingHeader("Particle Burst"))
 	{
-		ImGui::Checkbox("Burst", &emitterValues.isBurst);
+		if(ImGui::Checkbox("Burst", &emitterValues.isBurst))
+			emitterChange = true;
+
 		if (ImGui::BeginMenu("Shape"))
 		{
 			if (ImGui::MenuItem("Box"))
+			{
 				emitterValues.burstShapeEmitter = ShapeEmitter::BoxShape;
+				emitterChange = true;
+			}
 			else if (ImGui::MenuItem("Sphere"))
+			{
 				emitterValues.burstShapeEmitter = ShapeEmitter::SphereShape;
+				emitterChange = true;
+			}
 			else if (ImGui::MenuItem("Sphere From center"))
+			{
 				emitterValues.burstShapeEmitter = ShapeEmitter::SphereShapeCenter;
+				emitterChange = true;
+			}
 			else if (ImGui::MenuItem("Sphere From Surface"))
+			{
 				emitterValues.burstShapeEmitter = ShapeEmitter::SphereShapeBorder;
+				emitterChange = true;
+			}
 			else if (ImGui::MenuItem("Cone"))
+			{
 				emitterValues.burstShapeEmitter = ShapeEmitter::ConeShape;
+				emitterChange = true;
+			}
 			ImGui::End();
 		}
-		ImGui::DragInt("Min particles", &emitterValues.minBurst, 1.0f, 0, 100);
+		if(ImGui::DragInt("Min particles", &emitterValues.minBurst, 1.0f, 0, 100))
+			emitterChange = true;
 		if (emitterValues.minBurst > emitterValues.maxBurst)
+		{
 			emitterValues.maxBurst = emitterValues.minBurst;
-		ImGui::DragInt("Max Particles", &emitterValues.maxBurst, 1.0f, 0, 100);
+			emitterChange = true;
+		}
+		if(ImGui::DragInt("Max Particles", &emitterValues.maxBurst, 1.0f, 0, 100))
+			emitterChange = true;
 		if (emitterValues.maxBurst < emitterValues.minBurst)
 			emitterValues.minBurst = emitterValues.maxBurst;
 
-		ImGui::DragFloat("Seconds between Burst", &emitterValues.burstSeconds, 0.5f, 0.0f, 0.0f, "%.1f");
+		if(ImGui::DragFloat("Seconds between Burst", &emitterValues.burstSeconds, 0.5f, 0.0f, 0.0f, "%.1f"))
+			emitterChange = true;
 
 		ImGui::Separator();
 	}
@@ -218,7 +284,8 @@ void ComponentEmitter::ColorValuesInsp()
 		}
 
 		ImGui::Separator();
-		ImGui::Checkbox("Color time", &particleValues.activeMulticolor);
+		if (ImGui::Checkbox("Color time", &particleValues.activeMulticolor))
+			particleChange = true;
 		if (particleValues.activeMulticolor)
 		{
 
@@ -247,7 +314,7 @@ bool ComponentEmitter::EditColor(float* color, float position)
 	if (position > 0)
 	{
 		std::string colorStr = "Remove Color ";
-		colorStr.append(std::to_string(position));
+		colorStr.append(std::to_string(position * 100)+"%");
 		if (ImGui::Button(colorStr.data(), ImVec2(125, 25)))
 			ret = false;
 	}
@@ -261,7 +328,8 @@ void ComponentEmitter::TextureValuesInsp()
 {
 	if (ImGui::CollapsingHeader("Particle Texture", ImGuiTreeNodeFlags_FramePadding))
 	{
-		ImGui::Checkbox("Using texture", &particleValues.useTexture);
+		if (ImGui::Checkbox("Using texture", &particleValues.useTexture))
+			particleChange = true;
 
 		if (particleValues.textureID > 0u)
 		{
@@ -278,7 +346,10 @@ void ComponentEmitter::TextureValuesInsp()
 					ImGui::Dummy(ImVec2(sz, sz));
 					ImGui::SameLine();
 					if (ImGui::MenuItem((*iter)->texture.name.c_str()))
+					{
 						particleValues.textureID = (*iter)->texture.id;
+						particleChange = true;
+					}
 				}
 				ImGui::EndMenu();
 			}
@@ -291,15 +362,20 @@ void ComponentEmitter::TextureValuesInsp()
 					particleValues.textureColumns = 1;
 					particleValues.dieOnFinishAnim = false;
 				}
+				particleChange = true;
 			}
 			if (particleValues.isParticleAnimated)
 			{
-				ImGui::DragFloat("Animation Speed", &particleValues.animationSpeed, 0.001f, 0.0f, 5.0f);
+				if(ImGui::DragFloat("Animation Speed", &particleValues.animationSpeed, 0.001f, 0.0f, 5.0f))
+					particleChange = true;
 
-				ImGui::DragInt("Rows", &particleValues.textureRows, 1, 1, 10);
-				ImGui::DragInt("Columns", &particleValues.textureColumns, 1, 1, 10);
+				if(ImGui::DragInt("Rows", &particleValues.textureRows, 1, 1, 10))
+					particleChange = true;
+				if(ImGui::DragInt("Columns", &particleValues.textureColumns, 1, 1, 10))
+					particleChange = true;
 
-				ImGui::Checkbox("Kill particle with animation", &particleValues.dieOnFinishAnim);
+				if(ImGui::Checkbox("Kill particle with animation", &particleValues.dieOnFinishAnim))
+					particleChange = true;
 				if (particleValues.dieOnFinishAnim)
 				{
 					checkLife = false;
@@ -310,6 +386,7 @@ void ComponentEmitter::TextureValuesInsp()
 			if (ImGui::Button("Remove Texture", ImVec2(125, 25)))
 			{
 				particleValues.textureID = 0u;
+				particleChange = true;
 			}
 		}
 		else
@@ -323,7 +400,10 @@ void ComponentEmitter::TextureValuesInsp()
 					ImGui::Dummy(ImVec2(sz, sz));
 					ImGui::SameLine();
 					if (ImGui::MenuItem((*iter)->texture.name.c_str()))
+					{
 						particleValues.textureID = (*iter)->texture.id;
+						particleChange = true;
+					}
 				}
 				ImGui::EndMenu();
 			}

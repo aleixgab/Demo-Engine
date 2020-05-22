@@ -22,7 +22,6 @@ public:
 
 	PartVec3 Normalize();
 
-	PartVec3& operator =(const PartVec3& vec);
 	PartVec3& operator +=(const PartVec3& vec);
 	PartVec3& operator /=(const float num);
 	PartVec3& operator *=(const float num);

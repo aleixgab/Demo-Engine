@@ -36,23 +36,23 @@ PARTICLELIB_API struct ParticleValues
 	//------------------------------------------------BASIC VALUES--------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------
 	//The seconds that the particle will be alive
-	PartVec2 life /*= PartVec2(5.0f, 5.0f)*/;
+	PartVec2 life;
 	//The initial velocity that will get the particle
-	PartVec2 speed /*= PartVec2(3.0f, 3.0f)*/;
+	PartVec2 speed;
 	//The acceleration in world coordinates that will afect the particle
-	PartVec3 gravity /*= PartVec3(0.0f, 0.0f, 0.0f)*/;
+	PartVec3 gravity;
 	//The acceleration that will afect the particle velocity without changing the direction
-	PartVec2 acceleration/* = PartVec2(0.0f, 0.0f)*/;
+	PartVec2 acceleration;
 	//The initial plane size
-	PartVec2 size/* = PartVec2(1.0f, 1.0f)*/;
+	PartVec2 size;
 	//The acceleration plane size
-	PartVec2 sizeOverTime/* = PartVec2(0.0f, 0.0f)*/;
+	PartVec2 sizeOverTime;
 	//The initial rotation plane
-	PartVec2 rotation /*= PartVec2(0.0f, 0.0f)*/;
+	PartVec2 rotation;
 	//The angular acceleration of the plane 
-	PartVec2 angularAcceleration/* = PartVec2(0.0f, 0.0f)*/;
+	PartVec2 angularAcceleration;
 	//The angular velocity of the plane 
-	PartVec2 angularVelocity /*= PartVec2(0.0f, 0.0f)*/;
+	PartVec2 angularVelocity;
 	//_________________________________________________________________________________________________________________________________
 
 	//------------------------------------------------TEXTURE--------------------------------------------------------------------------
@@ -89,7 +89,7 @@ PARTICLELIB_API struct EmitterValues
 	ShapeEmitter burstShapeEmitter = BoxShape;
 
 	//The dimensions of the box shape that will spawn the particles (width and height)
-	PartVec3 boxShapeSize /*= PartVec3(1.0f)*/;
+	PartVec3 boxShapeSize;
 	//The radiant of the sphere shape that will spawn the particles
 	float sphereShapeRad = 1.0f;
 	//The height is the distance between the tip of the cone to the base, and the rad is witch radiant will have this base
@@ -122,7 +122,7 @@ public:
 	PARTICLELIB_API void SetParticleValues(ParticleValues values);
 	PARTICLELIB_API ParticleValues GetParticleValues() const;
 
-	PARTICLELIB_API void SetParticleValues(EmitterValues values);
+	PARTICLELIB_API void SetEmitterValues(EmitterValues values);
 	PARTICLELIB_API EmitterValues GetEmitterValues() const;
 
 	PARTICLELIB_API void ChangeMaxParticles(int maxParticles);

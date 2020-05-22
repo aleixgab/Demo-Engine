@@ -3,7 +3,7 @@
 #include "PartMath.h"
 #include <cstddef>
 
-PlaneImporter::PlaneImporter(unsigned int maxParticles)
+PlaneImporter::PlaneImporter()
 {
 	float particle_quad[] = {
 

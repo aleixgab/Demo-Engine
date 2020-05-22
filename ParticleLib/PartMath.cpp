@@ -26,13 +26,13 @@ PartVec3 PartVec3::Normalize()
 	return copy;
 }
 
-PartVec3& PartVec3::operator =(const PartVec3& vec)
+/*PartVec3& PartVec3::operator =(const PartVec3& vec)
 {
 	x = vec.x;
 	y = vec.y;
 	z = vec.z;
 	return *this;
-}
+}*/
 
 PartVec3& PartVec3::operator +=(const PartVec3& vec)
 {

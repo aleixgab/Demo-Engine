@@ -100,7 +100,7 @@ PARTICLELIB_API bool Part::SetCameraPos(float* newCameraPos)
 bool ParticleManager::Update(float dt)
 {
 	bool ret = true;
-	if (emittersList.empty())
+	if (!emittersList.empty())
 	{
 		for (std::list<ParticleEmitter*>::iterator it = emittersList.begin(); it != emittersList.end(); ++it)
 		{

@@ -8,13 +8,20 @@
 #include "PlaneImporter.h"
 #include <string>
 
-ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles): globalObjPos(emitterPos[0])
+ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles) : globalObjPos(emitterPos[0])
 {
 	colorMap.insert(std::pair<float, PartVec4>(0.0f, PartVec4(1.0f)));
-	plane = new PlaneImporter(maxParticles);
+	plane = new PlaneImporter();
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 
 	ChangeMaxParticles(maxParticles);
+
+	//Start Values
+	particleValues.speed = PartVec2(3.0f, 3.0f);
+	particleValues.size = PartVec2(1.0f, 1.0f);
+	particleValues.life = PartVec2(5.0f, 5.0f);
+
+	emitterValues.boxShapeSize = PartVec3(1.0f);
 }
 
 PARTICLELIB_API void ParticleEmitter::ChangeMaxParticles(int maxParticles)
@@ -47,7 +54,7 @@ PARTICLELIB_API void ParticleEmitter::SetGlobalPos(float* globalPos)
 
 PARTICLELIB_API void ParticleEmitter::AddColor(float* colorRGBA, const float position)
 {
-	colorMap.insert(std::pair<float, PartVec4>(position, PartVec4(colorRGBA[0])));
+	colorMap.insert(std::pair<float, PartVec4>(position, PartVec4(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3])));
 }
 
 PARTICLELIB_API bool ParticleEmitter::EditColor(float* colorRGBA, const float position)
@@ -56,7 +63,7 @@ PARTICLELIB_API bool ParticleEmitter::EditColor(float* colorRGBA, const float po
 	std::map<float, PartVec4>::iterator iter = colorMap.find(position);
 	if (iter != colorMap.end())
 	{
-		(*iter).second = PartVec4(colorRGBA[0]);
+		(*iter).second = PartVec4(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
 		ret = true;
 	}
 	return ret;
@@ -69,6 +76,9 @@ PARTICLELIB_API bool ParticleEmitter::GetColor(float* colorRGBA, const float pos
 	if (iter != colorMap.end())
 	{
 		colorRGBA[0] = (*iter).second.x;
+		colorRGBA[1] = (*iter).second.y;
+		colorRGBA[2] = (*iter).second.z;
+		colorRGBA[3] = (*iter).second.w;
 		ret = true;
 	}
 	return ret;
@@ -102,6 +112,27 @@ ParticleEmitter::~ParticleEmitter()
 
 PARTICLELIB_API void ParticleEmitter::SetParticleValues(ParticleValues values)
 {
+	particleValues.life = values.life;
+	particleValues.speed = values.speed;
+	particleValues.gravity = values.gravity;
+	particleValues.acceleration = values.acceleration;
+	particleValues.size = values.size;
+	particleValues.sizeOverTime =values.sizeOverTime;
+	particleValues.rotation = values.rotation;
+	particleValues.angularAcceleration = values.angularAcceleration;
+	particleValues.angularVelocity = values.angularVelocity;
+
+	particleValues.textureID = values.textureID;
+	particleValues.textureRows = values.textureRows;
+	particleValues.textureColumns = values.textureColumns;
+	particleValues.animationSpeed = values.animationSpeed;
+	particleValues.dieOnFinishAnim = values.dieOnFinishAnim;
+	particleValues.isParticleAnimated = values.isParticleAnimated;
+	particleValues.useTexture = values.useTexture;
+
+	particleValues.activeMulticolor = values.activeMulticolor;
+
+	particleValues.particlesEmition = values.particlesEmition;
 }
 
 PARTICLELIB_API ParticleValues ParticleEmitter::GetParticleValues() const
@@ -109,8 +140,18 @@ PARTICLELIB_API ParticleValues ParticleEmitter::GetParticleValues() const
 	return particleValues;
 }
 
-PARTICLELIB_API void ParticleEmitter::SetParticleValues(EmitterValues values)
+PARTICLELIB_API void ParticleEmitter::SetEmitterValues(EmitterValues values)
 {
+	emitterValues.shapeEmitter = values.shapeEmitter;
+	emitterValues.burstShapeEmitter = values.burstShapeEmitter;
+	emitterValues.boxShapeSize = values.boxShapeSize;
+	emitterValues.sphereShapeRad = values.sphereShapeRad;
+	emitterValues.coneShapeHeight =	values.coneShapeHeight;
+	emitterValues.coneShapeRad = values.coneShapeRad;
+	emitterValues.isBurst =	values.isBurst;
+	emitterValues.burstSeconds = values.burstSeconds;
+	emitterValues.minBurst = values.minBurst;
+	emitterValues.maxBurst = values.maxBurst;
 }
 
 PARTICLELIB_API EmitterValues ParticleEmitter::GetEmitterValues() const
@@ -142,7 +183,7 @@ void ParticleEmitter::Update(float dt)
 			{
 				CreateParticles(GetRandomNum(emitterValues.minBurst, emitterValues.maxBurst), globalObjPos, emitterValues.burstShapeEmitter);
 
-				if (emitterValues.burstSeconds == 0)
+				if (emitterValues.burstSeconds <= 0)
 				{
 					onceBurst = true;
 					burstTimer.Stop();
