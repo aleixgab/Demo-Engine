@@ -17,6 +17,20 @@ extern "C" {
 
 class PlaneImporter;
 
+struct Particle
+{
+	PartVec3 position;
+	PartVec3 direction;
+	float speed;
+	float acceleration;
+	PartVec3 gravity;
+	float angleRot;
+	float angleVel;
+	float angleAccel;
+	float size;
+	float sizeTime;
+};
+
 PARTICLELIB_API enum ShapeEmitter {
 	//Spawn particles from the box and takes object Up direction
 	BoxShape = 0,
@@ -223,17 +237,18 @@ private:
 
 	PlaneImporter* plane = nullptr;
 
+	std::vector<Particle> particles;
 	std::vector<PartVec2> particleLife;
-	std::vector<PartVec3> particlePosition;
-	std::vector<PartVec3> particleDirection;
-	std::vector<PartVec3> particleGravity;
-	std::vector<float> particleSpeed;
-	std::vector<float> particleAcceleration;
-	std::vector<float> particleAngleRot;
-	std::vector<float> particleAngleVel;
-	std::vector<float> particleAngleAccel;
-	std::vector<float> particleSize;
-	std::vector<float> particleSizeTime;
+	//std::vector<PartVec3> particlePosition;
+	//std::vector<PartVec3> particleDirection;
+	//std::vector<PartVec3> particleGravity;
+	//std::vector<float> particleSpeed;
+	//std::vector<float> particleAcceleration;
+	//std::vector<float> particleAngleRot;
+	//std::vector<float> particleAngleVel;
+	//std::vector<float> particleAngleAccel;
+	//std::vector<float> particleSize;
+	//std::vector<float> particleSizeTime;
 	std::vector<bool> particleActiveBool;
 
 	bool onceBurst = false;

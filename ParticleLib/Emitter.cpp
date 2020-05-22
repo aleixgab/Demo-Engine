@@ -25,18 +25,9 @@ PARTICLELIB_API void ParticleEmitter::ChangeMaxParticles(int maxParticles)
 	if (maxParticles <= 0)
 		maxParticles = 1;
 
-	particleActiveBool.resize(maxParticles);
+	particles.resize(maxParticles);
 	particleLife.resize(maxParticles);
-	particlePosition.resize(maxParticles);
-	particleDirection.resize(maxParticles);
-	particleGravity.resize(maxParticles);
-	particleSpeed.resize(maxParticles);
-	particleAcceleration.resize(maxParticles);
-	particleAngleRot.resize(maxParticles);
-	particleAngleVel.resize(maxParticles);
-	particleAngleAccel.resize(maxParticles);
-	particleSize.resize(maxParticles);
-	particleSizeTime.resize(maxParticles);
+	particleActiveBool.resize(maxParticles);
 	
 	plane->SetDynamicValues(maxParticles);
 }
@@ -200,18 +191,8 @@ void ParticleEmitter::Update(float dt)
 				{
 					//Deactivate the particle
 					particleActive--;
-
+					particles[i] = particles[particleActive];
 					particleLife[i] = particleLife[particleActive];
-					particlePosition[i] = particlePosition[particleActive];
-					particleDirection[i] = particleDirection[particleActive];
-					particleGravity[i] = particleGravity[particleActive];
-					particleSpeed[i] = particleSpeed[particleActive];
-					particleAcceleration[i] = particleAcceleration[particleActive];
-					particleAngleRot[i] = particleAngleRot[particleActive];
-					particleAngleVel[i] = particleAngleVel[particleActive];
-					particleAngleAccel[i] = particleAngleAccel[particleActive];
-					particleSize[i] = particleSize[particleActive];
-					particleSizeTime[i] = particleSizeTime[particleActive];
 
 					particleActiveBool[particleActive] = false;
 
@@ -228,48 +209,12 @@ void ParticleEmitter::Update(float dt)
 void ParticleEmitter::SetNewBuffers()
 {
 	//Life
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_dynamic[0]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec2), &particleLife[0]);
 
-	//Position
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[2]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec3), &particlePosition[0]);
-
-	//Direction
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec3), &particleDirection[0]);
-
-	//Speed
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSpeed[0]);
-
-	//Acceleration
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[5]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAcceleration[0]);
-
-	//Gravity - Acceleration 3D
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[6]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec3), &particleGravity[0]);
-
-	//Rotation
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[7]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAngleRot[0]);
-
-	//Rotation Velocity
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[8]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAngleVel[0]);
-
-	//Rotation Acceleration
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[9]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleAngleAccel[0]);
-
-	//Size
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[10]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSize[0]);
-
-	//Size Over Time
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[11]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(float), &particleSizeTime[0]);
+	////Position
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_dynamic[1]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(Particle), &particles[0]);
 }
 
 void ParticleEmitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
@@ -277,7 +222,7 @@ void ParticleEmitter::CreateParticles(int numParticles, PartVec3 globalPosition,
 	for (int i = 0; i < numParticles; ++i)
 	{
 		//int particleId = 0;
-		if (particleActive < particleLife.size())
+		if (particleActive < particles.size())
 		{
 			globalPosition += GetRandomPos(emitter);
 			//Create the particle in the correctly slot in the pool
@@ -294,16 +239,17 @@ void ParticleEmitter::SetParticleValues(PartVec3 pos)
 {
 	//Save all the initial values 
 	particleLife[particleActive] = PartVec2(0.0f, GetRandomNum(particleValues.life.x, particleValues.life.y));
-	particlePosition[particleActive] = pos;
-	particleDirection[particleActive] = initialParticleDirection;
-	particleGravity[particleActive] = particleValues.gravity;
-	particleSpeed[particleActive] = GetRandomNum(particleValues.speed.x, particleValues.speed.y);
-	particleAcceleration[particleActive] = GetRandomNum(particleValues.acceleration.x, particleValues.acceleration.y);
-	particleAngleRot[particleActive] = GetRandomNum(particleValues.rotation.x, particleValues.rotation.y);
-	particleAngleVel[particleActive] = GetRandomNum(particleValues.angularVelocity.x, particleValues.angularVelocity.y);
-	particleAngleAccel[particleActive] = GetRandomNum(particleValues.angularAcceleration.x, particleValues.angularAcceleration.y);
-	particleSize[particleActive] = GetRandomNum(particleValues.size.x, particleValues.size.y);
-	particleSizeTime[particleActive] = GetRandomNum(particleValues.sizeOverTime.x, particleValues.sizeOverTime.y);
+
+	particles[particleActive].position = pos;
+	particles[particleActive].direction	= initialParticleDirection;
+	particles[particleActive].gravity = particleValues.gravity;
+	particles[particleActive].speed	= GetRandomNum(particleValues.speed.x, particleValues.speed.y);
+	particles[particleActive].acceleration = GetRandomNum(particleValues.acceleration.x, particleValues.acceleration.y);
+	particles[particleActive].angleRot = GetRandomNum(particleValues.rotation.x, particleValues.rotation.y);
+	particles[particleActive].angleVel = GetRandomNum(particleValues.angularVelocity.x, particleValues.angularVelocity.y);
+	particles[particleActive].angleAccel = GetRandomNum(particleValues.angularAcceleration.x, particleValues.angularAcceleration.y);
+	particles[particleActive].size = GetRandomNum(particleValues.size.x, particleValues.size.y);
+	particles[particleActive].sizeTime = GetRandomNum(particleValues.sizeOverTime.x, particleValues.sizeOverTime.y);
 
 	particleActiveBool[particleActive] = true;
 }
@@ -341,7 +287,7 @@ void ParticleEmitter::Draw(unsigned int shaderUuid)
 	glBindVertexArray(plane->VAO);
 
 	// Set mesh attributes
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_static);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 
@@ -349,7 +295,7 @@ void ParticleEmitter::Draw(unsigned int shaderUuid)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_dynamic[0]);
 	//Life
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(2);
@@ -357,65 +303,56 @@ void ParticleEmitter::Draw(unsigned int shaderUuid)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_dynamic[1]);
 	//Position
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[3]);
 	//Direction
 	glVertexAttribDivisor(4, 1);
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)sizeof(PartVec3));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[4]);
 	//Speed
 	glVertexAttribDivisor(5, 1);
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[5]);
 	//Acceleration
 	glVertexAttribDivisor(6, 1);
 	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2 + sizeof(float)));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[6]);
 	//Gravity - Acceleration 3D
 	glVertexAttribDivisor(7, 1);
 	glEnableVertexAttribArray(7);
-	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2 + sizeof(float) * 2));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[7]);
 	//Rotation
 	glVertexAttribDivisor(8, 1);
 	glEnableVertexAttribArray(8);
-	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 2));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[8]);
 	//Rotation Velocity
 	glVertexAttribDivisor(9, 1);
 	glEnableVertexAttribArray(9);
-	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 3));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[9]);
 	//Rotation Acceleration
 	glVertexAttribDivisor(10, 1);
 	glEnableVertexAttribArray(10);
-	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 4));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[10]);
 	//Size
 	glVertexAttribDivisor(11, 1);
 	glEnableVertexAttribArray(11);
-	glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 5));
 
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO[11]);
 	//Size Over Time
 	glVertexAttribDivisor(12, 1);
 	glEnableVertexAttribArray(12);
-	glVertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 6));
 
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleActive);
 
@@ -449,9 +386,9 @@ void ParticleEmitter::StopEmitter()
 {
 	for (int i = 0; i < particleActive; ++i)
 	{
-		if (particleActiveBool[i])
+		if (particleActiveBool[particleActive])
 		{
-			particleActiveBool[i] = false;
+			particleActiveBool[particleActive] = false;
 		}
 	}
 
