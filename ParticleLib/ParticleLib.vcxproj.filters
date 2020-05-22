@@ -75,10 +75,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Demo Engine\ParticleLibrary\Shaders\Particle_FShader.txt">
+    <Text Include="Shaders\Particle_FShader.txt">
       <Filter>Shader</Filter>
     </Text>
-    <Text Include="..\Demo Engine\ParticleLibrary\Shaders\Particle_VShader.txt">
+    <Text Include="Shaders\Particle_VShader.txt">
       <Filter>Shader</Filter>
     </Text>
   </ItemGroup>

@@ -183,8 +183,8 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Demo Engine\ParticleLibrary\Shaders\Particle_FShader.txt" />
-    <Text Include="..\Demo Engine\ParticleLibrary\Shaders\Particle_VShader.txt" />
+    <Text Include="Shaders\Particle_FShader.txt" />
+    <Text Include="Shaders\Particle_VShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
