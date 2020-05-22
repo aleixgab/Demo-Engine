@@ -168,6 +168,7 @@
     <ClInclude Include="Emitter.h" />
     <ClInclude Include="ParticleLib.h" />
     <ClInclude Include="ParticleManager.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PartMath.h" />
     <ClInclude Include="PlaneImporter.h" />
     <ClInclude Include="Timer.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="3rdParty\glad\glad.c" />
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="PartMath.cpp" />
     <ClCompile Include="PlaneImporter.cpp" />
     <ClCompile Include="Timer.cpp" />

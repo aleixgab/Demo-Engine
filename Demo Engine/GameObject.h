@@ -8,7 +8,6 @@
 #include "ComponentTransform.h"
 
 class ComponentEmitter;
-class ParticleManager;
 class ControllerParticles;
 
 enum ComponentType;

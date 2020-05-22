@@ -1,11 +1,7 @@
-#include "Emitter.h"
-#include "Emitter.h"
-#include "Emitter.h"
-#include "Emitter.h"
-#include "Emitter.h"
-#include "Timer.h"
+#include <Emitter.h>
+#include <Timer.h>
 #include <glad/glad.h>
-#include "PlaneImporter.h"
+#include <PlaneImporter.h>
 #include <string>
 
 ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles) : globalObjPos(emitterPos[0])

@@ -6,8 +6,6 @@
 
 #include "ComponentEmitter.h"
 
-//class ParticleManager;
-
 class ControllerParticles: public Controller
 {
 public:
@@ -19,9 +17,6 @@ public:
 	bool Update(float dt);
 
 public:
-
-	//ParticleManager* particleManager;
-
 };
 
 #endif

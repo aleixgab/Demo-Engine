@@ -60,12 +60,17 @@ PARTICLELIB_API struct ParticleValues
 	//Texture id that draw function need it
 	unsigned int textureID = 0u;
 
-	int  textureRows = 1;
-	int  textureColumns = 1;
-	float animationSpeed = 0.1f;
-
-	bool dieOnFinishAnim = false;
+	//It says if this texture have animation or not
 	bool isParticleAnimated = false;
+
+	//Number of rows in the texture. If we have no animation rows = 1
+	int  textureRows = 1;
+	//Number of colums in the texture. If we have no animation colums = 1
+	int  textureColumns = 1;
+	//Seconds to change the animation between texture cells
+	float animationSpeed = 0.1f;
+	//It says if particles anim dies after finishing the animation
+	bool dieOnFinishAnim = false;
 	//Knowing if we have more than one color during the time
 	bool useTexture = false;
 	//_________________________________________________________________________________________________________________________________
@@ -86,14 +91,16 @@ PARTICLELIB_API struct EmitterValues
 	//---------------------------------------------------------------------------------------------------------------------------------
 	//Shape that the current emitter will have
 	ShapeEmitter shapeEmitter = BoxShape;
+	//Shape that the burst emitter will have
 	ShapeEmitter burstShapeEmitter = BoxShape;
 
 	//The dimensions of the box shape that will spawn the particles (width and height)
 	PartVec3 boxShapeSize;
 	//The radiant of the sphere shape that will spawn the particles
 	float sphereShapeRad = 1.0f;
-	//The height is the distance between the tip of the cone to the base, and the rad is witch radiant will have this base
+	//The height is the distance between the tip of the cone to the base
 	float coneShapeHeight = 1.0f;
+	//The rad is witch radiant will have the cone base
 	float coneShapeRad = 1.0f;
 	//_________________________________________________________________________________________________________________________________
 
@@ -106,8 +113,9 @@ PARTICLELIB_API struct EmitterValues
 	If the busrt seconds are 0 will do the burst only onces*/
 	float burstSeconds = 1.0;
 
-	//numbers of particles in each Burst. Random between 2 values
+	//Min number of particles in each Burst. Random between this and maxBurst
 	int minBurst = 1;
+	//Max number of particles in each Burst. Random between this and minBurst
 	int maxBurst = 10;
 	//_________________________________________________________________________________________________________________________________
 };
@@ -119,12 +127,17 @@ public:
 	ParticleEmitter(float* emitterPos, int maxParticles);
 	~ParticleEmitter();
 
+	//Set All Particle Vaules 
 	PARTICLELIB_API void SetParticleValues(ParticleValues values);
+	//Get the current data of Particle Values
 	PARTICLELIB_API ParticleValues GetParticleValues() const;
 
+	//Set All Emitter Vaules 
 	PARTICLELIB_API void SetEmitterValues(EmitterValues values);
+	//Get the current data of Emitter Values
 	PARTICLELIB_API EmitterValues GetEmitterValues() const;
 
+	//Change the max particles you will have at the same time on this emitter
 	PARTICLELIB_API void ChangeMaxParticles(int maxParticles);
 
 	//Set the position of the emitter in the world coordinates

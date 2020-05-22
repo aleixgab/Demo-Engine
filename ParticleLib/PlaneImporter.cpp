@@ -1,6 +1,6 @@
-#include "PlaneImporter.h"
+#include <PlaneImporter.h>
 #include <glad/glad.h>
-#include "PartMath.h"
+#include <PartMath.h>
 #include <cstddef>
 
 PlaneImporter::PlaneImporter()

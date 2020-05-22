@@ -149,10 +149,7 @@
     <ClInclude Include="GroundImporter.h">
       <Filter>Importers</Filter>
     </ClInclude>
-    <ClInclude Include="..\ParticleLib\ParticleManager.h">
-      <Filter>Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ParticleLib\PartMath.h">
+    <ClInclude Include="..\ParticleLib\ParticleSystem.h">
       <Filter>Particle</Filter>
     </ClInclude>
   </ItemGroup>

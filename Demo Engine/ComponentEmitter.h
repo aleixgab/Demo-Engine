@@ -3,7 +3,7 @@
 
 #include "Component.h"
 #include <glm/vec4.hpp>
-#include <ParticleManager.h>
+#include <ParticleSystem.h>
 
 class ControllerParticles;
 

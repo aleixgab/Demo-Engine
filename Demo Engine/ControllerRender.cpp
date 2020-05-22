@@ -3,7 +3,7 @@
 
 #include "ControllerRender.h"
 #include "ControllerParticles.h"
-#include <ParticleManager.h>
+#include <ParticleSystem.h>
 #include "GroundImporter.h"
 #include "ControllerWindow.h"
 #include "TextureImporter.h"

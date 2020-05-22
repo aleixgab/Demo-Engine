@@ -1,6 +1,6 @@
 #include "GameManager.h"
 #include "ControllerParticles.h"
-#include <ParticleManager.h>
+#include <ParticleSystem.h>
 
 ControllerParticles::ControllerParticles(GameManager* mng) : Controller(mng)
 {

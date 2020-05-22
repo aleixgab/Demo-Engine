@@ -6,7 +6,7 @@
 #include "imgui/imgui.h"
 #include "3rdPart/includes/imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include <ParticleManager.h>
+#include <ParticleSystem.h>
 
 ControllerImGui::ControllerImGui(GameManager* mng) : Controller(mng)
 {

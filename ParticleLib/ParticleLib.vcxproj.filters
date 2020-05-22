@@ -35,9 +35,6 @@
     <ClInclude Include="Emitter.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleManager.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="PartMath.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
@@ -46,6 +43,12 @@
     </ClInclude>
     <ClInclude Include="PlaneImporter.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -61,11 +64,14 @@
     <ClCompile Include="Emitter.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="PlaneImporter.cpp">
+      <Filter>Archivos de origen\Helpers</Filter>
+    </ClCompile>
     <ClCompile Include="ParticleManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="PlaneImporter.cpp">
-      <Filter>Archivos de origen\Helpers</Filter>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
