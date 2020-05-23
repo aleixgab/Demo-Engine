@@ -10,10 +10,11 @@ public:
 
 	Shader();
 
+
 	// constructor reads and builds the shader
-	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const char* vertexPath, const char* geometryPath, const char* fragmentPath);
 	//You need the constructor or call this function to add new shader
-	void SetShader(const char* vertexPath, const char* fragmentPath);
+	void SetShader(const char* vertexPath, const char* geometryPath, const char* fragmentPath);
 
 	// use/activate the shader
 	void UseProgram() const;
