@@ -1,0 +1,131 @@
+#version 330 core
+
+layout (points) in;
+layout (triangle_strip, max_vertices = 4) out;
+
+uniform mat4 view;
+uniform mat4 projection;
+
+//Animated Particle
+uniform int isAnimated;
+uniform int textRows;
+uniform int textColumns;
+uniform float animatedTime;
+
+//Color Particle
+uniform	float positions[10];
+uniform	int colorSize;
+uniform	vec4 colors[10];
+
+out vec2 texCoords;
+out vec4 particleColor;
+
+in layouts {
+	vec2 life; 
+	vec3 direction; 
+	float speed; 
+	float acceleration; 
+	vec3 gravity;
+	float angle; 
+	float angleVel; 
+	float angleAccel;
+	float size; 
+	float sizeTime;  
+} layouts_in[];
+
+void main()
+{
+	vec2 gLife = layouts_in[0].life; 
+	vec3 gDirection = layouts_in[0].direction; 
+	float gSpeed = layouts_in[0].speed; 
+	float gAcceleration = layouts_in[0].acceleration; 
+	vec3 gGravity = layouts_in[0].gravity;
+	float gAngle = layouts_in[0].angle; 
+	float gAngleVel = layouts_in[0].angleVel; 
+	float gAngleAccel =	layouts_in[0].angleAccel;
+	float gSize = layouts_in[0].size; 
+	float gSizeTime = layouts_in[0].sizeTime;  
+	
+	float lifeNorm = gLife.x/gLife.y;
+
+	//ANIMATION
+	vec2 normCoord = vec2(1.0);
+	vec2 gtexCoords = vec2(0.0);
+	if (isAnimated == 1)
+	{
+		float currentFrame = floor(mod(gLife.x / animatedTime, textRows * textColumns));
+		 normCoord = vec2(1.0 / textColumns, 1.0 / textRows);
+
+		gtexCoords.x = mod(currentFrame,textColumns) * normCoord.x;
+		gtexCoords.y = ((textRows - 1) - floor(currentFrame / textColumns)) * normCoord.y;
+	}
+
+	//COLOR
+	particleColor = colors[0];
+
+	if (colorSize > 1)
+	{
+		bool findColor = false;
+		for (int i = 0; i < colorSize - 1; i++)
+		{
+			if (lifeNorm < positions[i + 1] && findColor == false)
+			{
+				float timeNorm = (lifeNorm - positions[i]) / (positions[i + 1] - positions[i]);
+				particleColor = mix(colors[i], colors[i + 1], timeNorm);
+				findColor = true;
+			}
+		}
+		if (findColor == false)
+		{
+			particleColor = colors[colorSize - 1];
+		}
+	}
+
+	//Billboard
+	vec3 xAxis = normalize(cross(view[1].xyz, view[2].xyz));
+
+	//Tranlate
+	vec3 pos =  gl_in[0].gl_Position.xyz + gDirection * (gSpeed + gAcceleration * gLife.x) * gLife.x + gGravity * gLife.x * gLife.x;
+
+	//Plane Rotation
+	float angle = radians(gAngle) + (radians(gAngleVel) + radians(gAngleAccel) * gLife.x) * gLife.x;
+
+	mat4 aModel = mat4(xAxis.x, view[1].x, view[2].x, 0.0f,
+					   xAxis.y, view[1].y, view[2].y, 0.0f,
+					   xAxis.z, view[1].z, view[2].z, 0.0f,
+					   pos,				  1.0f);
+
+	aModel *= mat4(cos(angle), -sin(angle), 0.0, 0.0,
+				   sin(angle),	cos(angle),  0.0, 0.0,
+                   0.0,			0.0,		  1.0, 0.0,
+                   0.0,			0.0,		  0.0, 1.0);
+
+	float finalSize = gSize + gSizeTime * gLife.x;
+	mat4 PVM = projection * view * aModel;
+
+	//TOP LEFT
+	vec3 offset = vec3(-0.5, 0.5, 0.0);
+    gl_Position = PVM * vec4(offset * finalSize, 1.0);
+	texCoords = vec2(gtexCoords.x, gtexCoords.y + + normCoord.y);
+	EmitVertex();
+
+	//BOTTOM LEFT
+	offset = vec3(-0.5, -0.5, 0.0);
+    gl_Position = PVM * vec4(offset * finalSize, 1.0);
+	texCoords = gtexCoords;
+	EmitVertex();
+
+	//TOP RIGHT
+	offset = vec3(0.5, 0.5, 0.0);
+    gl_Position = PVM * vec4(offset * finalSize, 1.0);
+	texCoords = gtexCoords + normCoord;
+	EmitVertex();
+
+	//BOTTOM RIGHT
+	offset = vec3(0.5, -0.5, 0.0);
+    gl_Position = PVM * vec4(offset * finalSize, 1.0);
+	texCoords = vec2(gtexCoords.x + normCoord.x, gtexCoords.y);
+	EmitVertex();
+
+	EndPrimitive(); 
+}

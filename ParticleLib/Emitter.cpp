@@ -286,75 +286,66 @@ void ParticleEmitter::Draw(unsigned int shaderUuid)
 	//Bind VAO
 	glBindVertexArray(plane->VAO);
 
-	// Set mesh attributes
-	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_static);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-
-	// textCoords
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
-
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_dynamic[0]);
 	//Life
-	glVertexAttribDivisor(2, 1);
-	glEnableVertexAttribArray(2);
+	glVertexAttribDivisor(0, 1);
+	glEnableVertexAttribArray(0);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(PartVec2), &particleLife[0]);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, plane->VBO_dynamic[1]);
 	//Position
-	glVertexAttribDivisor(3, 1);
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)0);
+	glVertexAttribDivisor(1, 1);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)0);
 
 	//Direction
-	glVertexAttribDivisor(4, 1);
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)sizeof(PartVec3));
+	glVertexAttribDivisor(2, 1);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)sizeof(PartVec3));
 
 	//Speed
-	glVertexAttribDivisor(5, 1);
-	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2));
+	glVertexAttribDivisor(3, 1);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2));
 
 	//Acceleration
-	glVertexAttribDivisor(6, 1);
-	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2 + sizeof(float)));
+	glVertexAttribDivisor(4, 1);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2 + sizeof(float)));
 
 	//Gravity - Acceleration 3D
-	glVertexAttribDivisor(7, 1);
-	glEnableVertexAttribArray(7);
-	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2 + sizeof(float) * 2));
+	glVertexAttribDivisor(5, 1);
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 2 + sizeof(float) * 2));
 
 	//Rotation
-	glVertexAttribDivisor(8, 1);
-	glEnableVertexAttribArray(8);
-	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 2));
+	glVertexAttribDivisor(6, 1);
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 2));
 
 	//Rotation Velocity
-	glVertexAttribDivisor(9, 1);
-	glEnableVertexAttribArray(9);
-	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 3));
+	glVertexAttribDivisor(7, 1);
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 3));
 
 	//Rotation Acceleration
-	glVertexAttribDivisor(10, 1);
-	glEnableVertexAttribArray(10);
-	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 4));
+	glVertexAttribDivisor(8, 1);
+	glEnableVertexAttribArray(8);
+	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 4));
 
 	//Size
-	glVertexAttribDivisor(11, 1);
-	glEnableVertexAttribArray(11);
-	glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 5));
+	glVertexAttribDivisor(9, 1);
+	glEnableVertexAttribArray(9);
+	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 5));
 
 	//Size Over Time
-	glVertexAttribDivisor(12, 1);
-	glEnableVertexAttribArray(12);
-	glVertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 6));
+	glVertexAttribDivisor(10, 1);
+	glEnableVertexAttribArray(10);
+	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 6));
 
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, particleActive);
+	glDrawArraysInstanced(GL_POINTS, 0, 4, particleActive);
 
 	glBindVertexArray(0);
 }
@@ -386,9 +377,9 @@ void ParticleEmitter::StopEmitter()
 {
 	for (int i = 0; i < particleActive; ++i)
 	{
-		if (particleActiveBool[particleActive])
+		if (particleActiveBool[i])
 		{
-			particleActiveBool[particleActive] = false;
+			particleActiveBool[i] = false;
 		}
 	}
 

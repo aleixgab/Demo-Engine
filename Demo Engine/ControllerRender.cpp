@@ -21,7 +21,8 @@ bool ControllerRender::Start()
 {
 
 	basicShader.SetShader("Shaders/VertexShader.txt", nullptr, "Shaders/FragmentShader.txt");
-	particleShader.SetShader("Shaders/Particle_VShader.txt", nullptr, "Shaders/Particle_FShader.txt");
+	particleShader.SetShader("Shaders/Particle_VShader.txt", "Shaders/Particle_GShader.txt", "Shaders/Particle_FShader.txt");
+	gShader.SetShader("Shaders/vertex.txt", "Shaders/geometry.txt", "Shaders/fragment.txt");
 
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
 	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");
@@ -76,6 +77,8 @@ bool ControllerRender::Update(float dt)
 			glBindVertexArray(ground->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
+	
+	//gShader.UseProgram();
 
 	std::list<ParticleEmitter*> emitterList;
 	for (std::list<GameObject*>::iterator iter = toDraw.begin(); iter != toDraw.end(); ++iter)

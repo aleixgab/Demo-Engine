@@ -12,7 +12,6 @@ public:
 
 
 public:
-	unsigned int VBO_static;
 	unsigned int VBO_dynamic[2];
 
 	unsigned int VAO = 0u;
