@@ -78,8 +78,14 @@ bool ControllerRender::Update(float dt)
 	}
 
 	std::list<ParticleEmitter*> emitterList;
-	Part::GetEmitters(emitterList);
+	for (std::list<GameObject*>::iterator iter = toDraw.begin(); iter != toDraw.end(); ++iter)
+	{
+		ComponentEmitter* comp = (*iter)->GetComponentEmitter();
+		//DO ALL THE CAMERA CULLING HERE
+		if (comp)
+			emitterList.push_back(comp->emitter);
 
+	}
 	Part::Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
 
 	Mng->gui->Draw();

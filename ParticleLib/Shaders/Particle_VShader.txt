@@ -72,24 +72,19 @@ void main()
 		}
 	}
 
-	//Billboard
-	vec3 xAxis = normalize(cross(view[1].xyz, view[2].xyz));
-
 	//Tranlate
 	vec3 pos = aPosition + aDirection * (aSpeed + aAcceleration * life.x) * life.x + aGravity * life.x * life.x;
 
-	//Plane Rotation
-	float angle = radians(aAngle) + (radians(aAngleVel) + radians(aAngleAccel) * life.x) * life.x;
-
+	//Billboard
+	vec3 xAxis = normalize(cross(view[1].xyz, view[2].xyz));
 	mat4 aModel = mat4(xAxis.x, view[1].x, view[2].x, 0.0f,
 					   xAxis.y, view[1].y, view[2].y, 0.0f,
 					   xAxis.z, view[1].z, view[2].z, 0.0f,
 					   pos,				  1.0f);
 
-	aModel *= mat4(cos(angle), -sin(angle), 0.0, 0.0,
-				   sin(angle),	cos(angle),  0.0, 0.0,
-                   0.0,			0.0,		  1.0, 0.0,
-                   0.0,			0.0,		  0.0, 1.0);
+	//Plane Rotation
+	float angle = radians(aAngle) + (radians(aAngleVel) + radians(aAngleAccel) * life.x) * life.x;
 
-    gl_Position = projection * view * aModel * vec4(aPos * (aSize + aSizeTime * life.x), 1.0);
+								 //Bilboard+Pos		//Angle rotation Z axis							//VertexPos + Size of the plane
+    gl_Position = projection * view * aModel * vec4(cos(angle / 2), 0.0, 0.0, sin(angle / 2)) * vec4(aPos * (aSize + aSizeTime * life.x), 1.0);
 }
