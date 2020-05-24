@@ -345,7 +345,7 @@ void ParticleEmitter::Draw(unsigned int shaderUuid)
 	glEnableVertexAttribArray(10);
 	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)(sizeof(PartVec3) * 3 + sizeof(float) * 6));
 
-	glDrawArraysInstanced(GL_POINTS, 0, 4, particleActive);
+	glDrawArraysInstanced(GL_POINTS, 0, 1, particleActive);
 
 	glBindVertexArray(0);
 }
