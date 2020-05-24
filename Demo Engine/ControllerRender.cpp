@@ -21,7 +21,8 @@ bool ControllerRender::Start()
 {
 
 	basicShader.SetShader("Shaders/VertexShader.txt", nullptr, "Shaders/FragmentShader.txt");
-	particleShader.SetShader("Shaders/Particle_VShader.txt", "Shaders/Particle_GShader.txt", "Shaders/Particle_FShader.txt");
+
+	particleShaderUid = Part::SetShader("Shaders/Particle_VShader.txt", "Shaders/Particle_GShader.txt", "Shaders/Particle_FShader.txt");
 
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
 	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");
@@ -88,8 +89,10 @@ bool ControllerRender::Update(float dt)
 			emitterList.push_back(comp->emitter);
 
 	}
-	Part::Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
-
+	{	
+		BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
+		Part::Draw(particleShaderUid, &view[0][0], &projection[0][0], emitterList);
+	}
 	Mng->gui->Draw();
 	int display_w, display_h;
 	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);

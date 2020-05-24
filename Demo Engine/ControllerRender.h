@@ -23,7 +23,8 @@ public:
 	std::list<TextureImporter*> textures;
 private:
 	Shader basicShader;
-	Shader particleShader;
+
+	unsigned int particleShaderUid;
 
 	GroundImporter* ground;
 };
