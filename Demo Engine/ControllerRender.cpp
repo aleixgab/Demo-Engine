@@ -22,7 +22,6 @@ bool ControllerRender::Start()
 
 	basicShader.SetShader("Shaders/VertexShader.txt", nullptr, "Shaders/FragmentShader.txt");
 	particleShader.SetShader("Shaders/Particle_VShader.txt", "Shaders/Particle_GShader.txt", "Shaders/Particle_FShader.txt");
-	gShader.SetShader("Shaders/vertex.txt", "Shaders/geometry.txt", "Shaders/fragment.txt");
 
 	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
 	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");

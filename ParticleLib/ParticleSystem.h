@@ -35,6 +35,9 @@ namespace Part {
 	//Set camera pointers. If returns false it's mean the pointer it is null
 	PARTICLELIB_API bool SetCameraPos(float* cameraPos);
 
+	//Set Particle shader sending the pathslocation of vertex, geometry and fragment. It returns de Uid that the drawer needs
+	PARTICLELIB_API int SetShader(const char* vertexPath, const char* geometryPath, const char* fragmentPath);
+
 	/*Draw function with shaderUuid, camera view and projection
 	You have to send emitter list. If you don't do camera culling send all the emitters,
 	otherwise send only the emitters that camera sees*/

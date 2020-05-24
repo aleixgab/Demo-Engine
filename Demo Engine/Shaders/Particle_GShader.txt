@@ -81,14 +81,14 @@ void main()
 		}
 	}
 
-	//Billboard
-	vec3 xAxis = normalize(cross(view[1].xyz, view[2].xyz));
-
 	//Tranlate
 	vec3 pos =  gl_in[0].gl_Position.xyz + gDirection * (gSpeed + gAcceleration * gLife.x) * gLife.x + gGravity * gLife.x * gLife.x;
 
 	//Plane Rotation
 	float angle = radians(gAngle) + (radians(gAngleVel) + radians(gAngleAccel) * gLife.x) * gLife.x;
+
+	//Billboard
+	vec3 xAxis = normalize(cross(view[1].xyz, view[2].xyz));
 
 	mat4 aModel = mat4(xAxis.x, view[1].x, view[2].x, 0.0f,
 					   xAxis.y, view[1].y, view[2].y, 0.0f,

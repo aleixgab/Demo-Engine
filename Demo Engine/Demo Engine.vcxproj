@@ -200,12 +200,11 @@
     <ClInclude Include="TextureImporter.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShader.txt" />
-    <Text Include="FShader_BasicLight.txt" />
-    <Text Include="FShader_Lamp.txt" />
-    <Text Include="VertexShader.txt" />
-    <Text Include="VShader_BasicLight.txt" />
-    <Text Include="VShader_Lamp.txt" />
+    <Text Include="Shaders\FragmentShader.txt" />
+    <Text Include="Shaders\Particle_FShader.txt" />
+    <Text Include="Shaders\Particle_GShader.txt" />
+    <Text Include="Shaders\Particle_VShader.txt" />
+    <Text Include="Shaders\VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

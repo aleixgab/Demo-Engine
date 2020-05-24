@@ -182,10 +182,6 @@
     <ClCompile Include="PlaneImporter.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Shaders\Particle_FShader.txt" />
-    <Text Include="Shaders\Particle_VShader.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

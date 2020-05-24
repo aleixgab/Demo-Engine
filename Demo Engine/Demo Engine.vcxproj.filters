@@ -154,22 +154,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FragmentShader.txt">
+    <Text Include="Shaders\FragmentShader.txt">
       <Filter>Shaders</Filter>
     </Text>
-    <Text Include="FShader_BasicLight.txt">
+    <Text Include="Shaders\Particle_FShader.txt">
       <Filter>Shaders</Filter>
     </Text>
-    <Text Include="FShader_Lamp.txt">
+    <Text Include="Shaders\Particle_GShader.txt">
       <Filter>Shaders</Filter>
     </Text>
-    <Text Include="VertexShader.txt">
+    <Text Include="Shaders\Particle_VShader.txt">
       <Filter>Shaders</Filter>
     </Text>
-    <Text Include="VShader_BasicLight.txt">
-      <Filter>Shaders</Filter>
-    </Text>
-    <Text Include="VShader_Lamp.txt">
+    <Text Include="Shaders\VertexShader.txt">
       <Filter>Shaders</Filter>
     </Text>
   </ItemGroup>

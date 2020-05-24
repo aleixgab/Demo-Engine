@@ -18,9 +18,6 @@
     <Filter Include="Archivos de encabezado\Helpers">
       <UniqueIdentifier>{06385530-d136-4a8c-8928-7212b504a4d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{f3963291-9fc1-4e43-a548-ef39933ba481}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParticleLib.h">
@@ -73,13 +70,5 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Shaders\Particle_FShader.txt">
-      <Filter>Shader</Filter>
-    </Text>
-    <Text Include="Shaders\Particle_VShader.txt">
-      <Filter>Shader</Filter>
-    </Text>
   </ItemGroup>
 </Project>
