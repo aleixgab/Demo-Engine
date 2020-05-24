@@ -79,9 +79,10 @@ bool ControllerRender::Update(float dt)
 
 	std::list<ParticleEmitter*> emitterList;
 	Part::GetEmitters(emitterList);
-
-	Part::Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
-
+	{
+		BROFILER_CATEGORY(__FUNCTION__, Profiler::Color::PapayaWhip);
+		Part::Draw(particleShader.uid, &view[0][0], &projection[0][0], emitterList);
+	}
 	Mng->gui->Draw();
 	int display_w, display_h;
 	glfwGetFramebufferSize(Mng->window->window, &display_w, &display_h);
