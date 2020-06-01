@@ -26,6 +26,7 @@ public:
 	PartVec3& operator /=(const float num);
 	PartVec3& operator *=(const float num);
 	PartVec3 operator*(const float num);
+	PartVec3 operator+(const PartVec3& vec);
 public:
 	//X component.
 	float x = 0.0f;

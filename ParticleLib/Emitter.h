@@ -118,7 +118,6 @@ PARTICLELIB_API struct EmitterValues
 	float coneShapeRad = 1.0f;
 	//_________________________________________________________________________________________________________________________________
 
-
 	//------------------------------------------------BURST----------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------
 		//You active Burst option.
@@ -186,9 +185,8 @@ private:
 
 	/*Create Particle with the start values
 	The number of particles that we want to create this frame(you may need to create more than one particle each frame)
-	The global position in the world
 	And if we are in normal or burst mode */
-	void CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter);
+	void CreateParticles(int numParticles, ShapeEmitter emitter);
 
 	void SetParticleValues(PartVec3 pos);
 

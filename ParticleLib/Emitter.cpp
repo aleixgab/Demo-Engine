@@ -156,7 +156,7 @@ void ParticleEmitter::Update(float dt)
 			if (time > secParticleCreation)
 			{
 				int particlesToCreate = (time / (1.0f / particleValues.particlesEmition));
-				CreateParticles(particlesToCreate, globalObjPos, emitterValues.shapeEmitter);
+				CreateParticles(particlesToCreate, emitterValues.shapeEmitter);
 
 				secParticleCreation = (1.0f / particleValues.particlesEmition);
 
@@ -168,7 +168,7 @@ void ParticleEmitter::Update(float dt)
 			float time = burstTimer.GetTime() / 1000.0f;
 			if (time > emitterValues.burstSeconds && !onceBurst)
 			{
-				CreateParticles(GetRandomNum(emitterValues.minBurst, emitterValues.maxBurst), globalObjPos, emitterValues.burstShapeEmitter);
+				CreateParticles(GetRandomNum(emitterValues.minBurst, emitterValues.maxBurst), emitterValues.burstShapeEmitter);
 
 				if (emitterValues.burstSeconds <= 0)
 				{
@@ -217,16 +217,15 @@ void ParticleEmitter::SetNewBuffers()
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleActive * sizeof(Particle), &particles[0]);
 }
 
-void ParticleEmitter::CreateParticles(int numParticles, PartVec3 globalPosition, ShapeEmitter emitter)
+void ParticleEmitter::CreateParticles(int numParticles, ShapeEmitter emitter)
 {
 	for (int i = 0; i < numParticles; ++i)
 	{
 		//int particleId = 0;
 		if (particleActive < particles.size())
 		{
-			globalPosition += GetRandomPos(emitter);
 			//Create the particle in the correctly slot in the pool
-			SetParticleValues(globalPosition);
+			SetParticleValues(GetRandomPos(emitter));
 			particleActive++;
 		}
 		else
@@ -421,11 +420,11 @@ PartVec3 ParticleEmitter::GetRandomPos(ShapeEmitter emitter)
 		randomPos = randomPos.Normalize();
 		initialParticleDirection = randomPos;
 
-		if (emitterValues.shapeEmitter == SphereShape)
+		if (emitter == SphereShape)
 			randomPos *= GetRandomNum(0.0f, emitterValues.sphereShapeRad);
-		else if (emitterValues.shapeEmitter == SphereShapeCenter)
+		else if (emitter == SphereShapeCenter)
 			randomPos = PartVec3(0.0f);
-		else if (emitterValues.shapeEmitter == SphereShapeBorder)
+		else if (emitter == SphereShapeBorder)
 			randomPos = initialParticleDirection * emitterValues.sphereShapeRad;
 		break;
 	case ConeShape:
@@ -445,7 +444,7 @@ PartVec3 ParticleEmitter::GetRandomPos(ShapeEmitter emitter)
 	}
 
 
-	return randomPos;
+	return randomPos + globalObjPos;
 }
 
 float ParticleEmitter::GetRandomNum(float min, float max)

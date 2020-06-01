@@ -60,14 +60,13 @@ PartVec3& PartVec3::operator*=(const float num)
 
 PartVec3 PartVec3::operator*(const float num)
 {
-	PartVec3 res;
-
-	res.x = x * num;
-	res.y = y * num;
-	res.z = z * num;
-	return res;
+	return  PartVec3(x * num, y * num, z * num);
 }
 
+PartVec3 PartVec3::operator+(const PartVec3& vec)
+{
+	return PartVec3(x + vec.x, y + vec.y, z + vec.z);
+}
 //_________________________________________________________________________________________________________________________
 //-------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------VECTOR4------------------------------------------------------------
