@@ -10,7 +10,14 @@ ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles) : globalOb
 	plane = new PlaneImporter();
 	rng = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
 
-	ChangeMaxParticles(maxParticles);
+	if (maxParticles <= 0)
+		maxParticles = 1;
+
+	particles.resize(maxParticles);
+	particleLife.resize(maxParticles);
+	particleActiveBool.resize(maxParticles);
+
+	plane->SetDynamicValues(maxParticles);
 
 	//Start Values
 	particleValues.speed = PartVec2(3.0f, 3.0f);
@@ -18,25 +25,6 @@ ParticleEmitter::ParticleEmitter(float* emitterPos, int maxParticles) : globalOb
 	particleValues.life = PartVec2(5.0f, 5.0f);
 
 	emitterValues.boxShapeSize = PartVec3(1.0f);
-}
-
-PARTICLELIB_API void ParticleEmitter::ChangeMaxParticles(int maxParticles)
-{
-	if (maxParticles <= 0)
-		maxParticles = 1;
-
-	particles.resize(maxParticles);
-	particleLife.resize(maxParticles);
-	particleActiveBool.resize(maxParticles);
-	
-	plane->SetDynamicValues(maxParticles);
-}
-
-PARTICLELIB_API void ParticleEmitter::SetGlobalPos(float* globalPos)
-{
-	globalObjPos.x = globalPos[0];
-	globalObjPos.y = globalPos[1];
-	globalObjPos.z = globalPos[2];
 }
 
 PARTICLELIB_API void ParticleEmitter::AddColor(float* colorRGBA, const float position)

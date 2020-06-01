@@ -31,6 +31,13 @@ public:
 	//Stop specific emitter
 	void StopEmitter(ParticleEmitter* emitter);
 
+	//Change the max particles you will have at the same time on this emitter
+	bool ChangeMaxParticles(int maxParticles, ParticleEmitter* emitter);
+
+	//Set the position of the emitter in the world coordinates
+	bool SetGlobalPos(float* globalPos, ParticleEmitter* emitter);
+
+
 public:
 	//You have to add in this list all the emitters that you will have in your scene.
 	std::list<ParticleEmitter*> emittersList;

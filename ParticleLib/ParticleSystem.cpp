@@ -99,6 +99,16 @@ PARTICLELIB_API bool Part::SetCameraPos(float* newCameraPos)
 	return ret;
 }
 
+PARTICLELIB_API bool Part::ChangeMaxParticles(int maxParticles, ParticleEmitter* emitter)
+{
+	return manager->ChangeMaxParticles(maxParticles, emitter);
+}
+
+PARTICLELIB_API bool Part::SetGlobalPos(float* globalPos, ParticleEmitter* emitter)
+{
+	return manager->SetGlobalPos(globalPos, emitter);
+}
+
 PARTICLELIB_API int Part::SetShader(const char* vertexPath, const char* geometryPath, const char* fragmentPath)
 {
 	// 1. retrieve the vertex/fragment source code from filePath
