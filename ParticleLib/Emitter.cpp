@@ -67,6 +67,14 @@ PARTICLELIB_API void ParticleEmitter::GetAllPositions(std::list<float>& position
 	}
 }
 
+PARTICLELIB_API void ParticleEmitter::GetAllColors(std::list<float*>& color)
+{
+	for (std::map<float, PartVec4>::iterator iter = colorMap.begin(); iter != colorMap.end(); ++iter)
+	{
+		color.push_back(&(*iter).second.x);
+	}
+}
+
 PARTICLELIB_API bool ParticleEmitter::EraseColor(const float position)
 {
 	bool ret = false;

@@ -17,6 +17,22 @@ ComponentEmitter::ComponentEmitter(GameObject* gameObject, ControllerParticles* 
 	this->maxParticles = maxParticles;
 	particleValues = emitter->GetParticleValues();
 	emitterValues = emitter->GetEmitterValues();
+
+	SetMap();
+}
+
+void ComponentEmitter::SetMap()
+{
+	std::list<float> pos;
+	std::list<float*> color;
+	emitter->GetAllPositions(pos);
+	emitter->GetAllColors(color);
+
+	std::list<float*>::iterator iterColor = color.begin();
+	for (std::list<float>::iterator iterPos = pos.begin(); iterPos != pos.end(); ++iterPos, ++iterColor)
+	{
+		colorMap.insert(std::pair<float, glm::vec4>(*iterPos, glm::vec4((*iterColor)[0], (*iterColor)[1], (*iterColor)[2], (*iterColor)[3])));
+	}
 }
 
 ComponentEmitter::~ComponentEmitter()
@@ -272,15 +288,11 @@ void ComponentEmitter::ColorValuesInsp()
 	{
 		ImGui::Text("Particle Color");
 		ImGui::Separator();
-		std::list<float> positions;
-		emitter->GetAllPositions(positions);
 
-		for (std::list<float>::iterator iter = positions.begin(); iter != positions.end(); ++iter)
+		for (std::map<float, glm::vec4>::iterator iter = colorMap.begin(); iter != colorMap.end(); ++iter)
 		{
-			glm::vec4 color;
-			emitter->GetColor(&color.x, *iter);
-			if (!EditColor(&color.x, *iter))
-				emitter->EraseColor(*iter);
+			if (!EditColor(&(*iter).second.x, (*iter).first))
+				emitter->EraseColor((*iter).first);
 		}
 
 		ImGui::Separator();
@@ -294,6 +306,7 @@ void ComponentEmitter::ColorValuesInsp()
 			if (ImGui::Button("Add Color", ImVec2(125, 25)))
 			{
 				emitter->AddColor(&nextColor.x,(nextPos/100.0f));
+				colorMap.insert(std::pair<float, glm::vec4>((nextPos / 100.0f), nextColor));
 			}
 		}
 	}
@@ -314,8 +327,8 @@ bool ComponentEmitter::EditColor(float* color, float position)
 	if (position > 0)
 	{
 		std::string colorStr = "Remove Color ";
-		colorStr.append(std::to_string(position * 100)+"%");
-		if (ImGui::Button(colorStr.data(), ImVec2(125, 25)))
+		colorStr.append(std::to_string(int(position * 100))+"%");
+		if (ImGui::Button(colorStr.data(), ImVec2(150, 25)))
 			ret = false;
 	}
 

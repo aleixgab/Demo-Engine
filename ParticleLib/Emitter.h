@@ -162,6 +162,8 @@ public:
 	PARTICLELIB_API bool GetColor(float* colorRGBA, const float position);
 	//Get all the positions
 	PARTICLELIB_API void GetAllPositions(std::list<float>& positions);
+	//Get all the colors
+	PARTICLELIB_API void GetAllColors(std::list<float*>& color);
 	//Erase Color sending the own position
 	PARTICLELIB_API bool EraseColor(const float position);
 
@@ -231,16 +233,7 @@ private:
 
 	std::vector<Particle> particles;
 	std::vector<PartVec2> particleLife;
-	//std::vector<PartVec3> particlePosition;
-	//std::vector<PartVec3> particleDirection;
-	//std::vector<PartVec3> particleGravity;
-	//std::vector<float> particleSpeed;
-	//std::vector<float> particleAcceleration;
-	//std::vector<float> particleAngleRot;
-	//std::vector<float> particleAngleVel;
-	//std::vector<float> particleAngleAccel;
-	//std::vector<float> particleSize;
-	//std::vector<float> particleSizeTime;
+
 	std::vector<bool> particleActiveBool;
 
 	bool onceBurst = false;

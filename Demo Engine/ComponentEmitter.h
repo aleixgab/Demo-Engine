@@ -12,6 +12,8 @@ class ComponentEmitter : public Component
 public:
 	ComponentEmitter(GameObject* gameObject, ControllerParticles* controller, int maxParticles);
 
+	void SetMap();
+
 	~ComponentEmitter();
 
 	void Inspector();
@@ -59,6 +61,8 @@ public:
 
 private:
 	ControllerParticles* controller = nullptr;
+
+	std::map<float, glm::vec4> colorMap;
 };
 
 #endif

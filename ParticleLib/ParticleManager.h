@@ -37,7 +37,6 @@ public:
 	//Set the position of the emitter in the world coordinates
 	bool SetGlobalPos(float* globalPos, ParticleEmitter* emitter);
 
-
 public:
 	//You have to add in this list all the emitters that you will have in your scene.
 	std::list<ParticleEmitter*> emittersList;
