@@ -101,6 +101,7 @@ void main()
                    0.0,			0.0,		  0.0, 1.0);
 
 	float finalSize = gSize + gSizeTime * gLife.x;
+	//Final Transform
 	mat4 PVM = projection * view * aModel;
 
 	//TOP LEFT
