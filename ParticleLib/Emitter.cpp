@@ -202,6 +202,25 @@ void ParticleEmitter::Update(float dt)
 	}
 }
 
+PARTICLELIB_API void ParticleEmitter::ChangeMaxParticles(int maxParticles)
+{
+	if (maxParticles <= 0)
+		maxParticles = 1;
+
+	particles.resize(maxParticles);
+	particleLife.resize(maxParticles);
+	particleActiveBool.resize(maxParticles);
+
+	plane->SetDynamicValues(maxParticles);
+}
+
+PARTICLELIB_API void ParticleEmitter::SetGlobalPos(float* globalPos)
+{
+	globalObjPos.x = globalPos[0];
+	globalObjPos.y = globalPos[1];
+	globalObjPos.z = globalPos[2];
+}
+
 void ParticleEmitter::SetNewBuffers()
 {
 	//Life

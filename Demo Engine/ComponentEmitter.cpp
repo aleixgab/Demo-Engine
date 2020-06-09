@@ -47,7 +47,7 @@ void ComponentEmitter::Inspector()
 	ImGui::Separator();
 	ImGui::InputInt("Max Particles", &maxParticles);
 	if (ImGui::Button("Change", ImVec2(125, 25)))
-		Part::ChangeMaxParticles(maxParticles,emitter);
+		emitter->ChangeMaxParticles(maxParticles);
 
 	StartValuesInsp();
 	

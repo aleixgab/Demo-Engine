@@ -50,12 +50,6 @@ namespace Part {
 	Returns false if user doesn't set camera pointers correctly*/
 	PARTICLELIB_API bool Update(float dt);
 
-	//Change the max particles you will have at the same time on this emitter
-	PARTICLELIB_API bool ChangeMaxParticles(int maxParticles, ParticleEmitter* emitter);
-
-	//Set the position of the emitter in the world coordinates
-	PARTICLELIB_API bool SetGlobalPos(float* globalPos, ParticleEmitter* emitter);
-
 	//You have to add in this list all the emitters that you will have in your scene.
 	PARTICLELIB_API ParticleManager* manager;
 }

@@ -37,7 +37,7 @@ void Transform::SetPos(glm::vec3 position)
 
 	ComponentEmitter* emitter = owner->GetComponentEmitter();
 	if (emitter)
-		Part::SetGlobalPos(&position.x,emitter->emitter);
+		emitter->emitter->SetGlobalPos(&position.x);
 }
 
 void Transform::SetRotation(glm::quat rotation)

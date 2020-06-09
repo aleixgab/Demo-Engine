@@ -109,34 +109,4 @@ void ParticleManager::StopEmitter(ParticleEmitter* emitter)
 		emitter->StopEmitter();
 }
 
-bool ParticleManager::ChangeMaxParticles(int maxParticles, ParticleEmitter* emitter)
-{
-	bool ret = false;
-	if (emitter && std::find(emittersList.begin(), emittersList.end(), emitter) != emittersList.end())
-	{
-		if (maxParticles <= 0)
-			maxParticles = 1;
-
-		emitter->particles.resize(maxParticles);
-		emitter->particleLife.resize(maxParticles);
-		emitter->particleActiveBool.resize(maxParticles);
-
-		emitter->plane->SetDynamicValues(maxParticles);
-
-		ret = true;
-	}
-	return ret;
-}
-
-bool ParticleManager::SetGlobalPos(float* globalPos, ParticleEmitter* emitter)
-{
-	bool ret = false;
-	if (emitter && std::find(emittersList.begin(), emittersList.end(), emitter) != emittersList.end())
-	{
-		emitter->globalObjPos.x = globalPos[0];
-		emitter->globalObjPos.y = globalPos[1];
-		emitter->globalObjPos.z = globalPos[2];
-	}
-	return ret;
-}
 

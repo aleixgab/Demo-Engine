@@ -150,6 +150,11 @@ public:
 	//Get the current data of Emitter Values
 	PARTICLELIB_API EmitterValues GetEmitterValues() const;
 
+	//Change the max particles you will have at the same time on this emitter
+	PARTICLELIB_API void ChangeMaxParticles(int maxParticles);
+	//Set the position of the emitter in the world coordinates
+	PARTICLELIB_API void SetGlobalPos(float* globalPos);
+
 	/*Add New Color with RGBA & the percentatge position between 0 & 1 
 	The colors will change during the time depends on the position
 	position 0 = begining of the particle
