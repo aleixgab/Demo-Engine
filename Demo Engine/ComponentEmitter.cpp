@@ -288,10 +288,16 @@ void ComponentEmitter::ColorValuesInsp()
 		ImGui::Text("Particle Color");
 		ImGui::Separator();
 
-		for (std::map<float, glm::vec4>::iterator iter = colorMap.begin(); iter != colorMap.end(); ++iter)
+		for (std::map<float, glm::vec4>::iterator iter = colorMap.begin(); iter != colorMap.end();)
 		{
 			if (!EditColor(&(*iter).second.x, (*iter).first))
-				emitter->EraseColor((*iter).first);
+			{
+				float pos = (*iter).first;
+				colorMap.erase(iter++);
+				emitter->EraseColor(pos);
+			}
+			else
+				++iter;
 		}
 
 		ImGui::Separator();
