@@ -24,20 +24,13 @@ bool ControllerRender::Start()
 
 	particleShaderUid = Part::SetShader("Shaders/Particle_VShader.txt", "Shaders/Particle_GShader.txt", "Shaders/Particle_FShader.txt");
 
-	TextureImporter* newTexture = new TextureImporter("Assets/texture.jpg");
-	TextureImporter* newTexture2 = new TextureImporter("Assets/texture2.jpg");
-	TextureImporter* newTexture3 = new TextureImporter("Assets/awesomeface.png");
-	TextureImporter* newTexture4 = new TextureImporter("Assets/Smoke30Frames_0.png");
-	TextureImporter* newTexture5 = new TextureImporter("Assets/smokeTest.jpg");
-	TextureImporter* newTexture6 = new TextureImporter("Assets/FlameRoundParticleSheet.png");
-	TextureImporter* newTexture7 = new TextureImporter("Assets/Fire_sprites_v1.png");
+	TextureImporter* newTexture = new TextureImporter("Assets/Smoke30Frames_0.png");
+	TextureImporter* newTexture2 = new TextureImporter("Assets/smokeTest.jpg");
+	TextureImporter* newTexture3 = new TextureImporter("Assets/Fire_sprites_v1.png");
+
 	textures.push_back(newTexture);
 	textures.push_back(newTexture2);
 	textures.push_back(newTexture3);
-	textures.push_back(newTexture4);
-	textures.push_back(newTexture5);
-	textures.push_back(newTexture6);
-	textures.push_back(newTexture7);
 
 	ground = new GroundImporter();
 	// configure global opengl state
@@ -65,20 +58,21 @@ bool ControllerRender::Update(float dt)
 	glm::mat4 projection = glm::perspective(Mng->scene->camera->zoom, (float)Mng->window->SCR_WIDTH / (float)Mng->window->SCR_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = Mng->scene->camera->GetViewMatrix();
 
-	if ((*toDraw.begin())->isActive)
+	if (!toDraw.empty())
 	{
+		if ((*toDraw.begin())->isActive && (*toDraw.begin())->name == "Ground")
+		{
 			basicShader.UseProgram();
 			basicShader.SetMat4("view", view);
 			basicShader.SetMat4("projection", projection);
 			basicShader.SetMat4("model", (*toDraw.begin())->GetComponentTransform()->GetTransform());
 			basicShader.SetVec3("uColor", 1.0f, 1.0f, 1.0f);
 
-		// render Plane
+			// render Plane
 			glBindVertexArray(ground->VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 	}
-	
-	//gShader.UseProgram();
 
 	std::list<ParticleEmitter*> emitterList;
 	for (std::list<GameObject*>::iterator iter = toDraw.begin(); iter != toDraw.end(); ++iter)

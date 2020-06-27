@@ -59,6 +59,8 @@ public:
 	int nextPos = 100;
 	glm::vec4 nextColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
+	bool popParticle = false;
+	char path[64];
 private:
 	ControllerParticles* controller = nullptr;
 

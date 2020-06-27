@@ -1,7 +1,6 @@
 #include "ComponentEmitter.h"
 #include <imgui\imgui.h>
 #include "GameManager.h"
-#include "Controller.h"
 #include "ControllerRender.h"
 #include "TextureImporter.h"
 
@@ -364,6 +363,9 @@ void ComponentEmitter::TextureValuesInsp()
 						particleChange = true;
 					}
 				}
+				if (ImGui::MenuItem("Add New Texture"))
+					popParticle = true;
+
 				ImGui::EndMenu();
 			}
 
@@ -418,7 +420,31 @@ void ComponentEmitter::TextureValuesInsp()
 						particleChange = true;
 					}
 				}
+				if (ImGui::MenuItem("Import New Texture"))
+					popParticle = true;
+
 				ImGui::EndMenu();
+			}
+		}
+
+		if (popParticle)
+		{
+			ImGui::OpenPopup("Import new texture path");
+
+
+			if (ImGui::BeginPopupModal("Import new texture path", (bool*)0, ImGuiWindowFlags_NoResize))
+			{
+
+				ImGui::Text("Import new texture. Write the correct path");
+				ImGui::InputText("##MaxPart", path, 64);
+				if (ImGui::Button("Import", ImVec2(100.0f, 25.0f)))
+				{
+					TextureImporter* newTexture = new TextureImporter(path);
+					controller->Mng->render->textures.push_back(newTexture);
+
+					popParticle = false;
+				}
+				ImGui::EndPopup();
 			}
 		}
 		ImGui::Separator();
