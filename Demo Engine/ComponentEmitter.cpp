@@ -260,14 +260,14 @@ void ComponentEmitter::BurstInsp()
 			}
 			ImGui::End();
 		}
-		if(ImGui::DragInt("Min particles", &emitterValues.minBurst, 1.0f, 0, 100))
+		if(ImGui::DragInt("Min particle Burst", &emitterValues.minBurst, 1.0f, 0, 100))
 			emitterChange = true;
 		if (emitterValues.minBurst > emitterValues.maxBurst)
 		{
 			emitterValues.maxBurst = emitterValues.minBurst;
 			emitterChange = true;
 		}
-		if(ImGui::DragInt("Max Particles", &emitterValues.maxBurst, 1.0f, 0, 100))
+		if(ImGui::DragInt("Max Particle Burst", &emitterValues.maxBurst, 1.0f, 0, 100))
 			emitterChange = true;
 		if (emitterValues.maxBurst < emitterValues.minBurst)
 			emitterValues.minBurst = emitterValues.maxBurst;
